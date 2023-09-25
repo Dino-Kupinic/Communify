@@ -16,7 +16,7 @@ export default defineConfig({
   server: {
     host: true,
     strictPort: true,
-    port: 7000,
+    port: 10000,
     watch: {
       usePolling: true,
     },
