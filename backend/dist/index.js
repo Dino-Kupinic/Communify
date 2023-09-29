@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const socket_io_1 = require("socket.io");
 const dotenv_1 = __importDefault(require("dotenv"));
 const node_http_1 = require("node:http");
+const database_1 = require("./database/database");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
@@ -24,4 +25,5 @@ io.on("connection", (socket) => {
 });
 server.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
+    (0, database_1.connectAndQuery)();
 });
