@@ -3,22 +3,23 @@ import {Server} from "socket.io"
 import dotenv from "dotenv"
 import {createServer} from "node:http"
 import {ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData} from "./models/socket-io"
-import {connectAndQuery} from "./database/database"
+import {connectAndQuery} from "./database/db"
 
 dotenv.config()
 
 const app: Express = express()
 const port: string | undefined = process.env.PORT
+const FRONTEND_URL: string = "http://localhost:10000"
 
 const server = createServer(app)
-const io = new Server<
-    ClientToServerEvents,
-    ServerToClientEvents,
-    InterServerEvents,
-    SocketData
->(server, {
+const io: Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+> = new Server(server, {
   cors: {
-    origin: "http://localhost:10000",
+    origin: FRONTEND_URL,
   },
 })
 
