@@ -8,9 +8,13 @@ const connected = computed(() => {
 </script>
 
 <template>
-  <p>Is connected: {{ connected }}</p>
+  <p>[SOCKET IO DEBUG]: is connected: {{ connected }}</p>
+
+  <RouterView></RouterView>
 </template>
 
 <style scoped>
-
+p {
+  color: var(--error-500);
+}
 </style>

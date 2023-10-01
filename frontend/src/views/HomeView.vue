@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+
+import Logo from "@/components/util/Logo.vue"
+import BodyText from "@/components/text/BodyText.vue"
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <Logo></Logo>
+  <BodyText>Welcome to Communify!</BodyText>
 </template>
+
+<style>
+
+</style>
