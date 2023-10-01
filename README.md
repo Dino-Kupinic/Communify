@@ -1,3 +1,5 @@
+<img src="frontend/src/assets/img/CommunifyWhite.svg" alt="Image"  height="150" />
+
 # Communify
 
 Intuitive and simple chat app with rooms.
