@@ -6,7 +6,7 @@ Import Inter font with multiple weights
 :root {
     --neutral-50: #ffffff;
     --neutral-100: #f5f5f5;
-    --neutral-200: #d4d4d4;
+    --neutral-200: #e0dfdf;
     --neutral-300: #b8b8b8;
     --neutral-400: #9c9c9c;
     --neutral-500: #808080;
@@ -100,6 +100,7 @@ Import Inter font with multiple weights
 *::after {
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
     font-weight: normal;
 }
 
@@ -109,10 +110,32 @@ body {
     background: var(--color-background);
     transition: color 0.5s,
     background-color 0.5s;
-    line-height: 1.6;
-    font-family: -apple-system, Inter, Arial sans-serif;
-    font-size: 15px;
+    scroll-behavior: smooth;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-x: none;
+
 }
+
+body::-webkit-scrollbar {
+    width: 0.35rem;
+}
+
+body::-webkit-scrollbar:horizontal {
+    height: 0.35rem;
+}
+
+body::-webkit-scrollbar-track, body::-webkit-scrollbar-track:horizontal {
+    background-color: var(--color-background);
+}
+
+body::-webkit-scrollbar-corner {
+    background-color: var(--color-background);
+}
+
+body::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:horizontal {
+    background-color: var(--brand-500);
+    border-radius: 20px;
+}
+
