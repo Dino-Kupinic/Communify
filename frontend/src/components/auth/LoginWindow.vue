@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
+import BodyText from "@/components/text/BodyText.vue"
 </script>
 
 <template>
-  <Logo></Logo>
+  <BodyText>Login</BodyText>
 </template>
 
 <style scoped>
