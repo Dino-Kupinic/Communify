@@ -1,35 +1,68 @@
-@import './base.css';
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+html{
+    margin: 0;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
+:root {
+    --neutral-100: #fff1f1;
+    --neutral-100-minor: #fff1f1ad;
+    --neutral-200: #d4d4d4;
+    --neutral-300: #b8b8b8;
+    --neutral-400: #9c9c9c;
+    --neutral-500: #808080;
+    --neutral-600: #636363;
+    --neutral-700: #474747;
+    --neutral-800: #2a2a2a;
+    --neutral-900: #0e0e0ee6;
+    --neutral-1000: #030303;
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+    --brand-100: #e5f6fd;
+    --brand-200: #b0e4f9;
+    --brand-300: #7bd2f5;
+    --brand-400: #389abb;
+    --brand-500: #12aeed;
+    --brand-600: #0e87b8;
+    --brand-700: #0a6184;
+    --brand-800: #063a4f;
+    --brand-900: #001B26;
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+    --error-100: #fde4e4;
+    --error-200: #faafaf;
+    --error-300: #f67a7a;
+    --error-400: #f34545;
+    --error-500: #ef1010;
+    --error-600: #ba0c0c;
+    --error-700: #850909;
+    --error-800: #500505;
+    --error-900: #1b0202;
+
+    --warning-100: #fefbe4;
+    --warning-200: #fbf4ae;
+    --warning-300: #f9ec78;
+    --warning-400: #f6e442;
+    --warning-500: #f3dd0c;
+    --warning-600: #bdab09;
+    --warning-700: #877a06;
+    --warning-800: #514904;
+    --warning-900: #1b1801;
+
+    --info-100: #f7e5fd;
+    --info-200: #e7b1f8;
+    --info-300: #d77ef3;
+    --info-400: #c74aee;
+    --info-500: #b616e9;
+    --info-600: #8e11b5;
+    --info-700: #650c81;
+    --info-800: #3d074e;
+    --info-900: #14021a;
+
+    --success-100: #e5fded;
+    --success-200: #b1f8ca;
+    --success-300: #7ef3a6;
+    --success-400: #4aee83;
+    --success-500: #16e960;
+    --success-600: #11b54a;
+    --success-700: #0c8135;
+    --success-800: #074e20;
+    --success-900: #021a0b;
 }
