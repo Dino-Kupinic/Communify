@@ -31,8 +31,8 @@ function changeCol() {
   width: 100%;
   height: 6em;
   padding: 5%;
-  border-top: 1px solid var(--color-border-soft);
-
+  border-bottom: 1px solid var(--color-border-soft);
+  background-color: var(--color-background);
 }
 
 .clickedBtn {
