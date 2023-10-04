@@ -1,10 +1,16 @@
 <script setup lang="ts">
 
 import RoomsList from "@/components/chatrooms/RoomsList.vue"
+import UserProfileBar from "@/components/user/UserProfileBar.vue"
+
+
 </script>
 
 <template>
-  <div id="chatrooms-container">
+  <div id="userbar-container">
+    <UserProfileBar username="Neuery17" profilePicture="undefined"></UserProfileBar>
+  </div>
+  <div id="chatrooms-container" @click="test">
     <RoomsList title="Hallo1"></RoomsList>
     <RoomsList title="Hallo2"></RoomsList>
     <RoomsList title="Hallo3"></RoomsList>
@@ -13,16 +19,31 @@ import RoomsList from "@/components/chatrooms/RoomsList.vue"
     <RoomsList title="NWT"></RoomsList>
     <RoomsList title="Deutsch"></RoomsList>
     <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP"></RoomsList>
+    <RoomsList title="GGP "></RoomsList>
   </div>
 
 </template>
 
 <style scoped>
 #chatrooms-container {
-  border: 1px solid var(--color-border-very-soft);
-  width: 25%;
   overflow-y: scroll;
-  height: 95vh;
+  height: 89.4vh;
+  width: 25%;
+}
+
+#chatrooms-container, #userbar-container{
+  border-right: 1px solid var(--color-border-very-soft);
+}
+
+#userbar-container {
+  width: 25%;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 
