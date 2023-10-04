@@ -12,6 +12,8 @@ const props = defineProps<{
 <style scoped>
 #chatroom-title {
   font-size: 1em;
+
+  color: var(--color-text)
 }
 
 
