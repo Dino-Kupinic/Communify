@@ -7,7 +7,7 @@ import UserProfileText from "@/components/user/UserProfileText.vue"
 <template>
   <div id="chatroomheader-container">
       <ChatIcon imgPath="src/assets/img/github.svg"></ChatIcon>
-      <UserProfileText>Gruppe Reisinger</UserProfileText>
+      <UserProfileText id="profileText">Gruppe Reisinger</UserProfileText>
   </div>
 </template>
 
@@ -17,6 +17,7 @@ import UserProfileText from "@/components/user/UserProfileText.vue"
   display: flex;
   flex-wrap: wrap;
   align-content: center;
+  justify-content: center;
   overflow: hidden;
   border-bottom: 1px solid var(--color-border-soft);
 }
@@ -26,7 +27,9 @@ import UserProfileText from "@/components/user/UserProfileText.vue"
   width: min-content;
   padding: 14.75px;
 }
-
+#profileText {
+  width: max-content;
+}
 
 
 
