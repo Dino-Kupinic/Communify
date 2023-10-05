@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS topic
 
 CREATE TABLE IF NOT EXISTS topics_rooms
 (
-    t_id INT,
-    r_id INT,
+    t_id INT NOT NULL,
+    r_id INT NOT NULL,
     FOREIGN KEY (t_id) REFERENCES topic (topic_id),
     FOREIGN KEY (r_id) REFERENCES room (room_id),
     PRIMARY KEY (t_id, r_id)
