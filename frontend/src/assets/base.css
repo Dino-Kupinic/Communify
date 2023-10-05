@@ -86,12 +86,15 @@ Import Inter font with multiple weights
     :root {
         --color-background: var(--neutral-800);
         --color-background-soft: var(--neutral-700);
+        --color-main-background: var(--neutral-900);
 
         --color-border: var(--neutral-400);
         --color-border-hover: var(--neutral-300);
 
         --color-heading: var(--neutral-100);
         --color-text: var(--neutral-200);
+
+
     }
 }
 
