@@ -3,11 +3,11 @@
 import Logo from "@/components/util/Logo.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
-import Infobox from "@/components/footer/Infobox.vue"
+import Infobox from "@/components/InfoBoxes/Infobox.vue"
 import {ref} from "vue"
 
 const message2people = ref("You can enter Communify by clicking on the button below and become" +
-  " a part of our global community. You'll find what you're looking for!")
+  " part of our global community. You'll find what you're looking for!")
 </script>
 
 <template id="template">
@@ -16,16 +16,22 @@ const message2people = ref("You can enter Communify by clicking on the button be
   <BodyText id="bodyText" font-size="24px" color="#888888">{{message2people}}</BodyText>
 
   <div class="FlexDesign">
-    <infobox>
+    <infobox class="infoBoxOutside">
     <div class="infobox_inside">
-      <h2 class="VertikalCenterH2"> Communifiy hat schon über 100.000+ User! </h2>
+      <h2> Communify has more than <span id="amountUser">100.000+</span>  Users.</h2>
     </div>
   </infobox>
-    <infobox>
+    <infobox class="infoBoxOutside">
       <div class="infobox_inside">
-        <h2 class="VertikalCenterH2"> Data Privace is our focus! <a href="#"> Learn more about it.</a></h2>
+        <h2> Communify connects people! <div class="link_color">Join Communify. <a class="linkStyle" href="PrivacyAndContact.vue">Now.</a></div></h2>
       </div>
     </infobox>
+    <infobox class="infoBoxOutside">
+      <div class="infobox_inside">
+        <h2> Data Privace is our focus! <div class="link_color"><a class="linkStyle" href="PrivacyAndContact.vue">Learn more about it.</a></div></h2>
+      </div>
+    </infobox>
+
   </div>
 
 </template>
@@ -79,6 +85,14 @@ const message2people = ref("You can enter Communify by clicking on the button be
       padding-right: 10% !important;
       padding-left: 10% !important;
     }
+
+    .FlexDesign {
+        display: unset !important;
+    }
+
+    .infoBoxOutside {
+      margin: 15% auto !important;
+    }
   }
 
   #bodyText {
@@ -98,17 +112,28 @@ const message2people = ref("You can enter Communify by clicking on the button be
     align-content: center;
     justify-content: center;
     flex-wrap: wrap;
-
-  }
-
-  .VertikalCenterH2 {
     text-align: center;
-  }
 
+  }
 
   .FlexDesign {
     display: flex;
     justify-content: center;
+  }
+
+  .linkStyle {
+      background-image: linear-gradient(to right, #5863e8, #1ec3e0);
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 650;
+      border-bottom: 1px groove #1ec3e0;
+  }
+
+  #amountUser {
+    background-image: linear-gradient(to right, #5863e8, #1ec3e0);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: 650;
   }
 
 

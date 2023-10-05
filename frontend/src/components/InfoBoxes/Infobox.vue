@@ -12,7 +12,10 @@
 <style scoped>
 .cards{
   position: relative;
-  margin: 100px auto;
+  margin-top: 3%;
+  margin-bottom: 5%;
+  margin-left: 3%;
+  margin-right: 3%;
   width: 350px;
   height: 200px;
   background: #010002;
@@ -31,7 +34,6 @@
   height: calc(100% + 6px);
   border-radius: 20px;
   z-index: -1;
-  animation: animate 3s ease alternate infinite;
 }
 
 .cards:after {
