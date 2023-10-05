@@ -9,7 +9,7 @@ import {NextFunction, Request, Response} from "express"
  * @param {NextFunction} next - The next function to call in the middleware chain.
  * @returns {Promise<void>} - A promise that resolves when the asynchronous operation is complete.
  */
-type asyncFunc = (req: Request, res: Response, next: NextFunction) => Promise<void>
+type asyncFunc = (req: Request, res: Response, next: NextFunction) => Promise<any>
 
 /**
  * Executes an asynchronous function and handles any errors that occur during its execution.
