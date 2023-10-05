@@ -21,19 +21,23 @@ let username = ref("Neuery17")
 
 window.matchMedia('(prefers-color-scheme: dark)')
   .addEventListener('change',({ matches }) => {
-    if (matches) {
-      addIcon.value = "src/assets/img/menu-icons/darkmode/add-icon/icons8-add-30.png"
-      userIcon.value = "src/assets/img/menu-icons/darkmode/account-icon/icons8-test-account-30.png"
-      settingsIcon.value = "src/assets/img/menu-icons/darkmode/settings-icon/icons8-support-30.png"
-    } else {
-      addIcon.value = "src/assets/img/menu-icons/lightmode/add-icon/icons8-add-30.png"
-      userIcon.value = "src/assets/img/menu-icons/lightmode/account-icon/icons8-test-account-30.png"
-      settingsIcon.value = "src/assets/img/menu-icons/lightmode/settings-icon/icons8-support-30.png"
-    }
+    changeTheme(matches)
   })
 
-watch(window, () => {
+function changeTheme (media : Boolean) {
+  if (media) {
+    addIcon.value = "src/assets/img/menu-icons/darkmode/add-icon/icons8-add-30.png"
+    userIcon.value = "src/assets/img/menu-icons/darkmode/account-icon/icons8-test-account-30.png"
+    settingsIcon.value = "src/assets/img/menu-icons/darkmode/settings-icon/icons8-support-30.png"
+  } else {
+    addIcon.value = "src/assets/img/menu-icons/lightmode/add-icon/icons8-add-30.png"
+    userIcon.value = "src/assets/img/menu-icons/lightmode/account-icon/icons8-test-account-30.png"
+    settingsIcon.value = "src/assets/img/menu-icons/lightmode/settings-icon/icons8-support-30.png"
+  }
+}
 
+onMounted(() => {
+  changeTheme(!!window.matchMedia('(prefers-color-scheme: dark)'))
 })
 
 </script>
@@ -43,25 +47,21 @@ watch(window, () => {
     <div id="userbar-chatrooms-container">
       <div id="userbar-container">
         <!-- Bar for the user profile on top of the list -->
-        <UserProfileBar>
-          <div id="container-div-short-user" class="container-div-short">
+        <UserProfileBar  id="container-div-short-user" >
             <UserIcon imgPath="src/assets/img/github.svg"></UserIcon>
             <UserProfileText id="username">
               {{ username }}
             </UserProfileText>
-          </div>
         </UserProfileBar>
 
         <!-- Bar for the menu above the list and under the user-bar -->
-        <UserProfileBar>
-          <div id="container-div-short-menu" class="container-div-short">
+        <UserProfileBar id="container-div-short-menu">
             <MenuIcon class="menu-icons" id="user-btn"
                       :imgPath=userIcon></MenuIcon>
             <MenuIcon class="menu-icons" id="add-chatroom-btn"
                       :imgPath=addIcon></MenuIcon>
             <MenuIcon class="menu-icons" id="settings-btn"
                       :imgPath=settingsIcon></MenuIcon>
-          </div>
         </UserProfileBar>
       </div>
 
