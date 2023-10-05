@@ -1,27 +1,45 @@
 <script setup lang="ts">
-
-import Icon from "@/components/util/Icon.vue"
 import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
+import Message from "@/components/messages/Message.vue"
+
+const props = defineProps<{
+  roomID?: String
+}>()
 </script>
 
 <template>
-<div id="chatroom-div-container">
-  <header>
-  <ChatRoomHeaderBar></ChatRoomHeaderBar>
-  </header>
+  <div id="chatroom-div-container">
+    <header>
+      <ChatRoomHeaderBar></ChatRoomHeaderBar>
+    </header>
 
-  <div id="content-container">
-    <div id="message-container">
 
-    </div>
-    <Message></Message>
-
-    <div id="Input-Container">
-      <UserInput></UserInput>
+    <div id="content-container">
+      <div id="placeholder">
+      </div>
+        <Message messageType="sent" messageText="Awdwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqd "></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <div id="Input-Container">
+        <UserInput></UserInput>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <style scoped>
@@ -32,18 +50,24 @@ import UserInput from "@/components/user/UserInput.vue"
 }
 
 #content-container {
-  height: 89.4vh;
+  height: 89.2vh;
   background-color: var(--color-background-soft);
+  overflow-y: scroll;
 }
 
 header {
   width: 100%;
   border-bottom: 1px solid var(--color-border-soft);
-  padding: 0  ;
+  padding: 0;
 }
 
 #Input-Container {
   position: sticky;
-  top: 90%;
+  bottom: 2%;
+}
+
+#placeholder {
+  height: 1%;
+  width: 100%;
 }
 </style>
