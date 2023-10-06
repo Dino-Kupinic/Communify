@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS room
 (
     room_id       SERIAL PRIMARY KEY NOT NULL,
-    name          VARCHAR(60)        NOT NULL,
+    name          VARCHAR(60) UNIQUE NOT NULL,
     maximum_users INT,
     description   VARCHAR(150),
     password      VARCHAR(30),
