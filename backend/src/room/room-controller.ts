@@ -29,18 +29,24 @@ roomRouter.get("/getRoomById/:id", asyncHandler(async (req, res) => {
 }))
 
 roomRouter.post("/createRoom", asyncHandler(async (req, res) => {
-  const room: Room = req.body
-  await roomService.addRoom(room)
-  res.status(200)
+  const {name, maximum_users, description, password, creator_id} = req.body
+  await roomService.addRoom({
+    name: name,
+    maximum_users: maximum_users,
+    description: description,
+    password: password,
+    creator_id: creator_id,
+  } as Room)
+  res.send("Room created successfully")
 }))
 
 roomRouter.put("/editRoom/:id", asyncHandler(async (req, res) => {
   const {propertyToEdit, newPropertyValue} = req.body
   await roomService.editRoomById(getIdFromParams(req), propertyToEdit, newPropertyValue)
-  res.status(200)
+  res.send("Room edited successfully")
 }))
 
 roomRouter.delete("/deleteRoomById/:id", asyncHandler(async (req, res) => {
   await roomService.deleteRoomById(getIdFromParams(req))
-  res.status(200)
+  res.send("Room deleted successfully")
 }))
