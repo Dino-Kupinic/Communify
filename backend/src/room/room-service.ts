@@ -43,7 +43,8 @@ export class RoomService {
    */
   async getRoomById(room_id: number): Promise<Room | undefined> {
     return this.runQuery(async (): Promise<Room | undefined> => {
-      const result: QueryResult<Room> = await this.pool.query(
+      const client: PoolClient = await this.pool.connect()
+      const result: QueryResult<Room> = await client.query(
         "SELECT * FROM room WHERE room_id = $1;", [room_id],
       )
       return result.rows[0]
@@ -58,8 +59,9 @@ export class RoomService {
    */
   async addRoom(newRoom: Room): Promise<void> {
     return this.runQuery(async (): Promise<void> => {
-      await this.pool.query("INSERT INTO room (name, maximum_users, description, creator_id) VALUES ($1, $2, $3, $4);",
-        [newRoom.name, newRoom.maximum_users, newRoom.description, newRoom.creator_id],
+      const client: PoolClient = await this.pool.connect()
+      await client.query("INSERT INTO room (name, maximum_users, description, password, creator_id) VALUES ($1, $2, $3, $4, $5);",
+        [newRoom.name, newRoom.maximum_users, newRoom.description, newRoom.password, newRoom.creator_id],
       )
     })
   }
@@ -75,7 +77,11 @@ export class RoomService {
    */
   async editRoomById(room_id: number, propertyToEdit: string, newPropertyValue: string | number): Promise<void> {
     return this.runQuery(async (): Promise<void> => {
-      await this.pool.query(`UPDATE room SET ${propertyToEdit} = $1 WHERE room_id = $2`, [newPropertyValue, room_id])
+      const client: PoolClient = await this.pool.connect()
+      await client.query(`UPDATE room
+                          SET ${propertyToEdit} = $1
+                          WHERE room_id = $2`, [newPropertyValue, room_id],
+      )
     })
   }
 
@@ -87,7 +93,9 @@ export class RoomService {
    */
   async deleteRoomById(room_id: number): Promise<void> {
     return this.runQuery(async (): Promise<void> => {
-      await this.pool.query("DELETE FROM room WHERE room_id = $1", [room_id])
+      const client: PoolClient = await this.pool.connect()
+      await client.query("DELETE FROM room WHERE room_id = $1", [room_id])
+      client.release()
     })
   }
 }
