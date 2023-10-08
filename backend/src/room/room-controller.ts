@@ -28,6 +28,12 @@ roomRouter.get("/getRoomById/:id", asyncHandler(async (req, res) => {
   res.send(room)
 }))
 
+roomRouter.get("/getRoomByName/:name", asyncHandler(async (req, res) => {
+  const {name} = req.params
+  const room: Room | undefined = await roomService.getRoomByName(name)
+  res.send(room)
+}))
+
 roomRouter.post("/createRoom", asyncHandler(async (req, res) => {
   const {name, maximum_users, description, password, creator_id} = req.body
   await roomService.addRoom({

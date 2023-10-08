@@ -1,10 +1,11 @@
 import express, {Express, Request, Response} from "express"
 import dotenv from "dotenv"
+import cors from "cors"
 import {createServer} from "node:http"
 import {errorHandler} from "./middleware/error-handler"
 import {connectAndQuery} from "./database/db"
 import {roomRouter} from "./room/room-controller"
-import cors from "cors"
+import {clientRouter} from "./client/client-controller"
 
 dotenv.config()
 
@@ -26,6 +27,7 @@ export const server = createServer(app)
 //   app.use(`/${route}`, router)
 // })
 app.use("/room", roomRouter)
+app.use("/client", clientRouter)
 
 app.get("/", (req: Request, res: Response): void => {
   res.send("Communify Backend")

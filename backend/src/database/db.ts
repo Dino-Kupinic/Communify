@@ -43,3 +43,19 @@ export async function connectAndQuery(): Promise<void> {
   }
 }
 
+/**
+ * Runs the given query function asynchronously.
+ *
+ * @param {Function} queryFunction - The query function to be executed.
+ * @returns {Promise} A promise that resolves to the result of the query function execution.
+ * @throws {Error} If an error occurs during the execution of the query function.
+ */
+export async function runQuery(queryFunction: any): Promise<any> {
+  try {
+    return await queryFunction()
+  } catch (err) {
+    console.error(err)
+    throw err // rethrow the error to let the caller handle it if needed.
+  }
+}
+
