@@ -76,6 +76,9 @@ Import Inter font with multiple weights
     --color-background-soft: var(--neutral-200);
 
     --color-border: var(--neutral-700);
+    --color-border-very-soft: var(--neutral-400);
+    --color-border-soft: var(--neutral-400);
+
     --color-border-hover: var(--neutral-600);
 
     --color-heading: var(--neutral-900);
@@ -86,12 +89,16 @@ Import Inter font with multiple weights
     :root {
         --color-background: var(--neutral-800);
         --color-background-soft: var(--neutral-700);
+        --color-main-background: var(--neutral-900);
 
-        --color-border: var(--neutral-400);
+        --color-border-very-soft: var(--neutral-400);
+        --color-border-soft: var(--neutral-700);
         --color-border-hover: var(--neutral-300);
 
         --color-heading: var(--neutral-100);
         --color-text: var(--neutral-200);
+
+
     }
 }
 
@@ -118,24 +125,30 @@ body {
 
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 0.35rem;
 }
 
-body::-webkit-scrollbar:horizontal {
+*::-webkit-scrollbar:horizontal {
     height: 0.35rem;
 }
 
-body::-webkit-scrollbar-track, body::-webkit-scrollbar-track:horizontal {
+*::-webkit-scrollbar-track, body::-webkit-scrollbar-track:horizontal {
     background-color: var(--color-background);
 }
 
-body::-webkit-scrollbar-corner {
+*::-webkit-scrollbar-corner {
     background-color: var(--color-background);
 }
 
-body::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:horizontal {
+*::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:horizontal {
     background-color: var(--brand-500);
     border-radius: 20px;
 }
+
+*{
+    max-height: 100vh;
+}
+
+
 

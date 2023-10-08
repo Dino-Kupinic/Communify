@@ -17,15 +17,6 @@ app.use(errorHandler)
 
 export const server = createServer(app)
 
-// TODO: dynamic router imports
-// const routes: string[] = [
-//   "room",
-// ]
-//
-// routes.forEach(async (route: string): Promise<void> => {
-//   const {router} = await import(`./${route}/${route}-controller`)
-//   app.use(`/${route}`, router)
-// })
 app.use("/room", roomRouter)
 app.use("/client", clientRouter)
 
