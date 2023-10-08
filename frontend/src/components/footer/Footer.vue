@@ -30,7 +30,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 footer {
   text-decoration: none;
   padding: 0;
-  border-top: 1px solid var(--neutral-500);
+  /*border-top: 1px solid var(--neutral-500); */
   background-color: var(--color-background-soft);
   width: 100%;
   position: relative;
