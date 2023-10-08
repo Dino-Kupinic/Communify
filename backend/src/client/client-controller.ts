@@ -1,7 +1,7 @@
 import {asyncHandler} from "../middleware/error-handler"
 import express, {Router} from "express"
 import {ClientService} from "./client-service"
-import {Client, Room} from "../models/types"
+import {Client} from "../models/types"
 import {pool} from "../database/db"
 
 export const clientRouter: Router = express.Router()
