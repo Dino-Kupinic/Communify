@@ -5,7 +5,7 @@ import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
 import UserIcon from "@/components/user/UserIcon.vue"
 import UserProfileText from "@/components/user/UserProfileText.vue"
-import {onMounted, ref, watch} from "vue"
+import {onMounted, ref} from "vue"
 import MenuIcon from "@/components/user-menu/MenuIcon.vue"
 
 const props = defineProps<{
