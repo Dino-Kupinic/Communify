@@ -1,34 +1,36 @@
 import express, {Express, Request, Response} from "express"
-import {Server} from "socket.io"
 import dotenv from "dotenv"
+import cors from "cors"
 import {createServer} from "node:http"
-import {ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData} from "./models/socket-io"
+import {errorHandler} from "./middleware/error-handler"
 import {connectAndQuery} from "./database/db"
+import {roomRouter} from "./room/room-controller"
+import {clientRouter} from "./client/client-controller"
 
 dotenv.config()
 
-const app: Express = express()
-const port: string | undefined = process.env.PORT
-const FRONTEND_URL: string = "http://localhost:10000"
+export const port: string | undefined = process.env.PORT
+export const app: Express = express()
+app.use(cors())
+app.use(express.json())
+app.use(errorHandler)
 
-const server = createServer(app)
-const io: Server<
-  ClientToServerEvents,
-  ServerToClientEvents,
-  InterServerEvents,
-  SocketData
-> = new Server(server, {
-  cors: {
-    origin: FRONTEND_URL,
-  },
-})
+export const server = createServer(app)
+
+// TODO: dynamic router imports
+// const routes: string[] = [
+//   "room",
+// ]
+//
+// routes.forEach(async (route: string): Promise<void> => {
+//   const {router} = await import(`./${route}/${route}-controller`)
+//   app.use(`/${route}`, router)
+// })
+app.use("/room", roomRouter)
+app.use("/client", clientRouter)
 
 app.get("/", (req: Request, res: Response): void => {
-  res.send("Express + TypeScript Server")
-})
-
-io.on("connection", (socket) => {
-  console.log("a user connected")
+  res.send("Communify Backend")
 })
 
 server.listen(port, (): void => {
