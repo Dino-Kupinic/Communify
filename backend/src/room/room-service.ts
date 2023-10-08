@@ -1,25 +1,10 @@
 import {Pool, PoolClient, QueryResult} from "pg"
 import {Room} from "../models/types"
+import {runQuery} from "../database/db"
 
 
 export class RoomService {
   constructor(private pool: Pool) {
-  }
-
-  /**
-   * Runs the given query function asynchronously.
-   *
-   * @param {Function} queryFunction - The query function to be executed.
-   * @returns {Promise} A promise that resolves to the result of the query function execution.
-   * @throws {Error} If an error occurs during the execution of the query function.
-   */
-  async runQuery(queryFunction: any): Promise<any> {
-    try {
-      return await queryFunction()
-    } catch (err) {
-      console.error(err)
-      throw err // rethrow the error to let the caller handle it if needed.
-    }
   }
 
   /**
@@ -28,7 +13,7 @@ export class RoomService {
    * @returns {Promise<Room[]>} A promise that resolves to an array of Room objects.
    */
   async getAllRooms(): Promise<Room[] | undefined> {
-    return this.runQuery(async (): Promise<Room[] | undefined> => {
+    return runQuery(async (): Promise<Room[] | undefined> => {
       const client: PoolClient = await this.pool.connect()
       const result: QueryResult<Room> = await client.query("SELECT * FROM room;")
       return result.rows
@@ -42,10 +27,26 @@ export class RoomService {
    * @return {Promise<Room>} - A promise that resolves to the room object matching the given ID.
    */
   async getRoomById(room_id: number): Promise<Room | undefined> {
-    return this.runQuery(async (): Promise<Room | undefined> => {
+    return runQuery(async (): Promise<Room | undefined> => {
       const client: PoolClient = await this.pool.connect()
       const result: QueryResult<Room> = await client.query(
         "SELECT * FROM room WHERE room_id = $1;", [room_id],
+      )
+      return result.rows[0]
+    })
+  }
+
+  /**
+   * Retrieves a room by its name.
+   *
+   * @param {string} name - The name of the room.
+   * @return {Promise<Room|undefined>} - A promise that resolves to the room with the given name, or undefined if not found.
+   */
+  async getRoomByName(name: string): Promise<Room | undefined> {
+    return runQuery(async (): Promise<Room | undefined> => {
+      const client: PoolClient = await this.pool.connect()
+      const result: QueryResult<Room> = await client.query(
+        "SELECT * FROM room WHERE name = $1;", [name],
       )
       return result.rows[0]
     })
@@ -58,7 +59,7 @@ export class RoomService {
    * @return {Promise<void>} - A Promise that resolves when the room is successfully added.
    */
   async addRoom(newRoom: Room): Promise<void> {
-    return this.runQuery(async (): Promise<void> => {
+    return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("INSERT INTO room (name, maximum_users, description, password, creator_id) VALUES ($1, $2, $3, $4, $5);",
         [newRoom.name, newRoom.maximum_users, newRoom.description, newRoom.password, newRoom.creator_id],
@@ -76,7 +77,7 @@ export class RoomService {
    * @return {Promise<void>} - A promise that resolves once the room is edited successfully.
    */
   async editRoomById(room_id: number, propertyToEdit: string, newPropertyValue: string | number): Promise<void> {
-    return this.runQuery(async (): Promise<void> => {
+    return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query(`UPDATE room
                           SET ${propertyToEdit} = $1
@@ -92,10 +93,9 @@ export class RoomService {
    * @returns {Promise<void>} - A promise that resolves when the deletion is complete.
    */
   async deleteRoomById(room_id: number): Promise<void> {
-    return this.runQuery(async (): Promise<void> => {
+    return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("DELETE FROM room WHERE room_id = $1", [room_id])
-      client.release()
     })
   }
 }
