@@ -4,137 +4,110 @@ import Logo from "@/components/util/Logo.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
 import Infobox from "@/components/InfoBoxes/Infobox.vue"
-import {ref} from "vue"
+import HeroButton from "@/components/controls/HeroButton.vue"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
 
-const message2people = ref("You can enter Communify by clicking on the button below and become" +
-  " part of our global community. You'll find what you're looking for!")
 </script>
 
 <template id="template">
-  <Logo id="logoHomeView"></Logo>
-  <HeroTitle id="heroTitle">Lets start chatting.</HeroTitle>
-  <BodyText id="bodyText" font-size="24px" color="#888888">{{message2people}}</BodyText>
-
-  <div class="FlexDesign">
-    <infobox class="infoBoxOutside">
-    <div class="infobox_inside">
-      <h2> Communify has more than <span id="amountUser">100.000+</span>  Users.</h2>
-    </div>
-  </infobox>
-    <infobox class="infoBoxOutside">
-      <div class="infobox_inside">
-        <h2> Communify connects people! <div class="link_color">Join Communify. <a class="linkStyle" href="PrivacyAndContact.vue">Now.</a></div></h2>
-      </div>
-    </infobox>
-    <infobox class="infoBoxOutside">
-      <div class="infobox_inside">
-        <h2> Data Privace is our focus! <div class="link_color"><a class="linkStyle" href="PrivacyAndContact.vue">Learn more about it.</a></div></h2>
-      </div>
-    </infobox>
-
+  <div class="logo">
+    <Logo></Logo>
   </div>
 
+  <HeroTitle id="heroTitle">Let's start chatting.</HeroTitle>
+  <BodyText id="bodyText" font-size="24px" color="var(--neutral-500)">
+    Connecting people, one message at a time.<br> You'll find what you're looking for!
+  </BodyText>
+
+  <HeroButton to="/" class="center">
+    <GoogleIcon name="Arrow_forward" font-size="1.4rem"></GoogleIcon>
+    Join for free
+  </HeroButton>
+
+  <div class="infobox-container">
+    <Infobox class="infoBoxOutside">
+      <h3> Communify has more than <span class="highlight">100.000+</span> Users.</h3>
+    </Infobox>
+    <Infobox class="infoBoxOutside">
+      <h3>
+        Over
+        <span class="highlight">1000+<br></span>
+        messages sent per minute
+      </h3>
+    </Infobox>
+    <Infobox class="infoBoxOutside">
+      <h3>
+        <span class="highlight">99.9%</span>
+        Reliability and uptime
+      </h3>
+    </Infobox>
+  </div>
 </template>
+
 <style>
+.logo {
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+}
 
-  body {
-    background-color: var(--color-main-background);
-  }
+.center {
+  display: flex;
+  justify-content: center;
+}
 
-  #logoHomeView {
-    padding-top: 2.5em;
-    padding-right: 2.5em;
-    float: right;
-    width: 30em;
-  }
-
-  @media screen and (max-width: 1250px) {
-    #logoHomeView {
-      padding-top: 2em;
-      padding-right: 2em;
-      float: right;
-      width: 20em;
-    }
-
-    #heroTitle {
-      font-size: 6em;
-      margin-top: 25%;
-    }
-
-    #bodyText {
-      padding-right: 15% !important;
-      padding-left: 15% !important;
-    }
-  }
-
-
-  @media screen and (max-width: 750px) {
-    #logoHomeView {
-      float: right;
-      padding-top: 2em;
-      padding-right: 2em;
-      width: 15em;
-    }
-
-    #heroTitle {
-      font-size: 5em;
-      margin-top: 30%;
-    }
-
-    #bodyText {
-      padding-right: 10% !important;
-      padding-left: 10% !important;
-    }
-
-    .FlexDesign {
-        display: unset !important;
-    }
-
-    .infoBoxOutside {
-      margin: 15% auto !important;
-    }
+@media screen and (max-width: 1250px) {
+  #heroTitle {
+    font-size: 6em;
+    margin-top: 25%;
   }
 
   #bodyText {
-    padding-right: 28%;
-    padding-left: 28%;
-    text-align: center;
-    line-height: 1.65em;
-    font-weight: 450;
-    margin-bottom: 2.5em;
+    padding-right: 15%;
+    padding-left: 15%;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  #heroTitle {
+    font-size: 5em;
+    margin-top: 30%;
   }
 
-  .infobox_inside {
-
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    text-align: center;
-
+  #bodyText {
+    padding-right: 10%;
+    padding-left: 10%;
   }
 
-  .FlexDesign {
-    display: flex;
-    justify-content: center;
+  .infobox-container {
+    display: unset;
   }
 
-  .linkStyle {
-      background-image: linear-gradient(to right, #5863e8, #1ec3e0);
-      -webkit-background-clip: text;
-      color: transparent;
-      font-weight: 650;
-      border-bottom: 1px groove #1ec3e0;
+  .infoBoxOutside {
+    margin: 15% auto;
   }
+}
 
-  #amountUser {
-    background-image: linear-gradient(to right, #5863e8, #1ec3e0);
-    -webkit-background-clip: text;
-    color: transparent;
-    font-weight: 650;
-  }
+#bodyText {
+  padding-right: 28%;
+  padding-left: 28%;
+  text-align: center;
+  line-height: 1.65em;
+  font-weight: 450;
+  margin-bottom: 2em;
+}
 
+.infobox-container {
+  display: flex;
+  justify-content: center;
+}
+
+.highlight {
+  background-image: linear-gradient(to right, var(--brand-600), var(--brand-400));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
 
 </style>
