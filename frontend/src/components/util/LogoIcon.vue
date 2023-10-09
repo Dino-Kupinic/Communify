@@ -5,13 +5,13 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  width: 300,
-  height: 60,
+  width: 32,
+  height: 32,
 })
 </script>
 
 <template>
-  <img src="../../assets/img/Communify.svg" :width="width" :height="height" alt="Logo">
+  <img src="../../assets/img/CommunifyLogo.svg" alt="Logo">
 </template>
 
 <style scoped>

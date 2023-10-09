@@ -1,20 +1,24 @@
 <script setup lang="ts">
-const props = defineProps<{
-  imgPath?: String;
+defineProps<{
+  initials: string;
 }>()
 </script>
 
 <template>
-  <div id="iconContainer">
-    <img id="userImg" :src="imgPath" alt="User-Profilpicture">
+  <div>
+    <h2>{{ initials }}</h2>
   </div>
 </template>
 
 <style scoped>
-#userImg {
-  width: 46.25px;
-  height: 47.22px;
+div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--brand-500);
+  width: 3em;
+  height: 3em;
+  border-radius: 30px;
 }
-
 
 </style>

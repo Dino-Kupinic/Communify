@@ -52,6 +52,17 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/",
+    component: NoFooterLayout,
+    children: [
+      {
+        path: "/jannick",
+        name: "jannick",
+        component: RoomView
+      }
+    ]
+  },
+  {
+    path: "/",
     component: DefaultLayout,
     children: [
       {
