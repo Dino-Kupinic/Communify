@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import Title from "@/components/text/TitleText.vue"
 import TitleText from "@/components/text/TitleText.vue"
 import {ref} from "vue"
 
