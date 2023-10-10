@@ -37,4 +37,8 @@ export interface LoginClient {
   password: string,
 }
 
+export type LoginReponse = {
+  access_token: string
+}
+
 
