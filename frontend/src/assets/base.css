@@ -26,6 +26,16 @@ Import Inter font with multiple weights
     --brand-800: #012a54;
     --brand-900: #000e1c;
 
+    --gradient-100: #0cf;
+    --gradient-200: #4db5ff;
+    --gradient-300: #4d91ff;
+    --gradient-400: #6443de;
+    --gradient-500: #a64dff;
+    --gradient-600: #be47ed;
+    --gradient-700: #db4dff;
+    --gradient-800: #ed4dff;
+    --gradient-900: #ff4dde;
+
     --error-100: #fde4e4;
     --error-200: #faafaf;
     --error-300: #f67a7a;
@@ -76,6 +86,9 @@ Import Inter font with multiple weights
     --color-background-soft: var(--neutral-200);
 
     --color-border: var(--neutral-700);
+    --color-border-very-soft: var(--neutral-400);
+    --color-border-soft: var(--neutral-400);
+
     --color-border-hover: var(--neutral-600);
 
     --color-heading: var(--neutral-900);
@@ -86,15 +99,13 @@ Import Inter font with multiple weights
     :root {
         --color-background: var(--neutral-800);
         --color-background-soft: var(--neutral-700);
-        --color-main-background: var(--neutral-900);
 
-        --color-border: var(--neutral-400);
+        --color-border-very-soft: var(--neutral-400);
+        --color-border-soft: var(--neutral-700);
         --color-border-hover: var(--neutral-300);
 
         --color-heading: var(--neutral-100);
         --color-text: var(--neutral-200);
-
-
     }
 }
 
@@ -118,27 +129,36 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior-x: none;
-
 }
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 0.35rem;
 }
 
-body::-webkit-scrollbar:horizontal {
+*::-webkit-scrollbar:horizontal {
     height: 0.35rem;
 }
 
-body::-webkit-scrollbar-track, body::-webkit-scrollbar-track:horizontal {
+*::-webkit-scrollbar-track, body::-webkit-scrollbar-track:horizontal {
     background-color: var(--color-background);
 }
 
-body::-webkit-scrollbar-corner {
+*::-webkit-scrollbar-corner {
     background-color: var(--color-background);
 }
 
-body::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:horizontal {
+*::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb:horizontal {
     background-color: var(--brand-500);
     border-radius: 20px;
 }
+
+* {
+    max-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+}
+
+
 

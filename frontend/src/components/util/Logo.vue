@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue"
+interface Props {
+  width: number
+  height: number
+}
 
-const darkMode = window.matchMedia("(prefers-color-scheme: dark)")
-const isDarkMode = ref(darkMode.matches)
-
-onMounted(() => {
-  darkMode.addEventListener("change", (e) => {
-    isDarkMode.value = e.matches
-  })
+withDefaults(defineProps<Props>(), {
+  width: 300,
+  height: 60,
 })
 </script>
 
 <template>
-  <img v-if="isDarkMode" src="@/assets/img/CommunifyWhite.svg" alt="Dark Logo">
-  <img v-else src="@/assets/img/Communify.svg" alt="Light Logo">
+  <img src="../../assets/img/Communify.svg" :width="width" :height="height" alt="Logo">
 </template>
 
 <style scoped>
