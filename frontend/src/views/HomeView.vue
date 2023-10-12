@@ -9,7 +9,6 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
 
 </script>
-
 <template id="template">
   <div class="logo">
     <Logo></Logo>
@@ -60,7 +59,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
 @media screen and (max-width: 1250px) {
   #heroTitle {
     font-size: 6em;
-    margin-top: 25%;
+    margin-top: 20%;
   }
 
   #bodyText {
@@ -72,7 +71,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
 @media screen and (max-width: 750px) {
   #heroTitle {
     font-size: 5em;
-    margin-top: 30%;
+    margin-top: 15%;
   }
 
   #bodyText {
