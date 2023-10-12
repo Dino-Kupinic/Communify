@@ -6,18 +6,18 @@ import HeroTitle from "@/components/text/HeroTitle.vue"
 import Infobox from "@/components/InfoBoxes/Infobox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import HeroSubText from "@/components/text/HeroSubText.vue"
 
 </script>
-
 <template id="template">
   <div class="logo">
     <Logo></Logo>
   </div>
 
   <HeroTitle id="heroTitle">Let's start chatting.</HeroTitle>
-  <BodyText id="bodyText" font-size="24px" color="var(--neutral-500)">
+  <HeroSubText id="bodyText" font-size="24px" color="var(--neutral-500)">
     Connecting people, one message at a time.<br> You'll find what you're looking for!
-  </BodyText>
+  </HeroSubText>
 
   <HeroButton to="/" class="center">
     <GoogleIcon name="Arrow_forward" font-size="1.4rem"></GoogleIcon>
@@ -59,7 +59,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 @media screen and (max-width: 1250px) {
   #heroTitle {
     font-size: 6em;
-    margin-top: 25%;
+    margin-top: 20%;
   }
 
   #bodyText {
@@ -71,7 +71,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 @media screen and (max-width: 750px) {
   #heroTitle {
     font-size: 5em;
-    margin-top: 30%;
+    margin-top: 15%;
   }
 
   #bodyText {
