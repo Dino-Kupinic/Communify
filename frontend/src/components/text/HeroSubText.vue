@@ -12,21 +12,19 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div id="SubText">
+  <h2>
     <slot></slot>
-  </div>
+  </h2>
 </template>
 
 <style scoped>
 
-#SubText {
+h2 {
   font-size: v-bind(fontSize);
   font-family: "Inter", serif;
   font-weight: 400;
   line-height: 1.5;
   color: v-bind(color);
 }
-
-
 
 </style>
