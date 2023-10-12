@@ -13,9 +13,9 @@ export interface Client {
   email: string
   password: string
   biography: string | null
-  age: number | null
+  age: number
   member_since: string
-  current_room_id: number
+  current_room_id: number | null
 }
 
 export interface Message {
