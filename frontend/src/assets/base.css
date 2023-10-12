@@ -93,6 +93,7 @@ Import Inter font with multiple weights
 
     --color-heading: var(--neutral-900);
     --color-text: var(--neutral-800);
+    --color-text-soft: var(--neutral-700);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -106,6 +107,7 @@ Import Inter font with multiple weights
 
         --color-heading: var(--neutral-100);
         --color-text: var(--neutral-200);
+        --color-text-soft: var(--neutral-300);
     }
 }
 

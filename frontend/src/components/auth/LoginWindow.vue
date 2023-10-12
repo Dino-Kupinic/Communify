@@ -9,6 +9,9 @@ import useVuelidate from "@vuelidate/core"
 import InputField from "@/components/controls/InputField.vue"
 import {MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants"
 import InputError from "@/components/controls/InputError.vue"
+import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
+import Link from "@/components/text/Link.vue"
+
 
 const state: LoginClient = reactive({
   username: "",
@@ -64,7 +67,7 @@ async function submitForm() {
 </script>
 
 <template>
-  <h3 class="title" >Welcome back.</h3>
+  <BodySubtitleText class="title" font-size="1.8rem">Welcome back.</BodySubtitleText>
   <div class="container">
     <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username">
       <template #below-input>
