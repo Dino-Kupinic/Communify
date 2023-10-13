@@ -22,8 +22,6 @@ onMounted(() => {
   <div class="message" :id=messageStyle>
     {{ messageText }}
   </div>
-
-
 </template>
 
 <style scoped>

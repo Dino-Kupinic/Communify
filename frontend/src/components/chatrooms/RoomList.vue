@@ -14,7 +14,5 @@ div {
   height: 80.6vh;
   width: 100%;
   border-right: 1px solid var(--color-border-very-soft);
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>

@@ -2,12 +2,17 @@
 
 import ChatIcon from "@/components/user/UserIcon.vue"
 import UserProfileText from "@/components/user/UserProfileText.vue"
+import HeroSubText from "@/components/text/HeroSubText.vue"
 </script>
 
 <template>
   <div id="chatroomheader-container">
       <ChatIcon imgPath="src/assets/img/github.svg"></ChatIcon>
       <UserProfileText id="profileText">Gruppe Reisinger</UserProfileText>
+  </div>
+  <div id="hero-sub-text-container">
+    <HeroSubText>
+    </HeroSubText>
   </div>
 </template>
 
@@ -29,6 +34,11 @@ import UserProfileText from "@/components/user/UserProfileText.vue"
 }
 #profileText {
   width: max-content;
+}
+
+#hero-sub-text-container {
+  display: grid;
+  height: 100%;
 }
 
 
