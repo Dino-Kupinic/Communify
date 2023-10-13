@@ -10,6 +10,8 @@ import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
+import ActionButton from "@/components/controls/ActionButton.vue"
+import Modal from "@/components/Boxes/Modal.vue"
 
 let username = ref("Neuery17")
 let rooms = ref<Room[]>()
@@ -36,7 +38,10 @@ onMounted(async () => {
       <div id="userbar-container">
         <!-- Bar for the user profile on top of the list -->
         <UserProfileBar id="container-div-short-user">
-          <UserIcon initials="DK"></UserIcon>
+          <div id="icon-container">
+            <UserIcon initials="DK"></UserIcon>
+          </div>
+
           <UserProfileText id="username">
             {{ username }}
           </UserProfileText>
@@ -44,15 +49,31 @@ onMounted(async () => {
 
         <!-- Bar for the menu above the list and under the user-bar -->
         <UserProfileBar id="container-div-short-menu">
-          <Icon image-name="account" file-extension="png"></Icon>
-          <Icon image-name="add" file-extension="png"></Icon>
-          <Icon image-name="settings" file-extension="png"></Icon>
+          <ActionButton height="max-content" id="refresh">
+              <Icon id="ref-img" image-name="refresh" file-extension="png"></Icon>
+              <span id="ref-span">
+                 Refresh
+              </span>
+          </ActionButton>
+          <ActionButton height="max-content">
+            <Icon image-name="account" file-extension="png"></Icon>
+          </ActionButton>
+          <ActionButton height="max-content">
+            <Icon image-name="add" file-extension="png"></Icon>
+          </ActionButton>
+          <ActionButton height="max-content">
+            <Icon image-name="settings" file-extension="png"></Icon>
+          </ActionButton>
+
+
+
         </UserProfileBar>
       </div>
 
       <RoomList>
         <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
+        <Modal></Modal>
       </RoomList>
     </div>
     <ChatRoom></ChatRoom>
@@ -97,5 +118,35 @@ onMounted(async () => {
   justify-content: center;
   height: auto;
 }
+
+#icon-container {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+}
+
+#refresh {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
+  height: -webkit-fill-available
+}
+
+#ref-img {
+  margin-right: 0.3rem;
+}
+
+#ref-span {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+}
+
 
 </style>
