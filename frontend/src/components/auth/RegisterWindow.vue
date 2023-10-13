@@ -55,6 +55,10 @@ async function submitForm() {
   const isFormCorrect = await v$.value.$validate()
   if (!isFormCorrect) return
 
+  state.member_since = getJoinDate()
+  if (state.biography == undefined)
+    state.biography = null
+
   const user: Client = {
     "user_id": null,
     "username": state.username,
@@ -80,6 +84,15 @@ async function submitForm() {
   } catch (err) {
     console.error(err)
   }
+}
+
+function getJoinDate(): string {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, "0")
+  const day = String(today.getDate()).padStart(2, "0")
+
+  return `${year}-${month}-${day}`
 }
 
 </script>
