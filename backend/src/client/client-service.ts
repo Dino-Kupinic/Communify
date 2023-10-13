@@ -1,7 +1,7 @@
 import {Pool, PoolClient, QueryResult} from "pg"
-import {Client, Room} from "../models/types"
+import {Client} from "../models/types"
 import {runQuery} from "../database/db"
-
+import crypto from "crypto"
 
 export class ClientService {
   constructor(private pool: Pool) {
@@ -54,16 +54,33 @@ export class ClientService {
   }
 
   /**
+   * Retrieves a client by their email address.
+   *
+   * @param {string} email - The email address of the client.
+   * @returns {Promise<Client | undefined>} A promise that resolves to the client object if found, or undefined if not found.
+   */
+  async getClientByEmail(email: string): Promise<Client | undefined> {
+    return runQuery(async (): Promise<Client | undefined> => {
+      const client: PoolClient = await this.pool.connect()
+      const result: QueryResult<Client> = await client.query(
+        "SELECT * FROM client WHERE email = $1;", [email],
+      )
+      return result.rows[0]
+    })
+  }
+
+  /**
    * Inserts a new client to the database.
    *
    * @param {Client} newClient - The client object containing the client details.
    * @returns {Promise<void>} - A promise that resolves when the client is added successfully, or rejects with an error.
    */
   async addClient(newClient: Client): Promise<void> {
+    const hashed_password: string = crypto.createHash("sha256").update(newClient.password).digest("hex")
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("INSERT INTO client (username, email, password, biography, age, member_since, current_room_id) " +
-        "VALUES ($1, $2, $3, $4, $5, $6, $7);", [newClient.username, newClient.email, newClient.password, newClient.biography, newClient.age,
+        "VALUES ($1, $2, $3, $4, $5, $6, $7);", [newClient.username, newClient.email, hashed_password, newClient.biography, newClient.age,
         newClient.member_since, newClient.current_room_id],
       )
     })

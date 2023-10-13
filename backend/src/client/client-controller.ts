@@ -36,16 +36,27 @@ clientRouter.get("/getClientByUsername/:username", asyncHandler(async (req, res)
 
 clientRouter.post("/createClient", asyncHandler(async (req, res) => {
   const {username, email, password, biography, age, member_since, current_room_id} = req.body
-  await clientService.addClient({
-    username: username,
-    email: email,
-    password: password,
-    biography: biography,
-    age: age,
-    member_since: member_since,
-    current_room_id: current_room_id,
-  } as Client)
-  res.send("Client created successfully")
+
+  const emailExists = await clientService.getClientByEmail(email)
+  const usernameExists = await clientService.getClientByUsername(username)
+  if (emailExists) {
+    res.status(400).send("Email exists. Couldn't create client")
+    return
+  } else if (usernameExists) {
+    res.status(400).send("Username exists. Couldn't create client")
+    return
+  } else {
+    await clientService.addClient({
+      username: username,
+      email: email,
+      password: password,
+      biography: biography,
+      age: age,
+      member_since: member_since,
+      current_room_id: current_room_id,
+    } as Client)
+    res.send("Client created successfully")
+  }
 }))
 
 clientRouter.put("/editClientById/:id", asyncHandler(async (req, res) => {
