@@ -80,7 +80,7 @@ async function submitForm() {
       </template>
     </InputField>
     <div class="button-container">
-      <ActionButton @click="submitForm" class="btn" width="88%" height="3rem">Log in</ActionButton>
+      <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Log in</ActionButton>
     </div>
   </div>
   <BodyText>

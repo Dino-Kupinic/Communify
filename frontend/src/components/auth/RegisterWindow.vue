@@ -41,6 +41,7 @@ const rules = {
   },
   age: {
     required,
+    minValue: minValue(18),
     maxValue: maxValue(150),
   },
   biography: {
@@ -86,7 +87,8 @@ async function submitForm() {
 <template>
   <BodySubtitleText class="title" font-size="1.8rem">Create your account</BodySubtitleText>
   <div class="container">
-    <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username" placeholder="Dino Kupinic">
+    <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username"
+                placeholder="Dino Kupinic">
       <template #below-input>
         <InputError field="username" :v$="v$"></InputError>
       </template>
@@ -96,7 +98,8 @@ async function submitForm() {
         <InputError field="password" :v$="v$"></InputError>
       </template>
     </InputField>
-    <InputField :class="{'input-error': v$.email.$error}" v-model="state.email" label="E-Mail Address" type="email" placeholder="dkupinic@htl-steyr.ac.at">
+    <InputField :class="{'input-error': v$.email.$error}" v-model="state.email" label="E-Mail Address" type="email"
+                placeholder="dkupinic@htl-steyr.ac.at">
       <template #below-input>
         <InputError field="email" :v$="v$"></InputError>
       </template>
@@ -107,13 +110,13 @@ async function submitForm() {
       </template>
     </InputField>
     <OptionalInputField :class="{'input-error': v$.biography && v$.biography.$error}" v-model="state.biography"
-                        label="Biography" placeholder="I love listening to music and programming">
+                        label="Biography (Optional)" placeholder="I love listening to music and programming">
       <template #below-input>
         <InputError field="biography" :v$="v$"></InputError>
       </template>
     </OptionalInputField>
     <div class="button-container">
-      <ActionButton @click="submitForm" class="btn" width="88%" height="3rem">Create my account</ActionButton>
+      <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Create my account</ActionButton>
     </div>
   </div>
   <BodyText>
