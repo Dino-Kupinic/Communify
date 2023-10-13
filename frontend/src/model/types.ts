@@ -38,7 +38,7 @@ export interface LoginClient {
 }
 
 export type LoginReponse = {
-  access_token: string
+  token: string
 }
 
 

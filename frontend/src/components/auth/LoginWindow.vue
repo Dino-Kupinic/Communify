@@ -52,14 +52,11 @@ async function submitForm() {
       },
       body: JSON.stringify(loginUser),
     })
-
     if (response.status !== 200)
       return
-
     const content: LoginReponse = await response.json()
-    localStorage.setItem("auth_token", content.access_token)
-    // Todo: update vue router
-    await router.push("/")
+    localStorage.setItem("auth_token", content.token)
+    await router.push("/chats")
   } catch (err) {
     console.error(err)
   }

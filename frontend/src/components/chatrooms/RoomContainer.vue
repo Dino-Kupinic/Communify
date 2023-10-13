@@ -42,9 +42,4 @@ function changeCol() {
 }
 
 
-
-
-
-
-
 </style>
