@@ -21,4 +21,3 @@ authRouter.get("/profile", asyncHandler(async (req, res, next) => {
   const client = await authService.getUserFromToken(token)
   res.send(client)
 }))
-
