@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS topic
 (
     topic_id SERIAL PRIMARY KEY NOT NULL,
     text     VARCHAR(25)        NOT NULL,
-    color    VARCHAR(30)        NOT NULL
+    color    VARCHAR(30)        NOT NULL,
+    UNIQUE (text, color)
 );
 
 CREATE TABLE IF NOT EXISTS topics_rooms
