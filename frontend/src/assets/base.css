@@ -122,7 +122,8 @@ Import Inter font with multiple weights
 }
 
 body {
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
     color: var(--color-text);
     background: var(--color-background);
     transition: color 0.5s,
