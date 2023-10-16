@@ -11,6 +11,8 @@ import Section from "@/components/section/Section.vue"
 import Module1 from "@/components/modules/Module1.vue"
 import Module2 from "@/components/modules/Module2.vue"
 import Module3 from "@/components/modules/Module3.vue"
+import Icon from "@/components/util/Icon.vue"
+import Illustration from "@/components/util/Illustration.vue"
 
 /*
 #44585f
@@ -52,12 +54,17 @@ import Module3 from "@/components/modules/Module3.vue"
   </div>
 
   <Section bgColor="--color-text" id="section1">
-    <Module1 id="module1" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >Das ist Modul 1!</Module1>
+    <Module1 id="module1" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >
+      <Illustration image-name="test"></Illustration>
+      <h3 id="textSection1">Chat with everyone you like.</h3>
+    </Module1>
     <Module2 id="module2" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >Das ist Modul 2!</Module2>
   </Section>
 
   <Section bgColor="--color-text" id="section2" >
-    <Module3 id="module3" bgColor="#1c344a" text-color="#e0dfdf">Das ist Modul 3!</Module3>
+    <Module3 id="module3" bgColor="#1c344a" text-color="#e0dfdf">
+      <Illustration image-name="">TEST! HIER WEITERMACHEN -> BIlD suchen für 2. Modul!</Illustration>
+    </Module3>
   </Section>
 
 </template>
@@ -109,7 +116,6 @@ import Module3 from "@/components/modules/Module3.vue"
 
   #section1 {
     display: unset !important;
-
   }
 
   #module1 {
@@ -166,15 +172,19 @@ import Module3 from "@/components/modules/Module3.vue"
     .moduleSplitted4mediaQuery {
       background-color: #44585f !important;
     }
-
     #section2 {
       margin: 0 !important;
+      margin-bottom: 15px !important;
     }
-
 }
 
 #module3 {
   margin-top: 40px;
+}
+
+#textSection1 {
+  text-align: center;
+  width: 100%;
 }
 
 
