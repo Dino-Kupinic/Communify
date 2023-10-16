@@ -36,6 +36,10 @@ async function submitForm() {
   const isFormCorrect = await v$.value.$validate()
   if (!isFormCorrect) return
 
+  // can't login as unknown placeholder user
+  if (state.username == "[unknown]" && state.password == "unknown")
+    return
+
   const loginUser: LoginClient = {
     username: state.username,
     password: state.password,
