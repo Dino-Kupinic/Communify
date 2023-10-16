@@ -8,6 +8,7 @@ import {roomRouter} from "./room/room-controller"
 import {clientRouter} from "./client/client-controller"
 import {authRouter} from "./auth/auth-controller"
 import {topicRouter} from "./topic/topic-controller"
+import {messageRouter} from "./message/message-controller"
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ const routes = [
   {path: "/client", router: clientRouter},
   {path: "/auth", router: authRouter},
   {path: "/topic", router: topicRouter},
+  {path: "/message", router: messageRouter},
 ]
 
 routes.forEach(route => app.use(route.path, route.router))
