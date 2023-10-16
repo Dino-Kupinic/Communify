@@ -3,12 +3,16 @@ import {computed} from "vue"
 
 interface Props {
   imageName: string,
-  fileExtension?: string
+  fileExtension?: string,
+  pictureHeight: string,
+  pictureWidth: string,
 }
 
 const props = withDefaults(defineProps<Props>(), {
   imageName: "",
   fileExtension: "svg",
+  pictureHeight: "20rem",
+  pictureWidth: "20rem",
 })
 
 const imgSrc = computed(() => {
@@ -26,8 +30,8 @@ const imgSrc = computed(() => {
 <style scoped>
 
 img {
-  width: 20rem;
-  height: 20rem;
-  padding: 0
+  width: v-bind(pictureWidth);
+  height: v-bind(pictureHeight);
+  padding: 0;
 }
 </style>

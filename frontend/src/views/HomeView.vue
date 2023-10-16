@@ -54,15 +54,20 @@ import Illustration from "@/components/util/Illustration.vue"
 
   <Section bgColor="--color-text" id="section1">
     <Module1 id="module1" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >
-      <Illustration image-name="test"></Illustration>
-      <h3 id="textSection1">Chat with everyone you like.</h3>
+      <Illustration image-name="everyPerson"></Illustration>
+      <h3 class="textmodule1">Chat with everyone you like ...</h3>
     </Module1>
-    <Module2 id="module2" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >Das ist Modul 2!</Module2>
+
+    <Module2 id="module2" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >
+      <Illustration image-name="worldwide" picture-width="25rem"></Illustration>
+      <h3 class="textmodule1"> ... and everywhere you stay.</h3>
+    </Module2>
   </Section>
 
   <Section bgColor="--color-text" id="section2" >
     <Module3 id="module3" bgColor="#1c344a" text-color="#e0dfdf">
-      <Illustration image-name="">TEST! HIER WEITERMACHEN -> BIlD suchen für 2. Modul!</Illustration>
+      <Illustration image-name="connectingPeople"  picture-width="45rem"></Illustration>
+      <h3 class="textmodule1">Find new Friends and use the platform for new experiencies, practise in talking or for learning</h3>
     </Module3>
   </Section>
 
@@ -181,9 +186,20 @@ import Illustration from "@/components/util/Illustration.vue"
   margin-top: 40px;
 }
 
-#textSection1 {
+.textmodule1 {
   text-align: center;
   width: 100%;
+  font-weight: 500;
+  color: #829398;
+  font-family: Inter, serfi;
+  /*
+  background: linear-gradient(90deg, #1ec3e0, #2432d3);
+  background-clear: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 650;
+
+   */
 }
 
 
