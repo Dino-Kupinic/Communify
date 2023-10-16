@@ -2,10 +2,10 @@
 import {useVModel} from "@vueuse/core"
 
 interface Props {
-  modelValue: string | number
+  modelValue: string | number | null
   type?: string,
   label?: string,
-  autocomplete?: string
+  autocomplete?: string,
   placeholder?: string
 }
 
@@ -16,7 +16,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  update: [modelValue: string | number]
+  update: [modelValue: string | number | null]
 }>()
 const input = useVModel(props, "modelValue", emit)
 </script>
@@ -51,7 +51,7 @@ input {
 }
 
 input[type="password"] {
-  letter-spacing: 1px;
+  letter-spacing: 2px;
 }
 
 input:focus {

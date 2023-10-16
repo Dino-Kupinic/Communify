@@ -16,6 +16,7 @@ export class RoomService {
     return runQuery(async (): Promise<Room[] | undefined> => {
       const client: PoolClient = await this.pool.connect()
       const result: QueryResult<Room> = await client.query("SELECT * FROM room;")
+      client.release()
       return result.rows
     })
   }
@@ -32,6 +33,7 @@ export class RoomService {
       const result: QueryResult<Room> = await client.query(
         "SELECT * FROM room WHERE room_id = $1;", [room_id],
       )
+      client.release()
       return result.rows[0]
     })
   }
@@ -48,6 +50,7 @@ export class RoomService {
       const result: QueryResult<Room> = await client.query(
         "SELECT * FROM room WHERE name = $1;", [name],
       )
+      client.release()
       return result.rows[0]
     })
   }
@@ -64,6 +67,7 @@ export class RoomService {
       await client.query("INSERT INTO room (name, maximum_users, description, password, creator_id) VALUES ($1, $2, $3, $4, $5);",
         [newRoom.name, newRoom.maximum_users, newRoom.description, newRoom.password, newRoom.creator_id],
       )
+      client.release()
     })
   }
 
@@ -83,6 +87,7 @@ export class RoomService {
                           SET ${propertyToEdit} = $1
                           WHERE room_id = $2`, [newPropertyValue, room_id],
       )
+      client.release()
     })
   }
 
@@ -96,6 +101,7 @@ export class RoomService {
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("DELETE FROM room WHERE room_id = $1", [room_id])
+      client.release()
     })
   }
 }

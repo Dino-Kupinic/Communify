@@ -35,9 +35,9 @@ button {
 }
 
 .hollow {
-  background-color: var(--color-background);
+  background-color: var(--color-background-very-soft);
   border-radius: 1.2rem;
-  border: 1px solid var(--brand-500);
+  border: 1px solid var(--neutral-500);
   color: var(--color-text);
   font-weight: 400;
   font-size: 1rem;

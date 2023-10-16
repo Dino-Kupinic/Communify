@@ -80,9 +80,4 @@ function changeCol() {
 }
 
 
-
-
-
-
-
 </style>

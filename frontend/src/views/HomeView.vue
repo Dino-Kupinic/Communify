@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import Logo from "@/components/util/Logo.vue"
-import BodyText from "@/components/text/BodyText.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
 import Infobox from "@/components/Boxes/InfoBox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
@@ -9,7 +8,6 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
 
 </script>
-
 <template id="template">
   <div class="logo">
     <Logo></Logo>
@@ -20,7 +18,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
     Connecting people, one message at a time.<br> You'll find what you're looking for!
   </HeroSubText>
 
-  <HeroButton to="/" class="center">
+  <HeroButton to="/auth/login" class="center">
     <GoogleIcon name="Arrow_forward" font-size="1.4rem"></GoogleIcon>
     Join for free
   </HeroButton>
@@ -60,7 +58,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
 @media screen and (max-width: 1250px) {
   #heroTitle {
     font-size: 6em;
-    margin-top: 25%;
+    margin-top: 20%;
   }
 
   #bodyText {
@@ -72,7 +70,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
 @media screen and (max-width: 750px) {
   #heroTitle {
     font-size: 5em;
-    margin-top: 30%;
+    margin-top: 15%;
   }
 
   #bodyText {

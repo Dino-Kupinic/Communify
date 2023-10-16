@@ -16,7 +16,6 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue"
 import UserHomeView from "@/views/UserHomeView.vue"
 import UserProfileView from "@/views/UserProfileView.vue"
 import ChatRoomsView from "@/views/ChatRoomsView.vue"
-import RoomView from "@/views/RoomView.vue"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
@@ -30,24 +29,6 @@ const routes: Array<RouteRecordRaw> & {
         name: "home",
         component: HomeView,
       },
-      {
-        path: "/chats",
-        name: "chats",
-        component: ChatRoomsView,
-        meta: {
-          requiresAuth: true,
-        },
-        children: [
-          {
-            path: ":room_name",
-            name: "room",
-            component: RoomView,
-            meta: {
-              requiresAuth: true,
-            },
-          },
-        ],
-      },
     ],
   },
   {
@@ -55,11 +36,24 @@ const routes: Array<RouteRecordRaw> & {
     component: NoFooterLayout,
     children: [
       {
-        path: "/jannick",
-        name: "jannick",
-        component: RoomView
-      }
-    ]
+        path: "/chats",
+        name: "chats",
+        component: ChatRoomsView,
+        meta: {
+          requiresAuth: true,
+        },
+        // children: [
+        //   {
+        //     path: ":room_name",
+        //     name: "room",
+        //     component: RoomView,
+        //     meta: {
+        //       requiresAuth: true,
+        //     },
+        //   },
+        // ],
+      },
+    ],
   },
   {
     path: "/",

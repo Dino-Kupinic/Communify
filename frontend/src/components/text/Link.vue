@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface Props {
-  link: string,
+  link?: string,
   opensTab?: boolean
 }
 

@@ -9,6 +9,9 @@ import useVuelidate from "@vuelidate/core"
 import InputField from "@/components/controls/InputField.vue"
 import {MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants"
 import InputError from "@/components/controls/InputError.vue"
+import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
+import Link from "@/components/text/Link.vue"
+
 
 const state: LoginClient = reactive({
   username: "",
@@ -33,6 +36,10 @@ async function submitForm() {
   const isFormCorrect = await v$.value.$validate()
   if (!isFormCorrect) return
 
+  // can't login as unknown placeholder user
+  if (state.username == "[unknown]" && state.password == "unknown")
+    return
+
   const loginUser: LoginClient = {
     username: state.username,
     password: state.password,
@@ -49,14 +56,11 @@ async function submitForm() {
       },
       body: JSON.stringify(loginUser),
     })
-
     if (response.status !== 200)
       return
-
     const content: LoginReponse = await response.json()
-    localStorage.setItem("auth_token", content.access_token)
-    // Todo: update vue router
-    await router.push("/")
+    localStorage.setItem("auth_token", content.token)
+    await router.push("/chats")
   } catch (err) {
     console.error(err)
   }
@@ -64,7 +68,7 @@ async function submitForm() {
 </script>
 
 <template>
-  <h3 class="title" >Welcome back.</h3>
+  <BodySubtitleText class="title" font-size="1.8rem">Welcome back.</BodySubtitleText>
   <div class="container">
     <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username">
       <template #below-input>
@@ -77,7 +81,7 @@ async function submitForm() {
       </template>
     </InputField>
     <div class="button-container">
-      <ActionButton @click="submitForm" class="btn" width="88%" height="3rem">Log in</ActionButton>
+      <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Log in</ActionButton>
     </div>
   </div>
   <BodyText>

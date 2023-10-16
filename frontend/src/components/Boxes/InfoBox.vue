@@ -43,8 +43,17 @@
   border-radius: 20px;
   z-index: -1;
 }
-
 .cards:after {
   filter: blur(14px);
 }
+
+
+.cards:hover:after {
+  background: linear-gradient(45deg, #fd29fd, #1724cc, #fd07fd);
+
+}
+.cards:hover:after {
+  filter: blur(14px);
+}
+
 </style>

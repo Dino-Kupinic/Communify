@@ -24,6 +24,11 @@ export const pool: Pool = new Pool({
   password: DATABASE_PASSWORD,
 })
 
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err)
+  process.exit(-1)
+})
+
 /**
  * Establishes a connection to the database and executes a query.
  *

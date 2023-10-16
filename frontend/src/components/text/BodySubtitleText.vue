@@ -1,30 +1,28 @@
 <script setup lang="ts">
 interface Props {
   fontSize?: string
-  color?: string
 }
 
 withDefaults(defineProps<Props>(), {
-  color: "var(--color-text)",
-  fontSize: "14px",
+  fontSize: "2rem",
 })
 
 </script>
 
 <template>
-  <h2>
+  <h3>
     <slot></slot>
-  </h2>
+  </h3>
 </template>
 
 <style scoped>
-
-h2 {
-  font-size: v-bind(fontSize);
+h3 {
+  display: inline;
   font-family: "Inter", serif;
+  font-size: v-bind(fontSize);
   font-weight: 500;
-  line-height: 1.5;
-  color: v-bind(color);
+  line-height: 1.2;
+  color: var(--color-text-soft);
 }
 
 </style>
