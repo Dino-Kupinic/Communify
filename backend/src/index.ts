@@ -6,6 +6,9 @@ import {errorHandler} from "./middleware/error-handler"
 import {connectAndQuery} from "./database/db"
 import {roomRouter} from "./room/room-controller"
 import {clientRouter} from "./client/client-controller"
+import {authRouter} from "./auth/auth-controller"
+import {topicRouter} from "./topic/topic-controller"
+import {messageRouter} from "./message/message-controller"
 
 dotenv.config()
 
@@ -17,8 +20,15 @@ app.use(errorHandler)
 
 export const server = createServer(app)
 
-app.use("/room", roomRouter)
-app.use("/client", clientRouter)
+const routes = [
+  {path: "/room", router: roomRouter},
+  {path: "/client", router: clientRouter},
+  {path: "/auth", router: authRouter},
+  {path: "/topic", router: topicRouter},
+  {path: "/message", router: messageRouter},
+]
+
+routes.forEach(route => app.use(route.path, route.router))
 
 app.get("/", (req: Request, res: Response): void => {
   res.send("Communify Backend")

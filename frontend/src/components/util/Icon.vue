@@ -34,4 +34,8 @@ img:hover {
   opacity: 80%;
 }
 
+div {
+  display: flex;
+}
+
 </style>

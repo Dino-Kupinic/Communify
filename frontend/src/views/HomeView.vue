@@ -1,9 +1,8 @@
 <script setup lang="ts">
 
 import Logo from "@/components/util/Logo.vue"
-import BodyText from "@/components/text/BodyText.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
-import Infobox from "@/components/InfoBoxes/Infobox.vue"
+import Infobox from "@/components/Boxes/InfoBox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
@@ -29,7 +28,7 @@ import Illustration from "@/components/util/Illustration.vue"
     Connecting people, one message at a time.<br> You'll find what you're looking for!
   </HeroSubText>
 
-  <HeroButton to="/" class="center">
+  <HeroButton to="/auth/login" class="center">
     <GoogleIcon name="Arrow_forward" font-size="1.4rem"></GoogleIcon>
     Join for free
   </HeroButton>

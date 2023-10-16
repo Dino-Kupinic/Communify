@@ -1,101 +1,125 @@
-<script setup lang="ts">
+<!--<script setup lang="ts">-->
 
-import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
-import UserProfileBar from "@/components/user/UserProfileBar.vue"
-import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import UserIcon from "@/components/user/UserIcon.vue"
-import UserProfileText from "@/components/user/UserProfileText.vue"
-import {onMounted, ref} from "vue"
-import RoomList from "@/components/chatrooms/RoomList.vue"
-import Icon from "@/components/util/Icon.vue"
-import type {Room} from "@/model/types"
-import TitleText from "@/components/text/TitleText.vue"
+<!--import RoomContainer from "@/components/chatrooms/RoomContainer.vue"-->
+<!--import UserProfileBar from "@/components/user/UserProfileBar.vue"-->
+<!--import ChatRoom from "@/components/chatrooms/ChatRoom.vue"-->
+<!--import {onMounted, ref} from "vue"-->
+<!--import RoomList from "@/components/chatrooms/RoomList.vue"-->
+<!--import Icon from "@/components/util/Icon.vue"-->
+<!--import type {Room} from "@/model/types"-->
+<!--import TitleText from "@/components/text/TitleText.vue"-->
+<!--import ActionButton from "@/components/controls/ActionButton.vue"-->
+<!--import Modal from "@/components/Boxes/Modal.vue"-->
 
-let username = ref("Neuery17")
-let rooms = ref<Room[]>()
+<!--const rooms = ref<Room[]>()-->
 
-onMounted(async () => {
-  try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
-  } catch (err) {
-    console.error(err)
-  }
-})
+<!--onMounted(async () => {-->
+<!--  loadRooms()-->
+<!--})-->
 
-</script>
+<!--async function loadRooms() {-->
+<!--  try {-->
+<!--    const response = await fetch("http://localhost:4000/room/getRooms", {-->
+<!--      method: "GET",-->
+<!--      headers: {-->
+<!--        "Content-Type": "application/json",-->
+<!--      },-->
+<!--    })-->
+<!--    rooms.value = await response.json()-->
+<!--  } catch (err) {-->
+<!--    console.error(err)-->
+<!--  }-->
+<!--}-->
 
-<template>
-  <div id="site-container">
-    <div id="userbar-chatrooms-container">
-      <div id="userbar-container">
-        <!-- Bar for the user profile on top of the list -->
-        <UserProfileBar id="container-div-short-user">
-          <UserIcon initials="DK"></UserIcon>
-          <UserProfileText id="username">
-            {{ username }}
-          </UserProfileText>
-        </UserProfileBar>
+<!--const actionButtons = ref([-->
+<!--  {icon: "refresh", label: "Refresh", action: loadRooms},-->
+<!--  {icon: "account", label: "Profile"},-->
+<!--  {icon: "add", label: "Create Room"},-->
+<!--  {icon: "settings", label: "Settings"},-->
+<!--])-->
 
-        <!-- Bar for the menu above the list and under the user-bar -->
-        <UserProfileBar id="container-div-short-menu">
-          <Icon image-name="account" file-extension="png"></Icon>
-          <Icon image-name="add" file-extension="png"></Icon>
-          <Icon image-name="settings" file-extension="png"></Icon>
-        </UserProfileBar>
-      </div>
+<!--</script>-->
 
-      <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
-        <TitleText v-else title="Loading..."></TitleText>
-      </RoomList>
-    </div>
-    <ChatRoom></ChatRoom>
-  </div>
-</template>
+<!--<template>-->
+<!--  <div id="site-container">-->
+<!--    <div id="userbar-chatrooms-container">-->
+<!--      <div id="userbar-container">-->
+<!--        <UserProfileBar id="container-div-short-user"/>-->
 
-<style scoped>
-#userbar-container {
-  border-right: 1px solid var(--color-border-very-soft);
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-}
+<!--        &lt;!&ndash; Bar for the menu above the list and under the user-bar &ndash;&gt;-->
+<!--        <div id="container-div-short-menu" class="container-div-short">-->
+<!--          <ActionButton-->
+<!--            v-for="button in actionButtons"-->
+<!--            :key="button.label"-->
+<!--            :hollow="true"-->
+<!--            height="max-content"-->
+<!--            class="refresh"-->
+<!--            @click="button.action"-->
+<!--          >-->
+<!--            <Icon class="ref-img" :image-name="button.icon" file-extension="png"/>-->
+<!--            <span class="btn-span">{{ button.label }}</span>-->
+<!--          </ActionButton>-->
+<!--        </div>-->
+<!--      </div>-->
 
-#site-container {
-  display: flex;
-}
+<!--      <RoomList>-->
+<!--        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>-->
+<!--        <TitleText v-else title="Loading..."></TitleText>-->
+<!--        <Modal></Modal>-->
+<!--      </RoomList>-->
+<!--    </div>-->
+<!--    <ChatRoom></ChatRoom>-->
+<!--  </div>-->
+<!--</template>-->
 
-#userbar-chatrooms-container {
-  width: 25%;
-}
+<!--<style scoped>-->
+<!--#userbar-container {-->
+<!--  border-right: 1px solid var(&#45;&#45;color-border-very-soft);-->
+<!--  display: flex;-->
+<!--  flex-wrap: wrap;-->
+<!--  width: 100%;-->
+<!--}-->
 
-.container-div-short {
-  width: 100%;
-  height: 6em;
-  background-color: var(--color-background);
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid var(--color-border-soft);
-}
+<!--#site-container {-->
+<!--  display: flex;-->
+<!--}-->
 
-#username {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-}
+<!--#userbar-chatrooms-container {-->
+<!--  width: 25%;-->
+<!--}-->
 
-#container-div-short-menu {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  justify-content: center;
-  height: auto;
-}
+<!--#container-div-short-menu {-->
+<!--  display: flex;-->
+<!--  flex-wrap: wrap;-->
+<!--  align-content: center;-->
+<!--  justify-content: center;-->
+<!--  height: auto;-->
+<!--}-->
 
-</style>
+<!--.refresh {-->
+<!--  display: flex;-->
+<!--  flex-wrap: wrap;-->
+<!--  font-size: 1rem;-->
+<!--  padding-right: 1.5%;-->
+<!--  padding-left: 1.5%;-->
+<!--}-->
+
+<!--.container-div-short {-->
+<!--  width: 100%;-->
+<!--  height: 6em;-->
+<!--  background-color: var(&#45;&#45;color-background);-->
+<!--  display: flex;-->
+<!--  flex-direction: row;-->
+<!--  border-bottom: 1px solid var(&#45;&#45;color-border-soft);-->
+<!--}-->
+
+<!--.ref-img {-->
+<!--  margin-right: 0.1rem;-->
+<!--}-->
+
+<!--.btn-span {-->
+<!--  padding-top: 3%;-->
+<!--}-->
+
+
+<!--</style>-->
