@@ -21,7 +21,7 @@ function reverseDisplayModal() {
 </script>
 
 <template>
-  <div @click="reverseDisplayModal">
+  <div id="container" @click="reverseDisplayModal">
     <slot name="modal-btn"></slot>
   </div>
   <div id="modal-container">
@@ -84,7 +84,8 @@ function reverseDisplayModal() {
   border-radius: 2rem;
   padding: 1%;
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  text-align: left;
 }
 
 #close-btn-div {
@@ -107,6 +108,11 @@ function reverseDisplayModal() {
   display: flex;
   position: relative;
   margin-top: auto;
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
 }
 
 </style>
