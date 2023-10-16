@@ -1,7 +1,7 @@
 import {Pool, PoolClient, QueryResult} from "pg"
-import {Client, Room} from "../models/types"
+import {Client} from "../models/types"
 import {runQuery} from "../database/db"
-
+import crypto from "crypto"
 
 export class ClientService {
   constructor(private pool: Pool) {
@@ -17,6 +17,7 @@ export class ClientService {
     return runQuery(async (): Promise<Client[] | undefined> => {
       const client: PoolClient = await this.pool.connect()
       const result: QueryResult<Client> = await client.query("SELECT * FROM client;")
+      client.release()
       return result.rows
     })
   }
@@ -33,6 +34,7 @@ export class ClientService {
       const result: QueryResult<Client> = await client.query(
         "SELECT * FROM client WHERE user_id = $1;", [user_id],
       )
+      client.release()
       return result.rows[0]
     })
   }
@@ -49,6 +51,24 @@ export class ClientService {
       const result: QueryResult<Client> = await client.query(
         "SELECT * FROM client WHERE username = $1;", [username],
       )
+      client.release()
+      return result.rows[0]
+    })
+  }
+
+  /**
+   * Retrieves a client by their email address.
+   *
+   * @param {string} email - The email address of the client.
+   * @returns {Promise<Client | undefined>} A promise that resolves to the client object if found, or undefined if not found.
+   */
+  async getClientByEmail(email: string): Promise<Client | undefined> {
+    return runQuery(async (): Promise<Client | undefined> => {
+      const client: PoolClient = await this.pool.connect()
+      const result: QueryResult<Client> = await client.query(
+        "SELECT * FROM client WHERE email = $1;", [email],
+      )
+      client.release()
       return result.rows[0]
     })
   }
@@ -60,12 +80,14 @@ export class ClientService {
    * @returns {Promise<void>} - A promise that resolves when the client is added successfully, or rejects with an error.
    */
   async addClient(newClient: Client): Promise<void> {
+    const hashed_password: string = crypto.createHash("sha256").update(newClient.password).digest("hex")
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("INSERT INTO client (username, email, password, biography, age, member_since, current_room_id) " +
-        "VALUES ($1, $2, $3, $4, $5, $6, $7);", [newClient.username, newClient.email, newClient.password, newClient.biography, newClient.age,
+        "VALUES ($1, $2, $3, $4, $5, $6, $7);", [newClient.username, newClient.email, hashed_password, newClient.biography, newClient.age,
         newClient.member_since, newClient.current_room_id],
       )
+      client.release()
     })
   }
 
@@ -84,6 +106,7 @@ export class ClientService {
                           SET ${propertyToEdit} = $1
                           WHERE user_id = $2`, [newPropertyValue, user_id],
       )
+      client.release()
     })
   }
 
@@ -102,6 +125,7 @@ export class ClientService {
                           SET ${propertyToEdit} = $1
                           WHERE username = $2`, [newPropertyValue, username],
       )
+      client.release()
     })
   }
 
@@ -115,6 +139,7 @@ export class ClientService {
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("DELETE FROM client WHERE user_id = $1", [user_id])
+      client.release()
     })
   }
 
@@ -128,6 +153,7 @@ export class ClientService {
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
       await client.query("DELETE FROM client WHERE username = $1", [username])
+      client.release()
     })
   }
 }

@@ -6,13 +6,12 @@ const props = defineProps<{
 </script>
 
 <template>
-  <p id="chatroom-title"> {{ title }} </p>
+  <h3 id="chatroom-title"> {{ title }} </h3>
 </template>
 
 <style scoped>
-#chatroom-title {
-  font-size: 1em;
-
+h3 {
+  font-weight: 500;
   color: var(--color-text)
 }
 
