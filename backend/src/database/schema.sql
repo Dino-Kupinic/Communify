@@ -23,12 +23,12 @@ CREATE TABLE IF NOT EXISTS client
 CREATE TABLE IF NOT EXISTS message
 (
     message_id SERIAL PRIMARY KEY NOT NULL,
-    user_id    INT                NOT NULL,
+    user_id    INT                NOT NULL DEFAULT 0,
     content    VARCHAR(1000)      NOT NULL,
     timestamp  TIMESTAMP          NOT NULL,
     room_id    INT                NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES client (user_id),
-    FOREIGN KEY (room_id) REFERENCES room (room_id)
+    FOREIGN KEY (user_id) REFERENCES client (user_id) ON DELETE SET DEFAULT,
+    FOREIGN KEY (room_id) REFERENCES room (room_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS topic
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS topics_rooms
 (
     t_id INT NOT NULL,
     r_id INT NOT NULL,
-    FOREIGN KEY (t_id) REFERENCES topic (topic_id),
-    FOREIGN KEY (r_id) REFERENCES room (room_id),
+    FOREIGN KEY (t_id) REFERENCES topic (topic_id) ON DELETE CASCADE,
+    FOREIGN KEY (r_id) REFERENCES room (room_id) ON DELETE CASCADE,
     PRIMARY KEY (t_id, r_id)
 );
 
