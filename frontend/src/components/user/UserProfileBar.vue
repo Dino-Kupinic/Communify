@@ -54,11 +54,12 @@ async function getProfile() {
     <UserProfileText id="username">
       {{ username }}
     </UserProfileText>
-
-    <ActionButton height="max-content" :hollow="true" id="logout">
-      <Icon class="img" image-name="stop" file-extension="png"/>
-      <span>Logout</span>
-    </ActionButton>
+    <div id="user-logout-container">
+      <ActionButton height="max-content" :hollow="true" id="logout">
+        <Icon class="img" image-name="stop" file-extension="png"/>
+        <span>Logout</span>
+      </ActionButton>
+    </div>
   </div>
 </template>
 
@@ -74,6 +75,7 @@ async function getProfile() {
   background-color: var(--color-background);
   display: flex;
   flex-direction: row;
+  align-content: center;
   border-bottom: 1px solid var(--color-border-soft);
 }
 
@@ -106,5 +108,11 @@ async function getProfile() {
 
 span {
   padding-top: 3%;
+}
+
+#user-logout-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 </style>
