@@ -60,16 +60,23 @@ export class TopicService {
   }
 
   /**
-   * Adds a new topic to a specific room.
+   * Adds a new topic to a room.
    *
-   * @param {Topic} newTopic - The new topic object containing the text and color properties.
+   * @param {Topic} newTopic - The new topic object to be added.
    * @param {number} room_id - The ID of the room where the topic will be added.
+   *
    * @returns {Promise<void>} - A promise that resolves when the topic is successfully added.
+   *
+   * @throws {Error} - If the new topic fails to be inserted.
    */
   async addTopic(newTopic: Topic, room_id: number): Promise<void> {
     return runQuery(async (): Promise<void> => {
       const client: PoolClient = await this.pool.connect()
-      const id = await client.query("INSERT INTO topic (text, color) VALUES ($1, $2) RETURNING topic_id;", [newTopic.text, newTopic.color])
+      const result = await client.query("INSERT INTO topic (text, color) VALUES ($1, $2) RETURNING topic_id;", [newTopic.text, newTopic.color])
+      const id = result.rows[0].topic_id
+      if (!id) {
+        throw new Error("Failed to insert new Topic")
+      }
       await client.query("INSERT INTO topics_rooms (t_id, r_id) VALUES ($1, $2)", [id, room_id])
       client.release()
     })

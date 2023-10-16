@@ -33,7 +33,7 @@ topicRouter.post("/createTopic", asyncHandler(async (req, res) => {
   await topicService.addTopic({
     text: text,
     color: color,
-  } as Topic, room_id)
+  } as Topic, parseInt(room_id))
   res.send(`Topic for room ${room_id} created successfully`)
 }))
 
