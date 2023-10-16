@@ -66,8 +66,8 @@ let isPrivateRoom = ref<boolean>(false)
 
 const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: loadRooms},
-  {icon: "account", label: "Profile"},
   {icon: "add", label: "Create Room"},
+  {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
 ])
 
@@ -99,7 +99,7 @@ function reverseDisplay(name: string) {
                 <span class="btn-span">{{ button.label }}</span>
               </template>
               <template #modal-content>
-                <InputField :model-value=name  label="Enter a Name for your Room"></InputField>
+                <InputField :model-value=name label="Enter a Name for your Room"></InputField>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
@@ -129,7 +129,7 @@ function reverseDisplay(name: string) {
         <Modal></Modal>
       </RoomList>
     </div>
-    <ChatRoom></ChatRoom>
+    <!--    <ChatRoom></ChatRoom>-->
   </div>
 </template>
 
@@ -154,7 +154,7 @@ function reverseDisplay(name: string) {
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  height: auto;
+  height: 4vh;
 }
 
 .logout {
@@ -168,7 +168,7 @@ function reverseDisplay(name: string) {
 
 .container-div-short {
   width: 100%;
-  height: 6em;
+  height: 8vh;
   background-color: var(--color-background);
   display: flex;
   flex-direction: row;

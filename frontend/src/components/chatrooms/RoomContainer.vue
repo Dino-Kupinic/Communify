@@ -11,19 +11,14 @@ const props = defineProps<{
 }>()
 
 const badges = [
-  {name: "Badge1"},
-  {name: "Badge2"},
-  {name: "Badge3"},
-  {name: "Badge4"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
+  {name: "Programming"},
+  {name: "Cooking"},
+  {name: "Just chilling"},
+  {name: "Gaming"},
+  {name: "Software Development"},
 ]
 
-const buttonStyle = ref('unclickedBtn')
+const buttonStyle = ref("unclickedBtn")
 
 function changeCol() {
   if (buttonStyle.value === "clickedBtn") {
@@ -36,37 +31,48 @@ function changeCol() {
 </script>
 
 <template>
-    <div id="chatroom-div" :class="buttonStyle" @click="changeCol()">
-      <TitleText :title="title"></TitleText>
-      <Modal>
-        <template #modal-btn>
-          <ActionButton height="max-content">
-            <Icon image-name="more" file-extension="png"></Icon>
-          </ActionButton>
-        </template>
-        <template #modal-content>
-          <p id="title">
-            <TitleText title="Chatroom Info"></TitleText>
-          </p>
-          <p>Badges</p>
-          <div id="badges">
-            <Badge v-for="badge in badges"> {{badge.name}} </Badge>
-          </div>
-        </template>
-      </Modal>
+  <div id="chatroom-div" :class="buttonStyle" @click="changeCol()">
+    <TitleText :title="title"></TitleText>
+    <Modal>
+      <template #modal-btn>
+        <Icon class="details" image-name="more" file-extension="png"></Icon>
+      </template>
+      <template #modal-content>
+        <p id="title">
+          <TitleText title="Chatroom Info"></TitleText>
+        </p>
+        <p>Badges</p>
+        <div id="badges">
+          <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
+        </div>
+      </template>
+    </Modal>
+    <div>
+      <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
     </div>
+  </div>
 </template>
 
 <style scoped>
+
 #chatroom-div {
   width: 100%;
-  height: 6em;
+  height: 10em;
   padding: 5%;
   border-bottom: 1px solid var(--color-border-soft);
   background-color: var(--color-background);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+}
+
+.details {
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+
+#chatroom-div:hover {
+  background-color: var(--color-background-soft);
 }
 
 #title {

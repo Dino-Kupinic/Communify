@@ -8,7 +8,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
 
 </script>
-<template id="template">
+<template>
   <div class="logo">
     <Logo></Logo>
   </div>

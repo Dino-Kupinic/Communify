@@ -11,7 +11,7 @@
 <style scoped>
 div {
   overflow-y: scroll;
-  height: 80.6vh;
+  height: 88vh;
   width: 100%;
   border-right: 1px solid var(--color-border-very-soft);
 }
