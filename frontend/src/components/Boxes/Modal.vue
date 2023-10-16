@@ -1,32 +1,45 @@
 <script setup lang="ts">
 
-import ActionButton from "@/components/controls/ActionButton.vue"
 import {ref} from "vue"
 import TitleText from "@/components/text/TitleText.vue"
-const displayStatus = ref('none')
+
+const displayStatus = ref("none")
+
 
 defineProps<{
-  modalTitle?: String
+  modalTitle?: string
 }>()
 
-function reverseDisplayModal () {
-    if (displayStatus.value === "none") {
-      displayStatus.value = "flex"
-    } else {
-      displayStatus.value = "none"
-    }
+function reverseDisplayModal() {
+  if (displayStatus.value === "none") {
+    displayStatus.value = "flex"
+  } else {
+    displayStatus.value = "none"
+  }
 }
 
 </script>
 
 <template>
-  <ActionButton @click="reverseDisplayModal">...</ActionButton>
+  <div id="container" @click="reverseDisplayModal">
+    <slot name="modal-btn"></slot>
+  </div>
   <div id="modal-container">
     <div id="modal-content-container">
-      <TitleText>
-        {{ modalTitle }}
-      </TitleText>
-      <span @click="reverseDisplayModal" class="close">Close</span>
+      <p id="title">
+        <TitleText :title="modalTitle"></TitleText>
+      </p>
+      <slot name="modal-content"></slot>
+      <div id="btn-container">
+        <div id="save-btn-div" @click="reverseDisplayModal">
+          <span class="close">
+            <slot name="second-btn"></slot>
+          </span>
+        </div>
+        <div id="close-btn-div">
+          <span @click="reverseDisplayModal" class="close">Close</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,8 +54,8 @@ function reverseDisplayModal () {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
   justify-content: center;
   flex-wrap: wrap;
   padding-top: 5%;
@@ -51,9 +64,10 @@ function reverseDisplayModal () {
 /* The Close Button */
 .close {
   color: #aaa;
-  float: right;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: bold;
+  top: auto;
+  margin-left: auto;
 }
 
 .close:hover,
@@ -64,11 +78,41 @@ function reverseDisplayModal () {
 }
 
 #modal-content-container {
-  text-align: center;
   background-color: var(--color-background-soft);
   height: 50%;
   width: 40%;
   border-radius: 2rem;
   padding: 1%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
 }
+
+#close-btn-div {
+  width: min-content;
+  margin-left: auto;
+  align-self: flex-end;
+  margin-top: auto;
+}
+
+#save-btn-div {
+  margin-top: auto; /* Move to the bottom */
+  margin-left: 0;
+}
+
+#title {
+  font-size: 2rem;
+}
+
+#btn-container {
+  display: flex;
+  position: relative;
+  margin-top: auto;
+}
+
+#container {
+  display: flex;
+  flex-direction: row;
+}
+
 </style>

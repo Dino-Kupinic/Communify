@@ -33,5 +33,6 @@ onMounted(() => {
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: 4px;
+  width: min-content;
 }
 </style>

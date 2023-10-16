@@ -17,7 +17,9 @@ withDefaults(defineProps<Props>(), {
 
 <template>
   <button :class="{ 'hollow': hollow, 'glow': glow }">
-    <slot></slot>
+    <div>
+      <slot></slot>
+    </div>
   </button>
 </template>
 
@@ -55,5 +57,14 @@ button:hover {
   background-color: var(--brand-500);
   transition: all 0.3s;
   cursor: pointer;
+}
+
+button {
+  display: flex;
+  align-content: center;
+}
+
+div {
+  display: flex;
 }
 </style>
