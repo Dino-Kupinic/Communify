@@ -5,6 +5,8 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import BodyText from "@/components/text/BodyText.vue"
 
 const props = defineProps<{
   title?: string
@@ -50,10 +52,29 @@ function changeCol() {
     <div>
       <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
     </div>
+    <ActionButton class="join-button" width="5rem">
+      <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+      <BodyText class="join-text" >Join</BodyText>
+    </ActionButton>
   </div>
 </template>
 
 <style scoped>
+.join-text {
+  margin-top: 0.2rem;
+}
+
+:deep(.join-button) {
+  background-color: var(--warning-300);
+  color: var(--warning-700);
+  border: 1px solid var(--warning-700);
+}
+
+:deep(.join-button:hover) {
+  background-color: var(--warning-400);
+  color: var(--warning-800);
+  border: 1px solid var(--warning-800);
+}
 
 #chatroom-div {
   width: 100%;
