@@ -7,6 +7,14 @@ import Infobox from "@/components/InfoBoxes/Infobox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
+import Section from "@/components/section/Section.vue"
+import Module1 from "@/components/modules/Module1.vue"
+import Module2 from "@/components/modules/Module2.vue"
+import Module3 from "@/components/modules/Module3.vue"
+
+/*
+#44585f
+ */
 
 </script>
 <template id="template">
@@ -15,7 +23,7 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
   </div>
 
   <HeroTitle id="heroTitle">Let's start chatting.</HeroTitle>
-  <HeroSubText id="bodyText" font-size="24px" color="var(--neutral-500)">
+  <HeroSubText id="herosubText" font-size="24px" color="var(--neutral-500)">
     Connecting people, one message at a time.<br> You'll find what you're looking for!
   </HeroSubText>
 
@@ -42,9 +50,20 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
       </h3>
     </Infobox>
   </div>
+
+  <Section bgColor="--color-text" id="section1">
+    <Module1 id="module1" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >Das ist Modul 1!</Module1>
+    <Module2 id="module2" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >Das ist Modul 2!</Module2>
+  </Section>
+
+  <Section bgColor="--color-text" id="section2" >
+    <Module3 id="module3" bgColor="#1c344a" text-color="#e0dfdf">Das ist Modul 3!</Module3>
+  </Section>
+
 </template>
 
 <style>
+
 .logo {
   margin-top: 2em;
   display: flex;
@@ -59,10 +78,10 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
 @media screen and (max-width: 1250px) {
   #heroTitle {
     font-size: 6em;
-    margin-top: 20%;
+    margin-top: 15%;
   }
 
-  #bodyText {
+  #herosubText {
     padding-right: 15%;
     padding-left: 15%;
   }
@@ -74,21 +93,45 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
     margin-top: 15%;
   }
 
-  #bodyText {
-    padding-right: 10%;
-    padding-left: 10%;
+  #herosubText {
+    padding-right: 10% !important;
+    padding-left: 10% !important;
   }
 
   .infobox-container {
-    display: unset;
+    display: unset !important;
   }
 
   .infoBoxOutside {
-    margin: 15% auto;
+    margin: 15% auto !important;
   }
+
+
+  #section1 {
+    display: unset !important;
+
+  }
+
+  #module1 {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 15px
+  }
+
+  #module2 {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 20px!important;
+    margin-bottom: 15px;
+  }
+
+  #module3 {
+    margin-top: 20px !important;
+  }
+
 }
 
-#bodyText {
+#herosubText {
   padding-right: 28%;
   padding-left: 28%;
   text-align: center;
@@ -109,5 +152,30 @@ import HeroSubText from "@/components/text/HeroSubText.vue"
   color: transparent;
   font-weight: 700;
 }
+
+#section1 {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#section2 {
+  margin-bottom: 15px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .moduleSplitted4mediaQuery {
+      background-color: #44585f !important;
+    }
+
+    #section2 {
+      margin: 0 !important;
+    }
+
+}
+
+#module3 {
+  margin-top: 40px;
+}
+
 
 </style>
