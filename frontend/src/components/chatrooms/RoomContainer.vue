@@ -44,7 +44,7 @@ async function deleteRoom() {
 </script>
 
 <template>
-  <div id="chatroom-div" :class="buttonStyle" @click="changeCol()">
+  <div id="chatroom-div" :class="buttonStyle">
     <TitleText :title="title"></TitleText>
     <Modal>
       <template #modal-btn>
