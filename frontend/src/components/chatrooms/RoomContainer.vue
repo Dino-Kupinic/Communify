@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
@@ -26,7 +26,7 @@ const badges = [
 ]
 
 const rooms = ref<Room[]>()
-const buttonStyle = ref('unclickedBtn')
+const buttonStyle = ref('unclicked')
 
 async function deleteRoom() {
   try {
@@ -44,10 +44,47 @@ async function deleteRoom() {
   }
 }
 
+onMounted (() => {
+  getRooms()
+})
+
+async function getRooms() {
+  try {
+    const response = await fetch("http://localhost:4000/room/getRooms", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    rooms.value = await response.json()
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+// Trying to make only one colorable
+
+
+
+async function getMessages() {
+  changeCol()
+  console.log("getMessages()")
+}
+
+function changeCol() {
+  console.log("changeCol()")
+  if (buttonStyle.value === "clicked") {
+    buttonStyle.value = "unclicked"
+  } else {
+    buttonStyle.value = "clicked"
+  }
+}
+
 </script>
 
 <template>
-    <div id="chatroom-div" :class="buttonStyle">
+  <div :id="buttonStyle">
+    <div id="chatroom-div" @click="getMessages">
       <TitleText :title="title"></TitleText>
       <Modal>
         <template #modal-btn>
@@ -69,6 +106,7 @@ async function deleteRoom() {
         </template>
       </Modal>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -94,6 +132,14 @@ async function deleteRoom() {
 
 #delete-btn {
   font-weight: bold;
+}
+
+#clicked {
+  background-color: var(--color-background-very-soft);
+}
+
+#unclicked {
+  background-color: var(--color-background);
 }
 
 
