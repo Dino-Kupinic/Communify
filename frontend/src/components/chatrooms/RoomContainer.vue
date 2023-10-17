@@ -5,9 +5,11 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
+import {Room} from "@/model/types"
 
 const props = defineProps<{
   title?: string
+  room_id: number|null;
 }>()
 
 const badges = [
@@ -23,20 +25,29 @@ const badges = [
   {name: "Badge5"},
 ]
 
+const rooms = ref<Room[]>()
 const buttonStyle = ref('unclickedBtn')
 
-function changeCol() {
-  if (buttonStyle.value === "clickedBtn") {
-    buttonStyle.value = "unclickedBtn"
-  } else {
-    buttonStyle.value = "clickedBtn"
+async function deleteRoom() {
+  try {
+    const response = await fetch("http://localhost:4000/room/deleteRoomById/"+props.room_id, {
+      method: "DELETE",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }
+    })
+  } catch (err) {
+    console.error(err)
   }
 }
 
 </script>
 
 <template>
-    <div id="chatroom-div" :class="buttonStyle" @click="changeCol()">
+    <div id="chatroom-div" :class="buttonStyle">
       <TitleText :title="title"></TitleText>
       <Modal>
         <template #modal-btn>
@@ -53,6 +64,9 @@ function changeCol() {
             <Badge v-for="badge in badges"> {{badge.name}} </Badge>
           </div>
         </template>
+        <template #second-btn>
+          <span @click="deleteRoom" id="delete-btn">Delete</span>
+        </template>
       </Modal>
     </div>
 </template>
@@ -63,7 +77,6 @@ function changeCol() {
   height: 6em;
   padding: 5%;
   border-bottom: 1px solid var(--color-border-soft);
-  background-color: var(--color-background);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -78,6 +91,11 @@ function changeCol() {
   flex-wrap: wrap;
   overflow-x: unset;
 }
+
+#delete-btn {
+  font-weight: bold;
+}
+
 
 
 </style>
