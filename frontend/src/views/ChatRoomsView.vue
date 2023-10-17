@@ -52,7 +52,7 @@ async function createRoom() {
 
   try {
     const response = await fetch("http://localhost:4000/room/createRoom", {
-      method: "DELETE",
+      method: "POST",
       mode: "cors",
       credentials: "same-origin",
       headers: {

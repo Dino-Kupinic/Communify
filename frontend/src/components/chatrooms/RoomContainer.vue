@@ -84,9 +84,7 @@ function changeCol() {
       <TitleText :title="title"></TitleText>
       <Modal>
         <template #modal-btn>
-          <ActionButton height="max-content">
-            <Icon image-name="more" file-extension="png"></Icon>
-          </ActionButton>
+            <Icon class="details" image-name="more" file-extension="png"></Icon>
         </template>
         <template #modal-content>
           <p id="title">
@@ -138,6 +136,11 @@ function changeCol() {
 
 .join-text {
   color: var(--warning-800);
+}
+
+.details {
+  padding-left: 0.5%;
+  cursor: pointer;
 }
 
 #chatroom-div {
