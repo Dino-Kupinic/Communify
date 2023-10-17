@@ -59,7 +59,7 @@ import Illustration from "@/components/util/Illustration.vue"
     </Module1>
 
     <Module2 id="module2" class="moduleSplitted4mediaQuery" bgColor="#c0cbcf" text-color="--text-color" >
-      <Illustration image-name="worldwide" picture-width="25rem"></Illustration>
+      <Illustration image-name="peopleNetworkWorld" picture-width="25rem"></Illustration>
       <h3 class="textmodule1"> ... and everywhere you stay.</h3>
     </Module2>
   </Section>
@@ -189,16 +189,15 @@ import Illustration from "@/components/util/Illustration.vue"
 .textmodule1 {
   text-align: center;
   width: 100%;
-  font-weight: 500;
-  color: #829398;
-  font-family: Inter, serfi;
+  font-weight: 450;
+  /*color: #829398;*/
+  font-family: Roboto, serif;
   /*
   background: linear-gradient(90deg, #1ec3e0, #2432d3);
   background-clear: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 650;
-
    */
 }
 
