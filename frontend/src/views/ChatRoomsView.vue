@@ -189,6 +189,9 @@ function reverseDisplay(name: string) {
 
 .btn-span {
   padding-top: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 #selection-container-div {
@@ -197,7 +200,6 @@ function reverseDisplay(name: string) {
 
 .selection-div {
   margin-top: 5%;
-  padding-bottom: 1%;
   padding-left: 1%;
 }
 
