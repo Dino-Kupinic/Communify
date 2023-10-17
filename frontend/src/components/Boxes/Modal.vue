@@ -82,7 +82,7 @@ function reverseDisplayModal() {
   height: 50%;
   width: 40%;
   border-radius: 2rem;
-  padding: 1%;
+  padding: 0.75%;
   display: flex;
   flex-direction: column;
   text-align: left;
