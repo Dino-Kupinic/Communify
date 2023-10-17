@@ -11,6 +11,7 @@ import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
+import BodyText from "@/components/text/BodyText.vue"
 
 let name = ref("")
 let maxUser = ref(10)
@@ -69,8 +70,8 @@ let isPrivateRoom = ref<boolean>(false)
 
 const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: loadRooms},
-  {icon: "account", label: "Profile"},
   {icon: "add", label: "Create Room"},
+  {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
 ])
 
@@ -99,7 +100,7 @@ function reverseDisplay(name: string) {
             <Modal v-if="button.icon==='add'" modalTitle="Create Room">
               <template #modal-btn>
                 <Icon class="img" :image-name="button.icon" file-extension="png"/>
-                <span class="btn-span">{{ button.label }}</span>
+                <BodyText class="btn-span">{{ button.label }}</BodyText>
               </template>
               <template #modal-content>
                 <InputField v-model="name" label="Enter a Name for your Room"></InputField>
@@ -130,7 +131,6 @@ function reverseDisplay(name: string) {
           </ActionButton>
         </div>
       </div>
-
       <RoomList>
         <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"
                        :room_id="room.room_id"></RoomContainer>
@@ -143,7 +143,7 @@ function reverseDisplay(name: string) {
 
 <style scoped>
 #userbar-container {
-  border-right: 1px solid var(--color-border-very-soft);
+  border-right: 1px solid var(--color-border-soft);
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -162,7 +162,7 @@ function reverseDisplay(name: string) {
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  height: auto;
+  height: 4vh;
 }
 
 .logout {
@@ -176,7 +176,7 @@ function reverseDisplay(name: string) {
 
 .container-div-short {
   width: 100%;
-  height: 6em;
+  height: 8vh;
   background-color: var(--color-background);
   display: flex;
   flex-direction: row;
@@ -188,7 +188,7 @@ function reverseDisplay(name: string) {
 }
 
 .btn-span {
-  padding-top: 3%;
+  padding-top: 1%;
 }
 
 #selection-container-div {
@@ -212,8 +212,6 @@ function reverseDisplay(name: string) {
 #save-btn {
   font-weight: bold;
 }
-
-
 
 
 </style>

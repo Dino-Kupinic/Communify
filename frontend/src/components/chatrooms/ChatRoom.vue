@@ -16,28 +16,34 @@ const props = defineProps<{
 
 
     <div id="content-container">
-      <div id="placeholder">
-      </div>
-        <Message messageType="sent" messageText="Awdwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqd "></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-        <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <div id="Input-Container">
-        <UserInput></UserInput>
-      </div>
+      <div id="placeholder"></div>
+      <Message messageType="sent"
+               messageText="Awdwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqd "></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+    </div>
+    <div id="Input-Container">
+      <UserInput></UserInput>
     </div>
   </div>
 </template>
@@ -46,24 +52,26 @@ const props = defineProps<{
 #chatroom-div-container {
   width: 75%;
   float: right;
-
 }
 
 #content-container {
-  height: 89.2vh;
+  height: 86vh;
   background-color: var(--color-background-soft);
   overflow-y: scroll;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
 header {
+  height: 8vh;
   width: 100%;
   border-bottom: 1px solid var(--color-border-soft);
   padding: 0;
 }
 
 #Input-Container {
+  padding: 1rem;
+  height: 6vh;
   position: sticky;
-  bottom: 2%;
 }
 
 #placeholder {
