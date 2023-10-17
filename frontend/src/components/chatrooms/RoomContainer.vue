@@ -52,14 +52,20 @@ function changeCol() {
     <div>
       <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
     </div>
-    <ActionButton class="join-button" width="5rem">
-      <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
-      <BodyText class="join-text" >Join</BodyText>
-    </ActionButton>
+    <div class="join-button-div">
+      <ActionButton class="join-button" width="5rem">
+        <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+        <BodyText class="join-text">Join</BodyText>
+      </ActionButton>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.join-button-div {
+  width: 100%;
+}
+
 .join-text {
   margin-top: 0.2rem;
 }
@@ -68,12 +74,17 @@ function changeCol() {
   background-color: var(--warning-300);
   color: var(--warning-700);
   border: 1px solid var(--warning-700);
+  float: right;
 }
 
 :deep(.join-button:hover) {
   background-color: var(--warning-400);
   color: var(--warning-800);
   border: 1px solid var(--warning-800);
+}
+
+.join-text {
+  color: var(--warning-800);
 }
 
 #chatroom-div {

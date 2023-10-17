@@ -11,6 +11,7 @@ import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
+import BodyText from "@/components/text/BodyText.vue"
 
 let name = ref("")
 let maxUser = ref(10)
@@ -96,7 +97,7 @@ function reverseDisplay(name: string) {
             <Modal modalTitle="Create Room">
               <template #modal-btn>
                 <Icon class="img" :image-name="button.icon" file-extension="png"/>
-                <span class="btn-span">{{ button.label }}</span>
+                <BodyText class="btn-span">{{ button.label }}</BodyText>
               </template>
               <template #modal-content>
                 <InputField :model-value=name label="Enter a Name for your Room"></InputField>
@@ -122,20 +123,19 @@ function reverseDisplay(name: string) {
           </ActionButton>
         </div>
       </div>
-
       <RoomList>
         <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
         <Modal></Modal>
       </RoomList>
     </div>
-    <!--    <ChatRoom></ChatRoom>-->
+    <ChatRoom></ChatRoom>
   </div>
 </template>
 
 <style scoped>
 #userbar-container {
-  border-right: 1px solid var(--color-border-very-soft);
+  border-right: 1px solid var(--color-border-soft);
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -180,7 +180,7 @@ function reverseDisplay(name: string) {
 }
 
 .btn-span {
-  padding-top: 3%;
+  padding-top: 1%;
 }
 
 #selection-container-div {
