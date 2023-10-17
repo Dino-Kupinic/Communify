@@ -3,7 +3,7 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref} from "vue"
+import {onMounted, ref, reactive, watch} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
@@ -18,14 +18,9 @@ let description = ref("hallo1")
 let password = ref("")
 let c_ID = ref(1)
 
+let isClicked = ref("clicked")
+
 const rooms = ref<Room[]>()
-const room = {
-  name: name.value,
-  maximum_users: maxUser.value,
-  description: description.value,
-  password: password.value,
-  creator_id: c_ID.value,
-}
 
 onMounted(async () => {
   await loadRooms()
@@ -46,8 +41,16 @@ async function loadRooms() {
 }
 
 async function createRoom() {
+  const room = {
+    name: name.value,
+    maximum_users: maxUser.value,
+    description: description.value,
+    password: isPrivateRoom.value ? password.value : "",
+    creator_id: c_ID.value,
+  }
+
   try {
-    const response = await fetch("http://localhost:4000/auth/login", {
+    const response = await fetch("http://localhost:4000/room/createRoom", {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",
@@ -93,13 +96,13 @@ function reverseDisplay(name: string) {
             class="logout"
             @click="button.action"
           >
-            <Modal modalTitle="Create Room">
+            <Modal v-if="button.icon==='add'" modalTitle="Create Room">
               <template #modal-btn>
                 <Icon class="img" :image-name="button.icon" file-extension="png"/>
                 <span class="btn-span">{{ button.label }}</span>
               </template>
               <template #modal-content>
-                <InputField :model-value=name  label="Enter a Name for your Room"></InputField>
+                <InputField v-model="name" label="Enter a Name for your Room"></InputField>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
@@ -111,22 +114,27 @@ function reverseDisplay(name: string) {
                     <input @click="reverseDisplay('private')" class="selection-input" type="radio"
                            name="chatroom-status" id="private">
                     <label class="selection-label" for="public">Private chat room</label>
-                    <InputField v-if="isPrivateRoom" model-value="" label="Password" type="password"></InputField>
+                    <InputField v-if="isPrivateRoom" v-model="password" label="Password" type="password"></InputField>
                   </div>
                 </div>
               </template>
               <template #second-btn>
-                <span @click="" id="save-btn">Save</span>
+                <span @click="createRoom" id="save-btn">Save</span>
               </template>
             </Modal>
+            <template v-else>
+              <Icon class="img" :image-name="button.icon" file-extension="png"/>
+              <span class="btn-span">{{ button.label }}</span>
+            </template>
+
           </ActionButton>
         </div>
       </div>
 
       <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
+        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"
+                       :room_id="room.room_id"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
-        <Modal></Modal>
       </RoomList>
     </div>
     <ChatRoom></ChatRoom>
@@ -204,6 +212,8 @@ function reverseDisplay(name: string) {
 #save-btn {
   font-weight: bold;
 }
+
+
 
 
 </style>
