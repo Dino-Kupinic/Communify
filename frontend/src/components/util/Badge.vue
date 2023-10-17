@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue"
 
-const hexColors = ["#ba0c0c","#6443de", "#c74aee", "#0262c4", "#3b9afd","#037dfc", "#f34545", "#11b54a"]
+const hexColors = ["#ff4040","#815eff", "#cf5df6", "#2591fd", "#3b9afd","#037dfc", "#f34545", "#11b54a"]
 const rndColor = ref('')
 
 onMounted(() => {
@@ -29,6 +29,7 @@ onMounted(() => {
   font-size: 85%;
   font-weight: 500;
   line-height: 1;
+  max-height: 1.5em;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;

@@ -5,6 +5,8 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import BodyText from "@/components/text/BodyText.vue"
 import {Room} from "@/model/types"
 
 const props = defineProps<{
@@ -13,16 +15,11 @@ const props = defineProps<{
 }>()
 
 const badges = [
-  {name: "Badge1"},
-  {name: "Badge2"},
-  {name: "Badge3"},
-  {name: "Badge4"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
+  {name: "Programming"},
+  {name: "Cooking"},
+  {name: "Just chilling"},
+  {name: "Gaming"},
+  {name: "Software Development"},
 ]
 
 const rooms = ref<Room[]>()
@@ -47,39 +44,83 @@ async function deleteRoom() {
 </script>
 
 <template>
-    <div id="chatroom-div" :class="buttonStyle">
-      <TitleText :title="title"></TitleText>
-      <Modal>
-        <template #modal-btn>
-          <ActionButton height="max-content">
-            <Icon image-name="more" file-extension="png"></Icon>
-          </ActionButton>
-        </template>
-        <template #modal-content>
-          <p id="title">
-            <TitleText title="Chatroom Info"></TitleText>
-          </p>
-          <p>Badges</p>
-          <div id="badges">
-            <Badge v-for="badge in badges"> {{badge.name}} </Badge>
-          </div>
-        </template>
-        <template #second-btn>
-          <span @click="deleteRoom" id="delete-btn">Delete</span>
-        </template>
-      </Modal>
+  <div id="chatroom-div" :class="buttonStyle">
+    <TitleText :title="title"></TitleText>
+    <Modal>
+      <template #modal-btn>
+        <ActionButton height="max-content">
+          <Icon image-name="more" file-extension="png"></Icon>
+        </ActionButton>
+      </template>
+      <template #modal-content>
+        <p id="title">
+          <TitleText title="Chatroom Info"></TitleText>
+        </p>
+        <p>Badges</p>
+        <div id="badges">
+          <Badge v-for="badge in badges"> {{badge.name}} </Badge>
+        </div>
+      </template>
+      <template #second-btn>
+        <span @click="deleteRoom" id="delete-btn">Delete</span>
+      </template>
+    </Modal>
+    <div>
+      <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
     </div>
+    <div class="join-button-div">
+      <ActionButton class="join-button" width="5rem">
+        <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+        <BodyText class="join-text">Join</BodyText>
+      </ActionButton>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.join-button-div {
+  width: 100%;
+}
+
+.join-text {
+  margin-top: 0.2rem;
+}
+
+:deep(.join-button) {
+  background-color: var(--warning-300);
+  color: var(--warning-700);
+  border: 1px solid var(--warning-700);
+  float: right;
+}
+
+:deep(.join-button:hover) {
+  background-color: var(--warning-400);
+  color: var(--warning-800);
+  border: 1px solid var(--warning-800);
+}
+
+.join-text {
+  color: var(--warning-800);
+}
+
 #chatroom-div {
   width: 100%;
-  height: 6em;
+  height: 10em;
   padding: 5%;
   border-bottom: 1px solid var(--color-border-soft);
+  background-color: var(--color-background);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+}
+
+.details {
+  margin-left: 0.5em;
+  cursor: pointer;
+}
+
+#chatroom-div:hover {
+  background-color: var(--color-background-soft);
 }
 
 #title {

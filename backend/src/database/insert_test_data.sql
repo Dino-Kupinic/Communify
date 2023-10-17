@@ -21,7 +21,11 @@ VALUES ('user1', 'user1@example.com', '0b14d501a594442a01c6859541bcb3e8164d183d3
 INSERT INTO room (name, maximum_users, description, password, creator_id)
 VALUES ('Room 1', 10, 'Description for Room 1', NULL, 1),
        ('Room 2', 8, 'Description for Room 2', 'room2pass', 2),
-       ('Room 3', 12, 'Description for Room 3', NULL, 3);
+       ('Room 3', 12, 'Description for Room 3', NULL, 3),
+       ('Room 4', 92, 'Description for Room 4', NULL, 1),
+       ('Room 5', 2, 'Description for Room 5', 'room2pass2', 1),
+       ('Room 6', 120, 'Description for Room 6', NULL, 3),
+       ('Room 7', 130, 'Description for Room 7', NULL, 3);
 
 -- Insert test data into the 'topic' table
 INSERT INTO topic (text, color)

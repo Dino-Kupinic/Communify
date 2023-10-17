@@ -6,6 +6,7 @@ import {computed, onMounted, ref} from "vue"
 import type {Client} from "@/model/types"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
+import BodyText from "@/components/text/BodyText.vue"
 
 const username = ref<string>("")
 const token = ref<string>(localStorage.getItem("auth_token") || "")
@@ -57,7 +58,7 @@ async function getProfile() {
     <div id="user-logout-container">
       <ActionButton height="max-content" :hollow="true" id="logout">
         <Icon class="img" image-name="stop" file-extension="png"/>
-        <span>Logout</span>
+        <BodyText class="logout-text">Logout</BodyText>
       </ActionButton>
     </div>
   </div>
@@ -96,7 +97,11 @@ async function getProfile() {
   height: 2rem;
 }
 
-:deep(#logout.hollow) {
+.logout-text {
+  color: var(--error-500);
+}
+
+:deep(#logout) {
   border: 1px solid var(--error-500);
   background-color: var(--error-200);
   color: var(--error-500)

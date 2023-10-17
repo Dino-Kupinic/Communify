@@ -20,7 +20,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
         Copyright © 2023 Team DJJ. All rights Reserved.
       </BodyText>
       <Link link="https://github.com/Dino-Kupinic/Communify" :opens-tab="true">
-        <Icon image-name="github"></Icon>
+        <Icon id="icon" image-name="github"></Icon>
       </Link>
     </div>
   </footer>
@@ -30,7 +30,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 footer {
   text-decoration: none;
   padding: 0;
-  /*border-top: 1px solid var(--neutral-500); */
+  border-top: 1px solid var(--neutral-500);
   background-color: var(--color-background-soft);
   width: 100%;
   position: relative;
@@ -47,5 +47,9 @@ footer {
 
 .footer-text {
   margin-bottom: 0.5rem;
+}
+
+#icon {
+  justify-content: center;
 }
 </style>
