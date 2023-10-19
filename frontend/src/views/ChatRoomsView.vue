@@ -12,6 +12,7 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import {socket} from "@/socket/server"
 
 let name = ref("")
 let maxUser = ref(10)
@@ -29,6 +30,7 @@ const room = {
 }
 
 onMounted(async () => {
+  socket.connect()
   await loadRooms()
 })
 

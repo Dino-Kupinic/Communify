@@ -8,7 +8,7 @@ import Badge from "@/components/util/Badge.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {io, Socket} from "socket.io-client"
-import {BACKEND_URL} from "@/socket/socket"
+import {BACKEND_URL} from "@/socket/server"
 
 const props = defineProps<{
   title: string
@@ -30,15 +30,6 @@ function changeCol() {
   } else {
     buttonStyle.value = "clickedBtn"
   }
-}
-
-onMounted(() => {
-  const socket: Socket = io(BACKEND_URL)
-  socket.emit("joinRoom", props.title)
-})
-
-async function joinRoom() {
-
 }
 
 </script>
