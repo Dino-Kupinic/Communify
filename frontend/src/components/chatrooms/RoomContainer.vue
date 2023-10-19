@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import {io, Socket} from "socket.io-client"
+import {BACKEND_URL} from "@/socket/socket"
 
 const props = defineProps<{
-  title?: string
+  title: string
 }>()
 
 const badges = [
@@ -28,6 +30,15 @@ function changeCol() {
   } else {
     buttonStyle.value = "clickedBtn"
   }
+}
+
+onMounted(() => {
+  const socket: Socket = io(BACKEND_URL)
+  socket.emit("joinRoom", props.title)
+})
+
+async function joinRoom() {
+
 }
 
 </script>
@@ -53,7 +64,7 @@ function changeCol() {
       <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
     </div>
     <div class="join-button-div">
-      <ActionButton class="join-button" width="5rem">
+      <ActionButton class="join-button" width="5rem" @click="joinRoom()">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
       </ActionButton>
