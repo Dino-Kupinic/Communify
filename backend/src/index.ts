@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(errorHandler)
 app.get("/", (req: Request, res: Response): void => {
   const count = io.engine.clientsCount
-  res.send(`Communify Backend, current clients ${count}`)
+  res.send(`Communify Backend ------- current clients: ${count}`)
 })
 
 export const server = createServer(app)
@@ -51,29 +51,26 @@ const io = new Server(server, {
   },
 })
 
-// io.on("connection", (socket: Socket) => {
-//   console.log("a user connected")
-//
-//   socket.onAny((event, ...args) => {
-//     console.log(event, args);
-//   });
-//
-//   socket.on("joinRoom", (room: string) => {
-//     socket.join(room)
-//   })
-//
-//   socket.on("chatMessage", (data: { room: string; message: string }) => {
-//     io.to(data.room).emit("message", data.message)
-//   })
-//
-//   socket.on('disconnect', () => {
-//     console.log('A user disconnected');
-//   });
-// })
-
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
   console.log("a user connected")
+
+  socket.onAny((event, ...args) => {
+    console.log(event, args);
+  });
+
+  socket.on("joinRoom", (room: string) => {
+    socket.join(room)
+  })
+
+  socket.on("chatMessage", (data: { room: string; message: string }) => {
+    io.to(data.room).emit("message", data.message)
+  })
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected');
+  });
 })
+
 
 server.listen(port, (): void => {
   console.log(`[server]: Server is running at http://localhost:${port}`)
