@@ -68,7 +68,7 @@ async function submitForm() {
 </script>
 
 <template>
-  <BodySubtitleText class="title" font-size="1.8rem">Welcome back.</BodySubtitleText>
+  <BodySubtitleText class="title" font-size="1.8rem">Welcome back. Please login.</BodySubtitleText>
   <div class="container">
     <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username">
       <template #below-input>
@@ -84,7 +84,7 @@ async function submitForm() {
       <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Log in</ActionButton>
     </div>
   </div>
-  <BodyText>
+  <BodyText class="text4Register">
     New to Communify?
     <Link @click="router.push('/auth/register')">
       Register
@@ -92,7 +92,7 @@ async function submitForm() {
   </BodyText>
 </template>
 
-<style scoped>
+<style >
 .container {
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
@@ -101,7 +101,9 @@ async function submitForm() {
   padding: 1.2rem;
   width: 25%;
   min-width: 360px;
-  margin: auto;
+  margin-top: 1.2em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .button-container {
@@ -118,6 +120,8 @@ async function submitForm() {
 .title {
   display: block;
   text-align: center;
+  margin-top: 3%;
+  font-size: 1.5em;
 }
 
 
@@ -130,5 +134,14 @@ async function submitForm() {
     width: 80%;
     min-width: 200px;
   }
+}
+
+.text4Register {
+    margin-top: 1em;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 </style>

@@ -62,6 +62,8 @@ button:hover {
 button {
   display: flex;
   align-content: center;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 div {
