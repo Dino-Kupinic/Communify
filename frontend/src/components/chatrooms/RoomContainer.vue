@@ -1,40 +1,69 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
-import {Room} from "@/model/types"
+import type {Room, Topic} from "@/model/types"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import ModalSubText from "@/components/text/ModalSubText.vue"
 
 const props = defineProps<{
   title?: string
-  room_id: number|null;
+  room_id: number | null;
 }>()
 
-const badges = [
-  {name: "Programming"},
-  {name: "Cooking"},
-  {name: "Just chilling"},
-  {name: "Gaming"},
-  {name: "Software Development"},
-]
+let badges = ref<Topic[]>()
 
+
+onMounted(() => {
+  loadRooms()
+  loadBadges()
+})
+
+async function loadBadges() {
+  try {
+    const response = await fetch("http://localhost:4000/topic/getTopicsByRoomId/"+props.room_id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    badges.value = await response.json()
+  } catch (err) {
+    console.log(err)
+  }
+}
 const rooms = ref<Room[]>()
+
 const buttonStyle = ref("unclickedBtn")
+
+async function loadRooms() {
+  try {
+    const response = await fetch("http://localhost:4000/room/getRooms", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    rooms.value = await response.json()
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 async function deleteRoom() {
   try {
-    const response = await fetch("http://localhost:4000/room/deleteRoomById/"+props.room_id, {
+    const response = await fetch("http://localhost:4000/room/deleteRoomById/" + props.room_id, {
       method: "DELETE",
       mode: "cors",
       credentials: "same-origin",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
-      }
+      },
     })
   } catch (err) {
     console.error(err)
@@ -54,19 +83,31 @@ async function deleteRoom() {
         <p id="title">
           <TitleText title="Chatroom Info"></TitleText>
         </p>
-        <p>Badges</p>
-        <div id="badges">
-          <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
+        <div class="subtheme-container">
+          <ModalSubText title="Badges"></ModalSubText>
+          <div id="badges">
+            <Badge v-for="badge in badges" :color="badge.color"> {{ badge.text }}</Badge>
+          </div>
         </div>
+        <div class="subtheme-container">
+          <ModalSubText title="Description"></ModalSubText>
+          <div v-for="room in rooms">
+            <p v-if="room.room_id === props.room_id">{{ room.description }}</p>
+          </div>
+        </div>
+
       </template>
       <template #second-btn>
         <span @click="deleteRoom" id="delete-btn">Delete</span>
       </template>
     </Modal>
-    <div>
-      <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
+    <div id="badges-div">
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
     <div class="join-button-div">
+      <div id="lock-div" v-for="room in rooms">
+        <Icon v-if="room.password !== null && room.room_id === room_id" image-name="locked" file-extension="png"></Icon>
+      </div>
       <ActionButton class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
@@ -78,6 +119,8 @@ async function deleteRoom() {
 <style scoped>
 .join-button-div {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .join-text {
@@ -88,7 +131,7 @@ async function deleteRoom() {
   background-color: var(--warning-300);
   color: var(--warning-700);
   border: 1px solid var(--warning-700);
-  float: right;
+  margin-left: auto;
 }
 
 :deep(.join-button:hover) {
@@ -135,6 +178,20 @@ async function deleteRoom() {
   font-weight: bold;
 }
 
+.subtheme-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+#lock-div {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+#badges-div {
+  width: 100%;
+}
 
 
 </style>
