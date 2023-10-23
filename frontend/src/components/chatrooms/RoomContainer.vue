@@ -7,9 +7,8 @@ import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
-import {Room} from "@/model/types"
-import {io, Socket} from "socket.io-client"
-import {BACKEND_URL} from "@/socket/server"
+import {type Room} from "@/model/types"
+import {fetchData} from "@/model/util-functions"
 
 const props = defineProps<{
   title?: string
@@ -49,13 +48,7 @@ onMounted(() => {
 
 async function getRooms() {
   try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
+    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
   } catch (err) {
     console.error(err)
   }
@@ -76,6 +69,11 @@ function changeCol() {
   } else {
     buttonStyle.value = "clicked"
   }
+}
+
+function getRoomId(): string {
+
+  return "room" + id
 }
 
 </script>
@@ -105,7 +103,7 @@ function changeCol() {
         <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
       </div>
       <div class="join-button-div">
-        <ActionButton class="join-button" width="5rem">
+        <ActionButton @click="$emit('joined', getRoomId())" class="join-button" width="5rem">
           <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
           <BodyText class="join-text">Join</BodyText>
         </ActionButton>

@@ -13,6 +13,7 @@ import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {socket} from "@/socket/server"
+import {fetchData} from "@/model/util-functions"
 
 let name = ref("")
 let maxUser = ref(10)
@@ -21,6 +22,7 @@ let password = ref("")
 let c_ID = ref(1)
 
 let isClicked = ref("clicked")
+const currentRoom = ref<string>("")
 
 const rooms = ref<Room[]>()
 
@@ -31,13 +33,7 @@ onMounted(async () => {
 
 async function loadRooms() {
   try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
+    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
   } catch (err) {
     console.error(err)
   }
@@ -134,7 +130,7 @@ function reverseDisplay(name: string) {
         </div>
       </div>
       <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"
+        <RoomContainer @joined="" v-if="rooms" v-for="room in rooms" :title="room.name"
                        :room_id="room.room_id"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
