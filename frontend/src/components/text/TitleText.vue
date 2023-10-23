@@ -12,7 +12,9 @@ const props = defineProps<{
 <style scoped>
 h3 {
   font-weight: 500;
-  color: var(--color-text)
+  color: var(--color-text);
+  font-family: Inter,sans-serif;
+  text-align: center;
 }
 
 
