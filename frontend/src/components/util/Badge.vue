@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue"
 
+const props = defineProps<{
+     color: string
+}>()
+
+
 const hexColors = ["#ff4040","#815eff", "#cf5df6", "#2591fd", "#3b9afd","#037dfc", "#f34545", "#11b54a"]
 const rndColor = ref('')
 
 onMounted(() => {
-  rndColor.value = hexColors[Math.floor(Math.random() * hexColors.length)]
+  rndColor.value = props.color.toLowerCase()
 })
 
 </script>
