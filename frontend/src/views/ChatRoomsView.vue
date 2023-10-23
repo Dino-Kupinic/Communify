@@ -3,13 +3,23 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref} from "vue"
+import {onMounted, ref, reactive, watch} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
+import InputField from "@/components/controls/InputField.vue"
+import BodyText from "@/components/text/BodyText.vue"
+
+let name = ref("")
+let maxUser = ref(10)
+let description = ref("hallo1")
+let password = ref("")
+let c_ID = ref(1)
+
+let isClicked = ref("clicked")
 
 const rooms = ref<Room[]>()
 
@@ -31,12 +41,43 @@ async function loadRooms() {
   }
 }
 
+async function createRoom() {
+  const room = {
+    name: name.value,
+    maximum_users: maxUser.value,
+    description: description.value,
+    password: isPrivateRoom.value ? password.value : "",
+    creator_id: c_ID.value,
+  }
+
+  try {
+    const response = await fetch("http://localhost:4000/room/createRoom", {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(room),
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+let isPrivateRoom = ref<boolean>(false)
+
 const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: loadRooms},
-  {icon: "account", label: "Profile"},
   {icon: "add", label: "Create Room"},
+  {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
 ])
+
+function reverseDisplay(name: string) {
+  isPrivateRoom.value = name === "private"
+}
 
 </script>
 
@@ -44,8 +85,8 @@ const actionButtons = ref([
   <div id="site-container">
     <div id="userbar-chatrooms-container">
       <div id="userbar-container">
+        <!-- Bar for the user profile on top of the list -->
         <UserProfileBar id="container-div-short-user"/>
-
         <!-- Bar for the menu above the list and under the user-bar -->
         <div id="container-div-short-menu" class="container-div-short">
           <ActionButton
@@ -56,16 +97,44 @@ const actionButtons = ref([
             class="logout"
             @click="button.action"
           >
-            <Icon class="img" :image-name="button.icon" file-extension="png"/>
-            <span class="btn-span">{{ button.label }}</span>
+            <Modal v-if="button.icon==='add'" modalTitle="Create Room">
+              <template #modal-btn>
+                <Icon class="img" :image-name="button.icon" file-extension="png"/>
+                <BodyText class="btn-span">{{ button.label }}</BodyText>
+              </template>
+              <template #modal-content>
+                <InputField v-model="name" label="Enter a Name for your Room"></InputField>
+                <!-- Private/Public Room Selection -->
+                <div id="selection-container-div">
+                  <div class="selection-div">
+                    <input @click="reverseDisplay('public')" class="selection-input" type="radio"
+                           name="chatroom-status" id="public">
+                    <label class="selection-label" for="private">Public chat room</label>
+                  </div>
+                  <div class="selection-div">
+                    <input @click="reverseDisplay('private')" class="selection-input" type="radio"
+                           name="chatroom-status" id="private">
+                    <label class="selection-label" for="public">Private chat room</label>
+                    <InputField v-if="isPrivateRoom" v-model="password" label="Password" type="password"></InputField>
+                  </div>
+                </div>
+              </template>
+              <template #second-btn>
+                <span @click="createRoom" id="save-btn">Save</span>
+              </template>
+            </Modal>
+            <template v-else>
+              <Icon class="img" :image-name="button.icon" file-extension="png"/>
+              <span class="btn-span">{{ button.label }}</span>
+            </template>
+
           </ActionButton>
         </div>
       </div>
-
       <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
+        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"
+                       :room_id="room.room_id"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
-        <Modal></Modal>
       </RoomList>
     </div>
     <ChatRoom></ChatRoom>
@@ -74,7 +143,7 @@ const actionButtons = ref([
 
 <style scoped>
 #userbar-container {
-  border-right: 1px solid var(--color-border-very-soft);
+  border-right: 1px solid var(--color-border-soft);
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -93,11 +162,12 @@ const actionButtons = ref([
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  height: auto;
+  height: 4vh;
 }
 
 .logout {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   font-size: 1rem;
   padding-right: 1.5%;
@@ -106,7 +176,7 @@ const actionButtons = ref([
 
 .container-div-short {
   width: 100%;
-  height: 6em;
+  height: 8vh;
   background-color: var(--color-background);
   display: flex;
   flex-direction: row;
@@ -118,8 +188,29 @@ const actionButtons = ref([
 }
 
 .btn-span {
-  padding-top: 3%;
+  padding-top: 1%;
 }
 
+#selection-container-div {
+  display: block;
+}
+
+.selection-div {
+  margin-top: 5%;
+  padding-bottom: 1%;
+  padding-left: 1%;
+}
+
+.selection-input {
+  margin-right: 1%;
+}
+
+.selection-label {
+  font-size: 1.2rem;
+}
+
+#save-btn {
+  font-weight: bold;
+}
 
 </style>
