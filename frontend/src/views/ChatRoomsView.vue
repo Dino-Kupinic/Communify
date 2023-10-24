@@ -12,30 +12,27 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import {socket} from "@/socket/server"
+import {fetchData} from "@/model/util-functions"
 
 let name = ref("")
 let maxUser = ref(10)
-let description = ref("hallo1")
+let description = ref("")
 let password = ref("")
 let c_ID = ref(1)
-
 let isClicked = ref("clicked")
+const currentRoom = ref<string>("")
 
 const rooms = ref<Room[]>()
 
 onMounted(async () => {
+  socket.connect()
   await loadRooms()
 })
 
 async function loadRooms() {
   try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
+    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
   } catch (err) {
     console.error(err)
   }
@@ -49,6 +46,8 @@ async function createRoom() {
     password: isPrivateRoom.value ? password.value : "",
     creator_id: c_ID.value,
   }
+
+  setValuesDefault()
 
   try {
     const response = await fetch("http://localhost:4000/room/createRoom", {
@@ -64,6 +63,17 @@ async function createRoom() {
   } catch (err) {
     console.error(err)
   }
+}
+
+function setValuesDefault() {
+  const radBtn = document.getElementById("public") as HTMLInputElement
+
+  name.value = ""
+  maxUser.value = 10
+  description.value = ""
+  password.value = ""
+  isPrivateRoom.value = false
+  radBtn.checked = true
 }
 
 let isPrivateRoom = ref<boolean>(false)
@@ -104,11 +114,13 @@ function reverseDisplay(name: string) {
               </template>
               <template #modal-content>
                 <InputField v-model="name" label="Enter a Name for your Room"></InputField>
+                <InputField v-model="description" label="Description"></InputField>
+                <InputField v-model="maxUser" label="Max. User" id="max-user-input" type="number" value="10" min="1" max="10"></InputField>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
                     <input @click="reverseDisplay('public')" class="selection-input" type="radio"
-                           name="chatroom-status" id="public">
+                           name="chatroom-status" checked="checked" id="public">
                     <label class="selection-label" for="private">Public chat room</label>
                   </div>
                   <div class="selection-div">
@@ -132,7 +144,7 @@ function reverseDisplay(name: string) {
         </div>
       </div>
       <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"
+        <RoomContainer @joined="" v-if="rooms" v-for="room in rooms" :title="room.name"
                        :room_id="room.room_id"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
@@ -189,15 +201,18 @@ function reverseDisplay(name: string) {
 
 .btn-span {
   padding-top: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 #selection-container-div {
   display: block;
+  margin-bottom: 5%;
 }
 
 .selection-div {
   margin-top: 5%;
-  padding-bottom: 1%;
   padding-left: 1%;
 }
 
@@ -212,5 +227,10 @@ function reverseDisplay(name: string) {
 #save-btn {
   font-weight: bold;
 }
+
+#max-user-input {
+  width: 50%;
+}
+
 
 </style>

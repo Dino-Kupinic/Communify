@@ -61,6 +61,7 @@ function reverseDisplayModal() {
   padding-top: 5%;
 }
 
+
 /* The Close Button */
 .close {
   color: #aaa;
@@ -70,22 +71,15 @@ function reverseDisplayModal() {
   margin-left: auto;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
 #modal-content-container {
   background-color: var(--color-background-soft);
-  height: 50%;
   width: 40%;
   border-radius: 2rem;
-  padding: 1%;
+  padding: 2%;
   display: flex;
   flex-direction: column;
   text-align: left;
+  height: min-content;
 }
 
 #close-btn-div {
@@ -93,6 +87,7 @@ function reverseDisplayModal() {
   margin-left: auto;
   align-self: flex-end;
   margin-top: auto;
+  color: var(--color-text);
 }
 
 #save-btn-div {
@@ -113,6 +108,15 @@ function reverseDisplayModal() {
 #container {
   display: flex;
   flex-direction: row;
+}
+
+.close:hover {
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+#modal-content-container {
+  color: var(--color-text);
 }
 
 </style>

@@ -34,6 +34,12 @@ clientRouter.get("/getClientByUsername/:username", asyncHandler(async (req, res)
   res.send(client)
 }))
 
+clientRouter.get("/getClientByEmail", asyncHandler(async (req, res) => {
+  const {email} = req.body
+  const client: Client | undefined = await clientService.getClientByEmail(email)
+  res.send(client)
+}))
+
 clientRouter.post("/createClient", asyncHandler(async (req, res) => {
   const {username, email, password, biography, age, member_since, current_room_id} = req.body
 

@@ -7,6 +7,8 @@ interface Props {
   label?: string,
   autocomplete?: string
   placeholder?: string
+  min?: string
+  max?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -25,7 +27,7 @@ const input = useVModel(props, "modelValue", emit)
   <div class="form-group">
     <label for="input">{{ label }}</label>
     <slot name="above-input"></slot>
-    <input v-model="input" :autocomplete="autocomplete" name="input" :type="type" :placeholder="placeholder">
+    <input v-model="input" :autocomplete="autocomplete" name="input" :type="type" :placeholder="placeholder" :min="min" :max="max">
     <slot name="below-input"></slot>
   </div>
 </template>
