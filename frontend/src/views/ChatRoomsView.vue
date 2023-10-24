@@ -17,10 +17,9 @@ import {fetchData} from "@/model/util-functions"
 
 let name = ref("")
 let maxUser = ref(10)
-let description = ref("hallo1")
+let description = ref("")
 let password = ref("")
 let c_ID = ref(1)
-
 let isClicked = ref("clicked")
 const currentRoom = ref<string>("")
 
@@ -48,6 +47,8 @@ async function createRoom() {
     creator_id: c_ID.value,
   }
 
+  setValuesDefault()
+
   try {
     const response = await fetch("http://localhost:4000/room/createRoom", {
       method: "POST",
@@ -62,6 +63,17 @@ async function createRoom() {
   } catch (err) {
     console.error(err)
   }
+}
+
+function setValuesDefault() {
+  const radBtn = document.getElementById("public") as HTMLInputElement
+
+  name.value = ""
+  maxUser.value = 10
+  description.value = ""
+  password.value = ""
+  isPrivateRoom.value = false
+  radBtn.checked = true
 }
 
 let isPrivateRoom = ref<boolean>(false)
@@ -102,11 +114,13 @@ function reverseDisplay(name: string) {
               </template>
               <template #modal-content>
                 <InputField v-model="name" label="Enter a Name for your Room"></InputField>
+                <InputField v-model="description" label="Description"></InputField>
+                <InputField v-model="maxUser" label="Max. User" id="max-user-input" type="number" value="10" min="1" max="10"></InputField>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
                     <input @click="reverseDisplay('public')" class="selection-input" type="radio"
-                           name="chatroom-status" id="public">
+                           name="chatroom-status" checked="checked" id="public">
                     <label class="selection-label" for="private">Public chat room</label>
                   </div>
                   <div class="selection-div">
@@ -187,15 +201,18 @@ function reverseDisplay(name: string) {
 
 .btn-span {
   padding-top: 1%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 
 #selection-container-div {
   display: block;
+  margin-bottom: 5%;
 }
 
 .selection-div {
   margin-top: 5%;
-  padding-bottom: 1%;
   padding-left: 1%;
 }
 
@@ -210,5 +227,10 @@ function reverseDisplay(name: string) {
 #save-btn {
   font-weight: bold;
 }
+
+#max-user-input {
+  width: 50%;
+}
+
 
 </style>

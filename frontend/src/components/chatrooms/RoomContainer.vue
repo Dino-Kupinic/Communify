@@ -5,9 +5,10 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
+import type {Room, Topic} from "@/model/types"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
-import {type Room} from "@/model/types"
+import ModalSubText from "@/components/text/ModalSubText.vue"
 import {fetchData} from "@/model/util-functions"
 
 const props = defineProps<{
@@ -15,16 +16,28 @@ const props = defineProps<{
   room_id: number | null;
 }>()
 
-const badges = [
-  {name: "Programming"},
-  {name: "Cooking"},
-  {name: "Just chilling"},
-  {name: "Gaming"},
-  {name: "Software Development"},
-]
+let badges = ref<Topic[]>()
 
+
+onMounted(() => {
+  loadRooms()
+  loadBadges()
+})
+
+async function loadBadges() {
+  try {
+    const response = await fetch("http://localhost:4000/topic/getTopicsByRoomId/"+props.room_id, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    badges.value = await response.json()
+  } catch (err) {
+    console.log(err)
+  }
+}
 const rooms = ref<Room[]>()
-const buttonStyle = ref('unclicked')
 
 async function deleteRoom() {
   try {
@@ -54,60 +67,53 @@ async function getRooms() {
   }
 }
 
-// Trying to make only one colorable
-
-
-async function getMessages() {
-  changeCol()
-  console.log("getMessages()")
-}
-
-function changeCol() {
-  console.log("changeCol()")
-  if (buttonStyle.value === "clicked") {
-    buttonStyle.value = "unclicked"
-  } else {
-    buttonStyle.value = "clicked"
-  }
-}
-
 function getRoomId(): string {
 
-  return "room" + id
+  // return "room" + id
 }
 
 </script>
 
 <template>
-  <div :id="buttonStyle">
-    <div id="chatroom-div" @click="getMessages">
-      <TitleText :title="title"></TitleText>
-      <Modal>
-        <template #modal-btn>
-            <Icon class="details" image-name="more" file-extension="png"></Icon>
-        </template>
-        <template #modal-content>
-          <p id="title">
-            <TitleText title="Chatroom Info"></TitleText>
-          </p>
-          <p>Badges</p>
+  <div id="chatroom-div">
+    <TitleText :title="title"></TitleText>
+    <Modal>
+      <template #modal-btn>
+        <Icon class="details" image-name="more" file-extension="png"></Icon>
+      </template>
+      <template #modal-content>
+        <p id="title">
+          <TitleText title="Chatroom Info"></TitleText>
+        </p>
+        <div class="subtheme-container">
+          <ModalSubText title="Badges"></ModalSubText>
           <div id="badges">
-            <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
+            <Badge v-for="badge in badges" :color="badge.color"> {{ badge.text }}</Badge>
           </div>
-        </template>
-        <template #second-btn>
-          <span @click="deleteRoom" id="delete-btn">Delete</span>
-        </template>
-      </Modal>
-      <div>
-        <Badge v-for="badge in badges"> {{ badge.name }}</Badge>
+        </div>
+        <div class="subtheme-container">
+          <ModalSubText title="Description"></ModalSubText>
+          <div v-for="room in rooms">
+            <p v-if="room.room_id === props.room_id">{{ room.description }}</p>
+          </div>
+        </div>
+
+      </template>
+      <template #second-btn>
+        <span @click="deleteRoom" id="delete-btn">Delete</span>
+      </template>
+    </Modal>
+    <div id="badges-div">
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
+    </div>
+    <div class="join-button-div">
+      <div id="lock-div" v-for="room in rooms">
+        <Icon v-if="room.password !== null && room.room_id === room_id" image-name="locked" file-extension="png"></Icon>
       </div>
-      <div class="join-button-div">
-        <ActionButton @click="$emit('joined', getRoomId())" class="join-button" width="5rem">
-          <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
-          <BodyText class="join-text">Join</BodyText>
-        </ActionButton>
-      </div>
+      <ActionButton @click="$emit('joined', getRoomId())" class="join-button" width="5rem">
+        <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+        <BodyText class="join-text">Join</BodyText>
+      </ActionButton>
     </div>
   </div>
 </template>
@@ -115,6 +121,8 @@ function getRoomId(): string {
 <style scoped>
 .join-button-div {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .join-text {
@@ -125,7 +133,7 @@ function getRoomId(): string {
   background-color: var(--warning-300);
   color: var(--warning-700);
   border: 1px solid var(--warning-700);
-  float: right;
+  margin-left: auto;
 }
 
 :deep(.join-button:hover) {
@@ -177,13 +185,21 @@ function getRoomId(): string {
   font-weight: bold;
 }
 
-#clicked {
-  background-color: var(--color-background-very-soft);
+.subtheme-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
-#unclicked {
-  background-color: var(--color-background);
+#lock-div {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
+
+#badges-div {
+  width: 100%;
+}
+
 
 
 </style>

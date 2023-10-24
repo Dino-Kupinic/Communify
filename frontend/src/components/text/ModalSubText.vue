@@ -11,10 +11,10 @@ const props = defineProps<{
 
 <style scoped>
 h3 {
+  margin-bottom: 2%;
+  font-size: 2rem;
   font-weight: 500;
-  color: var(--color-text);
-  font-family: Inter,sans-serif;
-  text-align: center;
+  color: var(--color-text)
 }
 
 
