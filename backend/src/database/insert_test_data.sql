@@ -23,15 +23,18 @@ VALUES ('Room 1', 10, 'Description for Room 1', NULL, 1),
        ('Room 2', 8, 'Description for Room 2', 'room2pass', 2),
        ('Room 3', 12, 'Description for Room 3', NULL, 3),
        ('Room 4', 92, 'Description for Room 4', NULL, 1),
-       ('Room 5', 2, 'Description for Room 5', 'room2pass2', 1),
-       ('Room 6', 120, 'Description for Room 6', NULL, 3),
-       ('Room 7', 130, 'Description for Room 7', NULL, 3);
+       ('Room 5', 2, 'Description for Room 5', 'room2pass2', 1);
 
 -- Insert test data into the 'topic' table
 INSERT INTO topic (text, color)
-VALUES ('Topic 1', 'Red'),
-       ('Topic 2', 'Blue'),
-       ('Topic 3', 'Green');
+VALUES ('Software Engineering', 'Red'),
+       ('Summer Vacation', 'Blue'),
+       ('Just Chilling', 'Green'),
+       ('Video Games', 'Yellow'),
+       ('Comics', 'Purple'),
+       ('Art', 'Teal'),
+       ('Movies', 'Orange'),
+       ('Anything', 'Brown');
 
 -- Insert test data into the 'message' table
 INSERT INTO message (user_id, content, timestamp, room_id)
@@ -42,5 +45,18 @@ VALUES (1, 'Hello from user 1 in Room 1', CURRENT_TIMESTAMP, 1),
 -- Insert test data into the 'topics_rooms' table
 INSERT INTO topics_rooms (t_id, r_id)
 VALUES (1, 1),
-       (2, 2),
-       (1, 3);
+       (2, 1),
+       (5, 1),
+       (3, 1),
+       (4, 1),
+       (5, 2),
+       (6, 2),
+       (7, 2),
+       (1, 2),
+       (3, 3),
+       (1, 3),
+       (2, 3),
+       (1, 4),
+       (4, 4),
+       (8, 4),
+       (8, 5);

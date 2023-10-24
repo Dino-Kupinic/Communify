@@ -8,7 +8,7 @@
  * @returns {Promise<T>} - A promise that resolves to the fetched data.
  * @throws {Error} - If the response status is not OK.
  */
-export async function fetchData<T>(url: string, method: string = "GET", headers?: string[][], body?: any): Promise<T> {
+export async function fetchData<T>(url: string, method: string = "GET", headers?: HeadersInit, body?: any): Promise<T> {
   const response = await fetch(
     url,
     {
