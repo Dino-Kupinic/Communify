@@ -20,7 +20,6 @@ let badges = ref<Topic[]>()
 
 
 onMounted(() => {
-  loadRooms()
   loadBadges()
 })
 
@@ -68,8 +67,8 @@ async function getRooms() {
 }
 
 function getRoomId(): string {
-
-  // return "room" + id
+  const id = 1
+  return "room" + id
 }
 
 </script>
