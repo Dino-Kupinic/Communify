@@ -5,8 +5,8 @@ const props = defineProps<{
   color: string
 }>()
 
-const backgroundColor = ref("")
-const fontColor = ref("")
+const backgroundColor = ref<string>("")
+const fontColor = ref<string>("")
 
 const colorsMap = new Map<string, string[]>()
 colorsMap.set("Red", ["#ba0c0c", "#fde4e4"])

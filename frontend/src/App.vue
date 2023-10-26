@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import {onMounted} from "vue"
-import {socket} from "@/socket/server"
 
 onMounted(() => {
   if (!localStorage.getItem("auth_token"))

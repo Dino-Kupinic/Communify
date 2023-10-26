@@ -7,7 +7,13 @@ import BodyText from "@/components/text/BodyText.vue"
 import router from "@/router/router"
 import InputError from "@/components/controls/InputError.vue"
 import type {Client} from "@/model/types"
-import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants"
+import {
+  EMAIL_MAX_LENGTH,
+  USERNAME_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  AGE_MIN_LENGTH, AGE_MAX_LENGTH, BIOGRAPHY_MAX_LENGTH,
+} from "@/model/type_constants"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import Link from "@/components/text/Link.vue"
@@ -27,12 +33,12 @@ const state: Client = reactive({
 const rules = {
   username: {
     required,
-    maxLength: maxLength(MAX_LENGTH),
+    maxLength: maxLength(USERNAME_MAX_LENGTH),
   },
   password: {
     required,
     minLength: minLength(PASSWORD_MIN_LENGTH),
-    maxLength: maxLength(MAX_LENGTH),
+    maxLength: maxLength(PASSWORD_MAX_LENGTH),
   },
   email: {
     required,
@@ -41,11 +47,11 @@ const rules = {
   },
   age: {
     required,
-    minValue: minValue(18),
-    maxValue: maxValue(150),
+    minValue: minValue(AGE_MIN_LENGTH),
+    maxValue: maxValue(AGE_MAX_LENGTH),
   },
   biography: {
-    maxLength: maxLength(1000),
+    maxLength: maxLength(BIOGRAPHY_MAX_LENGTH),
   },
 }
 
@@ -60,14 +66,14 @@ async function submitForm() {
     state.biography = null
 
   const user: Client = {
-    "user_id": null,
-    "username": state.username,
-    "password": state.password,
-    "email": state.email,
-    "biography": state.biography,
-    "age": state.age,
-    "member_since": state.member_since,
-    "current_room_id": null,
+    user_id: null,
+    username: state.username,
+    password: state.password,
+    email: state.email,
+    biography: state.biography,
+    age: state.age,
+    member_since: state.member_since,
+    current_room_id: null,
   }
 
   try {
