@@ -1,85 +1,112 @@
 <script setup lang="ts">
-
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref, reactive, watch} from "vue"
+import {onMounted, reactive, ref} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
-import type {Room} from "@/model/types"
+import type {Client, Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {socket} from "@/socket/server"
+import {useRoomStore} from "@/stores/roomStore"
+import {maxLength, maxValue, minValue, required} from "@vuelidate/validators"
+import {
+  DESCRIPTION_MAX_LENGTH,
+  MAXIMUM_USERS,
+  MINIMUM_USERS,
+  ROOM_NAME_MAX_LENGTH, ROOM_PASSWORD_MAX_LENGTH,
+} from "@/model/type_constants"
+import useVuelidate from "@vuelidate/core"
 import {fetchData} from "@/model/util-functions"
 
-let name = ref("")
-let maxUser = ref(10)
-let description = ref("")
-let password = ref("")
-let c_ID = ref(1)
-let isClicked = ref("clicked")
-const currentRoom = ref<string>("")
+const initialState: Room = reactive({
+  room_id: null,
+  name: "",
+  maximum_users: null,
+  description: null,
+  password: null,
+  creator_id: 0,
+})
+
+const state = reactive<Room>({...initialState})
+
+const rules = {
+  name: {
+    required,
+    maxLength: maxLength(ROOM_NAME_MAX_LENGTH),
+  },
+  maximum_users: {
+    minValue: minValue(MINIMUM_USERS),
+    maxValue: maxValue(MAXIMUM_USERS),
+  },
+  description: {
+    maxLength: maxLength(DESCRIPTION_MAX_LENGTH),
+  },
+  password: {
+    maxLength: maxLength(ROOM_PASSWORD_MAX_LENGTH),
+  },
+}
+
+const v$ = useVuelidate(rules, state)
+
+function resetState() {
+  Object.assign(state, initialState)
+}
+
+async function getCurrentUserId(): Promise<number> {
+  const token = localStorage.getItem("auth_token")
+  if (token) {
+    const client: Client = await fetchData("http://localhost:4000/auth/profile", "GET", [["access_token", token]])
+    return client.user_id as number
+  }
+  throw new Error("User not authorized")
+}
 
 const rooms = ref<Room[]>()
+const roomStore = useRoomStore()
 
 onMounted(async () => {
   socket.connect()
-  await loadRooms()
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
 })
 
-async function loadRooms() {
-  try {
-    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
-  } catch (err) {
-    console.error(err)
-  }
-}
-
 async function createRoom() {
-  const room = {
-    name: name.value,
-    maximum_users: maxUser.value,
-    description: description.value,
-    password: isPrivateRoom.value ? password.value : "",
-    creator_id: c_ID.value,
+  const isFormCorrect = await v$.value.$validate()
+  if (!isFormCorrect) return
+
+  const creator_id = await getCurrentUserId()
+  const room: Room = {
+    room_id: null,
+    name: state.name,
+    maximum_users: state.maximum_users,
+    description: state.description,
+    password: state.password,
+    creator_id: creator_id,
   }
 
-  setValuesDefault()
-
   try {
-    const response = await fetch("http://localhost:4000/room/createRoom", {
-      method: "POST",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(room),
-    })
+    await roomStore.addRoom(room)
+    rooms.value = roomStore.rooms
+    resetState()
   } catch (err) {
     console.error(err)
   }
-}
-
-function setValuesDefault() {
-  const radBtn = document.getElementById("public") as HTMLInputElement
-
-  name.value = ""
-  maxUser.value = 10
-  description.value = ""
-  password.value = ""
-  isPrivateRoom.value = false
-  radBtn.checked = true
 }
 
 let isPrivateRoom = ref<boolean>(false)
 
+async function refreshRooms() {
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
+}
+
 const actionButtons = ref([
-  {icon: "refresh", label: "Refresh", action: loadRooms},
+  {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
   {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
@@ -87,6 +114,10 @@ const actionButtons = ref([
 
 function reverseDisplay(name: string) {
   isPrivateRoom.value = name === "private"
+}
+
+function joinRoom(room: string) {
+  console.log(room)
 }
 
 </script>
@@ -107,27 +138,29 @@ function reverseDisplay(name: string) {
             class="logout"
             @click="button.action"
           >
-            <Modal v-if="button.icon==='add'" modalTitle="Create Room">
+            <Modal v-if="button.icon ==='add'" modalTitle="Create Room">
               <template #modal-btn>
                 <Icon class="img" :image-name="button.icon" file-extension="png"/>
                 <BodyText class="btn-span">{{ button.label }}</BodyText>
               </template>
               <template #modal-content>
-                <InputField v-model="name" label="Enter a Name for your Room"></InputField>
-                <InputField v-model="description" label="Description"></InputField>
-                <InputField v-model="maxUser" label="Max. User" id="max-user-input" type="number" value="10" min="1" max="10"></InputField>
+                <InputField v-model="state.name" label="Enter a Name for your Room"></InputField>
+                <InputField v-model="state.description" label="Description"></InputField>
+                <InputField v-model="state.maximum_users" label="Max. User" id="max-user-input" type="number" value="1"
+                            min="1"></InputField>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
                     <input @click="reverseDisplay('public')" class="selection-input" type="radio"
-                           name="chatroom-status" checked="checked" id="public">
+                           name="chatroom-status" id="public">
                     <label class="selection-label" for="private">Public chat room</label>
                   </div>
                   <div class="selection-div">
                     <input @click="reverseDisplay('private')" class="selection-input" type="radio"
                            name="chatroom-status" id="private">
                     <label class="selection-label" for="public">Private chat room</label>
-                    <InputField v-if="isPrivateRoom" v-model="password" label="Password" type="password"></InputField>
+                    <InputField v-if="isPrivateRoom" v-model="state.password" label="Password"
+                                type="password"></InputField>
                   </div>
                 </div>
               </template>
@@ -144,8 +177,7 @@ function reverseDisplay(name: string) {
         </div>
       </div>
       <RoomList>
-        <RoomContainer @joined="" v-if="rooms" v-for="room in rooms" :title="room.name"
-                       :room_id="room.room_id"></RoomContainer>
+        <RoomContainer @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
