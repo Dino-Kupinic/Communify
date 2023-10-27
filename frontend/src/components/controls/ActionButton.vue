@@ -25,6 +25,8 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 button {
+  padding-left: 1.5%;
+  padding-right: 1.5%;
   margin: v-bind(margin);
   width: v-bind(width);
   background-color: var(--brand-500);
@@ -67,5 +69,7 @@ button {
 
 div {
   display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 </style>
