@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, ref} from "vue"
+import {onMounted, ref, watch} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Modal from "@/components/Boxes/Modal.vue"
@@ -65,10 +65,14 @@ async function deleteRoom() {
         "Content-Type": "application/json",
       },
     })
+
+    await loadRooms()
+
   } catch (err) {
     console.error(err)
   }
 }
+
 
 </script>
 
@@ -102,7 +106,7 @@ async function deleteRoom() {
       </template>
     </Modal>
     <div id="badges-div">
-      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }}</Badge>
     </div>
     <div class="join-button-div">
       <div id="lock-div" v-for="room in rooms">
