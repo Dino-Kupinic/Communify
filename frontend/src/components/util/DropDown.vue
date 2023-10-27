@@ -2,6 +2,7 @@
 
 
 import {useVModel} from "@vueuse/core";
+import VerticalContainer from "@/components/util/VerticalContainer.vue";
 
 const props = defineProps<{
   modelValue: string | number
@@ -19,13 +20,15 @@ const clrInput = useVModel(props, "modelValue", emit)
 </script>
 
 <template>
-  <label for="input">{{ label }}</label>
-  <select v-model="clrInput" id="selection">
-    <option v-if="type === 'ColorPicker'" v-for="element in listElements" style="color: v-bind(element)">
-      {{ element }}
-    </option>
-    <option v-else v-for="element in listElements"> {{ element }}</option>
-  </select>
+  <VerticalContainer class="form-group">
+    <label for="input">{{ label }}</label>
+    <select v-model="clrInput" id="selection">
+      <option v-if="type === 'ColorPicker'" v-for="element in listElements" style="color: v-bind(element)">
+        {{ element }}
+      </option>
+      <option v-else v-for="element in listElements"> {{ element }}</option>
+    </select>
+  </VerticalContainer>
 </template>
 
 <style scoped>
@@ -57,5 +60,11 @@ label {
   margin: 1rem 0 0.2rem 0;
   padding-left: 0.5rem;
 }
+
+.form-group {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 
 </style>
