@@ -21,6 +21,7 @@ import useVuelidate from "@vuelidate/core";
 import {maxLength, minLength} from "@vuelidate/validators/dist/index";
 import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants";
 import InputError from "@/components/controls/InputError.vue";
+import ButtonText from "@/components/controls/ButtonText.vue"
 
 const badges = reactive([{color: "", text: ""}])
 const rooms = ref<Room[]>()
@@ -52,13 +53,6 @@ function updateOnRoomCreation() {
   rooms.value = roomStore.rooms
 }
 
-/**
- * @todo make the v-model of the badge color return a string containing the color
- * or return the full array
- * @todo make create room also add the badges to the room
- */
-
-
 </script>
 
 <template>
@@ -80,7 +74,7 @@ function updateOnRoomCreation() {
             <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'" modalTitle="Create Room"></CreateRoomModal>
             <template v-else>
               <Icon class="img" :image-name="button.icon" file-extension="png"/>
-              <span class="btn-span">{{ button.label }}</span>
+              <ButtonText>{{ button.label }}</ButtonText>
             </template>
           </ActionButton>
         </div>
