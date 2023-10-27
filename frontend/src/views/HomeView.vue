@@ -189,7 +189,7 @@ import Illustration from "@/components/util/Illustration.vue"
 .textmodule1 {
   text-align: center;
   width: 100%;
-  font-weight: 300;
+  font-weight: 500;
   font-family: Inter, serif;
   /*
   background: linear-gradient(90deg, #1ec3e0, #2432d3);

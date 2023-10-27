@@ -1,84 +1,57 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, ref, watch} from "vue"
+import {computed, onMounted, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
-import Modal from "@/components/Boxes/Modal.vue"
+import Modal from "@/components/modals/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
 import type {Room, Topic} from "@/model/types"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import ModalSubText from "@/components/text/ModalSubText.vue"
+import {fetchData} from "@/model/util-functions"
+import {useRoomStore} from "@/stores/roomStore"
 
 const props = defineProps<{
-  title?: string
-  room_id: number | null;
+  room: Room,
 }>()
 
-let badges = ref<Topic[]>()
+const emits = defineEmits<{
+  joined: [getRoomId: string]
+}>()
 
+const roomStore = useRoomStore()
+const badges = ref<Topic[]>()
 
 onMounted(() => {
-  loadRooms()
   loadBadges()
 })
 
 async function loadBadges() {
   try {
-    const response = await fetch("http://localhost:4000/topic/getTopicsByRoomId/"+props.room_id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    badges.value = await response.json()
+    badges.value = await fetchData("http://localhost:4000/topic/getTopicsByRoomId/" + props.room.room_id,
+      "GET",
+      [["Content-Type", "application/json"]],
+    )
   } catch (err) {
     console.log(err)
   }
 }
-const rooms = ref<Room[]>()
-
-const buttonStyle = ref("unclickedBtn")
-
-async function loadRooms() {
-  try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
-  } catch (err) {
-    console.error(err)
-  }
-}
 
 async function deleteRoom() {
-  try {
-    const response = await fetch("http://localhost:4000/room/deleteRoomById/" + props.room_id, {
-      method: "DELETE",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-
-    await loadRooms()
-
-  } catch (err) {
-    console.error(err)
-  }
+  if (props.room.room_id != null)
+    await roomStore.deleteRoom(props.room.room_id)
 }
 
+const getRoomId = computed(() => {
+  return "room-" + props.room.room_id
+})
 
 </script>
 
 <template>
-  <div id="chatroom-div" :class="buttonStyle">
-    <TitleText :title="title"></TitleText>
+  <div id="chatroom-div">
+    <TitleText :title="room.name"></TitleText>
     <Modal>
       <template #modal-btn>
         <Icon class="details" image-name="more" file-extension="png"></Icon>
@@ -95,24 +68,21 @@ async function deleteRoom() {
         </div>
         <div class="subtheme-container">
           <ModalSubText title="Description"></ModalSubText>
-          <div v-for="room in rooms">
-            <p v-if="room.room_id === props.room_id">{{ room.description }}</p>
-          </div>
+          <p>{{ room.description }}</p>
         </div>
-
       </template>
       <template #second-btn>
         <span @click="deleteRoom" id="delete-btn">Delete</span>
       </template>
     </Modal>
     <div id="badges-div">
-      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }}</Badge>
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
     <div class="join-button-div">
-      <div id="lock-div" v-for="room in rooms">
-        <Icon v-if="room.password !== null && room.room_id === room_id" image-name="locked" file-extension="png"></Icon>
+      <div id="lock-div">
+        <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
       </div>
-      <ActionButton class="join-button" width="5rem">
+      <ActionButton @click="$emit('joined', getRoomId)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
       </ActionButton>
@@ -146,6 +116,11 @@ async function deleteRoom() {
 
 .join-text {
   color: var(--warning-800);
+}
+
+.details {
+  padding-left: 0.5%;
+  cursor: pointer;
 }
 
 #chatroom-div {
