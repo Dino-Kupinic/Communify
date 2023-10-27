@@ -44,3 +44,12 @@ INSERT INTO topics_rooms (t_id, r_id)
 VALUES (1, 1),
        (2, 2),
        (1, 3);
+
+
+Insert INTO topics_rooms (t_id, r_id)
+VALUES (3,7),
+       (2,5),
+       (2,3),
+       (2,7),
+       (3,6),
+       (2,1);
