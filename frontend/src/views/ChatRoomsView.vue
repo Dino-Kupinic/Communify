@@ -57,38 +57,7 @@ function updateOnRoomCreation() {
  * or return the full array
  * @todo make create room also add the badges to the room
  */
-function addBadge() {
-  console.log(state.badgeColor ? state.badgeColor : "NULL");
-  badges.push({color: state.badgeColor, text: state.badgeName})
-}
 
-
-const state = reactive({
-  badgeName: "",
-  badgeColor: ""
-})
-
-const rules = {
-  badgeName: {
-    required,
-  },
-  badgeColor: {
-    required,
-  },
-}
-
-async function submitForm() {
-  const isFormCorrect = await v$.value.$validate()
-  console.log("" + state.badgeColor + " | " + state.badgeName)
-
-  if (!isFormCorrect) return
-
-
-  addBadge()
-}
-
-
-const v$ = useVuelidate(rules, state)
 
 </script>
 
@@ -178,39 +147,7 @@ const v$ = useVuelidate(rules, state)
   align-content: center;
 }
 
-#selection-container-div {
-  display: block;
-  margin-bottom: 5%;
-}
 
-.selection-div {
-  margin-top: 5%;
-  padding-left: 1%;
-}
-
-.selection-input {
-  margin-right: 1%;
-}
-
-.selection-label {
-  font-size: 1.2rem;
-}
-
-#save-btn {
-  font-weight: bold;
-}
-
-#max-user-input {
-  width: 50%;
-}
-
-#badge-colorpick-container {
-  display: flex;
-  flex-wrap: wrap;
-  width: auto;
-  align-content: center;
-
-}
 
 .input-error :deep(input) {
   border-color: var(--error-400);
