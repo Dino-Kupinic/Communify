@@ -6,12 +6,19 @@ import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
 import {onMounted, ref, reactive, watch} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
-import type {Room} from "@/model/types"
+import type {Room, Topic} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import Badge from "@/components/util/Badge.vue";
+import DropDown from "@/components/util/DropDown.vue";
+import {email, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import {maxLength, minLength} from "@vuelidate/validators/dist/index";
+import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants";
+import InputError from "@/components/controls/InputError.vue";
 
 let name = ref("")
 let maxUser = ref(10)
@@ -20,7 +27,9 @@ let password = ref("")
 let c_ID = ref(1)
 let isClicked = ref("clicked")
 
+const badges = reactive([{color: "", text: ""}])
 const rooms = ref<Room[]>()
+const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
 
 onMounted(async () => {
   await loadRooms()
@@ -62,9 +71,11 @@ async function createRoom() {
       },
       body: JSON.stringify(room),
     })
+    await loadRooms();
   } catch (err) {
     console.error(err)
   }
+
 }
 
 function setValuesDefault() {
@@ -91,6 +102,44 @@ function reverseDisplay(name: string) {
   isPrivateRoom.value = name === "private"
 }
 
+/**
+ * @todo make the v-model of the badge color return a string containing the color
+ * or return the full array
+ * @todo make create room also add the badges to the room
+ */
+function addBadge() {
+  console.log(state.badgeColor ? state.badgeColor : "NULL");
+  badges.push({color: state.badgeColor, text: state.badgeName})
+}
+
+
+const state = reactive({
+  badgeName: "",
+  badgeColor: ""
+})
+
+const rules = {
+  badgeName: {
+    required,
+  },
+  badgeColor: {
+    required,
+  },
+}
+
+async function submitForm() {
+  const isFormCorrect = await v$.value.$validate()
+  console.log("" + state.badgeColor + " | " + state.badgeName)
+
+  if (!isFormCorrect) return
+
+
+  addBadge()
+}
+
+
+const v$ = useVuelidate(rules, state)
+
 </script>
 
 <template>
@@ -102,12 +151,12 @@ function reverseDisplay(name: string) {
         <!-- Bar for the menu above the list and under the user-bar -->
         <div id="container-div-short-menu" class="container-div-short">
           <ActionButton
-            v-for="button in actionButtons"
-            :key="button.label"
-            :hollow="true"
-            height="max-content"
-            class="logout"
-            @click="button.action"
+              v-for="button in actionButtons"
+              :key="button.label"
+              :hollow="true"
+              height="max-content"
+              class="logout"
+              @click="button.action"
           >
             <Modal v-if="button.icon==='add'" modalTitle="Create Room">
               <template #modal-btn>
@@ -115,9 +164,23 @@ function reverseDisplay(name: string) {
                 <BodyText class="btn-span">{{ button.label }}</BodyText>
               </template>
               <template #modal-content>
-                <InputField v-model="name" label="Enter a Name for your Room"></InputField>
-                <InputField v-model="description" label="Description"></InputField>
-                <InputField v-model="maxUser" label="Max. User" id="max-user-input" type="number" value="10" min="1" max="10"></InputField>
+                <InputField placeholder="Room Name" v-model="name" label="Enter a Name for your Room"></InputField>
+                <InputField placeholder="Description" v-model="description" label="Description"></InputField>
+                <InputField placeholder="Max. User" v-model="maxUser" label="Max. User" id="max-user-input"
+                            type="number" value="10" min="1" max="10"></InputField>
+                <div id="badge-colorpick-container">
+                  <InputField :class="{'input-error': v$.badgeName.$error}" placeholder="Badge Name" v-model="state.badgeName" label="Add Badges">
+                    <template #below-input>
+                    </template>
+                  </InputField>
+                  <DropDown label="Badge Color" :class="{'input-error': v$.badgeColor.$error}" v-model="state.badgeColor" type="ColorPicker" :list-elements="hexColors"></DropDown>
+                  <ActionButton @click="submitForm" width="max-content" height="max-content">
+                    <Icon image-name="add" file-extension="png"></Icon>
+                  </ActionButton>
+                </div>
+                <div>
+                  <Badge v-for="badge in badges" :color="badge.color">{{ badge.text }}</Badge>
+                </div>
                 <!-- Private/Public Room Selection -->
                 <div id="selection-container-div">
                   <div class="selection-div">
@@ -234,5 +297,16 @@ function reverseDisplay(name: string) {
   width: 50%;
 }
 
+#badge-colorpick-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  align-content: center;
+
+}
+
+.input-error :deep(input) {
+  border-color: var(--error-400);
+}
 
 </style>
