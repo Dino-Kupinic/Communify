@@ -1,93 +1,63 @@
 <script setup lang="ts">
-
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref, reactive, watch} from "vue"
+import {onMounted, ref, reactive} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
+import {socket} from "@/socket/server"
+import {useRoomStore} from "@/stores/roomStore"
+import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import Modal from "@/components/Boxes/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import BodyText from "@/components/text/BodyText.vue"
-import {socket} from "@/socket/server"
-import {fetchData} from "@/model/util-functions"
+import Badge from "@/components/util/Badge.vue";
+import DropDown from "@/components/util/DropDown.vue";
+import {email, required} from "@vuelidate/validators";
+import useVuelidate from "@vuelidate/core";
+import {maxLength, minLength} from "@vuelidate/validators/dist/index";
+import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants";
+import InputError from "@/components/controls/InputError.vue";
 
-let name = ref("")
-let maxUser = ref(10)
-let description = ref("")
-let password = ref("")
-let c_ID = ref(1)
-let isClicked = ref("clicked")
-const currentRoom = ref<string>("")
-
+const badges = reactive([{color: "", text: ""}])
 const rooms = ref<Room[]>()
+const roomStore = useRoomStore()
 
 onMounted(async () => {
   socket.connect()
-  await loadRooms()
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
 })
 
-async function loadRooms() {
-  try {
-    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
-  } catch (err) {
-    console.error(err)
-  }
+async function refreshRooms() {
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
 }
-
-async function createRoom() {
-  const room = {
-    name: name.value,
-    maximum_users: maxUser.value,
-    description: description.value,
-    password: isPrivateRoom.value ? password.value : "",
-    creator_id: c_ID.value,
-  }
-
-  setValuesDefault()
-
-  try {
-    const response = await fetch("http://localhost:4000/room/createRoom", {
-      method: "POST",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(room),
-    })
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-function setValuesDefault() {
-  const radBtn = document.getElementById("public") as HTMLInputElement
-
-  name.value = ""
-  maxUser.value = 10
-  description.value = ""
-  password.value = ""
-  isPrivateRoom.value = false
-  radBtn.checked = true
-}
-
-let isPrivateRoom = ref<boolean>(false)
 
 const actionButtons = ref([
-  {icon: "refresh", label: "Refresh", action: loadRooms},
+  {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
   {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
 ])
 
-function reverseDisplay(name: string) {
-  isPrivateRoom.value = name === "private"
+function joinRoom(room: string) {
+  console.log(room)
 }
+
+function updateOnRoomCreation() {
+  rooms.value = roomStore.rooms
+}
+
+/**
+ * @todo make the v-model of the badge color return a string containing the color
+ * or return the full array
+ * @todo make create room also add the badges to the room
+ */
+
 
 </script>
 
@@ -107,45 +77,16 @@ function reverseDisplay(name: string) {
             class="logout"
             @click="button.action"
           >
-            <Modal v-if="button.icon==='add'" modalTitle="Create Room">
-              <template #modal-btn>
-                <Icon class="img" :image-name="button.icon" file-extension="png"/>
-                <BodyText class="btn-span">{{ button.label }}</BodyText>
-              </template>
-              <template #modal-content>
-                <InputField v-model="name" label="Enter a Name for your Room"></InputField>
-                <InputField v-model="description" label="Description"></InputField>
-                <InputField v-model="maxUser" label="Max. User" id="max-user-input" type="number" value="10" min="1" max="10"></InputField>
-                <!-- Private/Public Room Selection -->
-                <div id="selection-container-div">
-                  <div class="selection-div">
-                    <input @click="reverseDisplay('public')" class="selection-input" type="radio"
-                           name="chatroom-status" checked="checked" id="public">
-                    <label class="selection-label" for="private">Public chat room</label>
-                  </div>
-                  <div class="selection-div">
-                    <input @click="reverseDisplay('private')" class="selection-input" type="radio"
-                           name="chatroom-status" id="private">
-                    <label class="selection-label" for="public">Private chat room</label>
-                    <InputField v-if="isPrivateRoom" v-model="password" label="Password" type="password"></InputField>
-                  </div>
-                </div>
-              </template>
-              <template #second-btn>
-                <span @click="createRoom" id="save-btn">Save</span>
-              </template>
-            </Modal>
+            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'" modalTitle="Create Room"></CreateRoomModal>
             <template v-else>
               <Icon class="img" :image-name="button.icon" file-extension="png"/>
               <span class="btn-span">{{ button.label }}</span>
             </template>
-
           </ActionButton>
         </div>
       </div>
       <RoomList>
-        <RoomContainer @joined="" v-if="rooms" v-for="room in rooms" :title="room.name"
-                       :room_id="room.room_id"></RoomContainer>
+        <RoomContainer @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
@@ -206,31 +147,10 @@ function reverseDisplay(name: string) {
   align-content: center;
 }
 
-#selection-container-div {
-  display: block;
-  margin-bottom: 5%;
-}
 
-.selection-div {
-  margin-top: 5%;
-  padding-left: 1%;
-}
 
-.selection-input {
-  margin-right: 1%;
+.input-error :deep(input) {
+  border-color: var(--error-400);
 }
-
-.selection-label {
-  font-size: 1.2rem;
-}
-
-#save-btn {
-  font-weight: bold;
-}
-
-#max-user-input {
-  width: 50%;
-}
-
 
 </style>

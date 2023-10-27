@@ -19,7 +19,7 @@ const name = ref<string>("GETROOMNAME")
 
 <style scoped>
 #chatroomheader-container {
-  height: 6em;
+  height: 8vh;
   display: flex;
   flex-wrap: wrap;
   align-content: center;

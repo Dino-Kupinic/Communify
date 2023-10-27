@@ -5,14 +5,14 @@ defineProps<{
 </script>
 
 <template>
-  <h3> {{ title }} </h3>
+  <h2> {{ title }} </h2>
 </template>
 
 <style scoped>
-h3 {
+h2 {
   font-weight: 500;
   color: var(--color-text);
-  font-family: Inter,sans-serif;
+  font-family: -apple-system, Inter, sans-serif;
   text-align: center;
 }
 

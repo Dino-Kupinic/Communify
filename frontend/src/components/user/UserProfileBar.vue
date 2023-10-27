@@ -7,6 +7,7 @@ import type {Client} from "@/model/types"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import BodyText from "@/components/text/BodyText.vue"
+import router from "@/router/router"
 
 const username = ref<string>("")
 const token = ref<string>(localStorage.getItem("auth_token") || "")
@@ -20,6 +21,7 @@ function logout() {
   token.value = ""
 
   localStorage.setItem("auth_token", "")
+  router.push("/auth/login")
 }
 
 onMounted(async () => {
@@ -56,7 +58,7 @@ async function getProfile() {
       {{ username }}
     </UserProfileText>
     <div id="user-logout-container">
-      <ActionButton height="max-content" :hollow="true" id="logout">
+      <ActionButton @click="logout" height="max-content" :hollow="true" id="logout">
         <Icon class="img" image-name="stop" file-extension="png"/>
         <BodyText class="logout-text">Logout</BodyText>
       </ActionButton>

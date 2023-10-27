@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, ref} from "vue"
+import {computed, onMounted, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
-import Modal from "@/components/Boxes/Modal.vue"
+import Modal from "@/components/modals/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
 import type {Room, Topic} from "@/model/types"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import ModalSubText from "@/components/text/ModalSubText.vue"
 import {fetchData} from "@/model/util-functions"
+import {useRoomStore} from "@/stores/roomStore"
 
 const props = defineProps<{
-  title?: string
-  room_id: number | null;
+  room: Room,
 }>()
 
-let badges = ref<Topic[]>()
+const emits = defineEmits<{
+  joined: [getRoomId: string]
+}>()
 
+const roomStore = useRoomStore()
+const badges = ref<Topic[]>()
 
 onMounted(() => {
   loadBadges()
@@ -25,57 +29,29 @@ onMounted(() => {
 
 async function loadBadges() {
   try {
-    const response = await fetch("http://localhost:4000/topic/getTopicsByRoomId/"+props.room_id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    badges.value = await response.json()
+    badges.value = await fetchData("http://localhost:4000/topic/getTopicsByRoomId/" + props.room.room_id,
+      "GET",
+      [["Content-Type", "application/json"]],
+    )
   } catch (err) {
     console.log(err)
   }
 }
-const rooms = ref<Room[]>()
 
 async function deleteRoom() {
-  try {
-    const response = await fetch("http://localhost:4000/room/deleteRoomById/" + props.room_id, {
-      method: "DELETE",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-  } catch (err) {
-    console.error(err)
-  }
+  if (props.room.room_id != null)
+    await roomStore.deleteRoom(props.room.room_id)
 }
 
-onMounted(() => {
-  getRooms()
+const getRoomId = computed(() => {
+  return "room-" + props.room.room_id
 })
-
-async function getRooms() {
-  try {
-    rooms.value = await fetchData("http://localhost:4000/room/getRooms", "GET", [['Content-Type', 'application/json']])
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-function getRoomId(): string {
-  const id = 1
-  return "room" + id
-}
 
 </script>
 
 <template>
   <div id="chatroom-div">
-    <TitleText :title="title"></TitleText>
+    <TitleText :title="room.name"></TitleText>
     <Modal>
       <template #modal-btn>
         <Icon class="details" image-name="more" file-extension="png"></Icon>
@@ -92,11 +68,8 @@ function getRoomId(): string {
         </div>
         <div class="subtheme-container">
           <ModalSubText title="Description"></ModalSubText>
-          <div v-for="room in rooms">
-            <p v-if="room.room_id === props.room_id">{{ room.description }}</p>
-          </div>
+          <p>{{ room.description }}</p>
         </div>
-
       </template>
       <template #second-btn>
         <span @click="deleteRoom" id="delete-btn">Delete</span>
@@ -106,10 +79,10 @@ function getRoomId(): string {
       <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
     <div class="join-button-div">
-      <div id="lock-div" v-for="room in rooms">
-        <Icon v-if="room.password !== null && room.room_id === room_id" image-name="locked" file-extension="png"></Icon>
+      <div id="lock-div">
+        <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
       </div>
-      <ActionButton @click="$emit('joined', getRoomId())" class="join-button" width="5rem">
+      <ActionButton @click="$emit('joined', getRoomId)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
       </ActionButton>
@@ -198,7 +171,6 @@ function getRoomId(): string {
 #badges-div {
   width: 100%;
 }
-
 
 
 </style>
