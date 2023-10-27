@@ -16,11 +16,18 @@ import Icon from "@/components/util/Icon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {useRoomStore} from "@/stores/roomStore"
 import {reactive, ref} from "vue"
+import DropDown from "@/components/util/DropDown.vue";
+import ActionButton from "@/components/controls/ActionButton.vue";
+import Badge from "@/components/util/Badge.vue";
+import HorizontalContainer from "@/components/util/HorizontalContainer.vue";
+import VerticalContainer from "@/components/util/VerticalContainer.vue";
 
 const emit = defineEmits(["created"])
-
+const badges = reactive([{text: "", color: ""}])
 const roomStore = useRoomStore()
 const isPrivateRoom = ref<boolean>(false)
+const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
+
 
 const initialState: Room = reactive({
   room_id: null,
@@ -51,7 +58,22 @@ const rules = {
   },
 }
 
+const badgeState = reactive({
+  badgeText: "",
+  badgeColor: "",
+})
+
+const badgeRule = {
+  badgeText: {
+    required,
+  },
+  badgeColor: {
+    required,
+  }
+}
+
 const v$ = useVuelidate(rules, state)
+const vBadges$ = useVuelidate(badgeRule, badgeState)
 
 function resetState() {
   Object.assign(state, initialState)
@@ -88,6 +110,22 @@ async function createRoom() {
     console.error(err)
   }
 }
+
+async function submitForm() {
+  const isFormCorrect = await vBadges$.value.$validate()
+  console.log("" + badgeState.badgeColor + " | " + badgeState.badgeText)
+
+  if (!isFormCorrect) return
+
+
+  addBadge()
+}
+
+function addBadge() {
+  console.log(badgeState.badgeColor ? badgeState.badgeColor : "NULL");
+  badges.push({color: badgeState.badgeColor, text: badgeState.badgeText})
+}
+
 </script>
 
 <template>
@@ -99,10 +137,26 @@ async function createRoom() {
     <template #modal-content>
       <InputField v-model="state.name" label="Name" placeholder="My Room "></InputField>
       <InputField v-model="state.description" label="Description (Optional)"></InputField>
-      <InputField v-model="state.maximum_users" label="Maximum User (Optional)" id="max-user-input" type="number" value="1" min="1"></InputField>
-      <InputField v-if="isPrivateRoom" v-model="state.password" label="Password (Optional)" type="password"></InputField>
+      <InputField v-model="state.maximum_users" label="Maximum User (Optional)" id="max-user-input" type="number"
+                  value="1" min="1"></InputField>
+      <InputField v-model="state.password" label="Password (Optional)" type="password"></InputField>
+      <div id="badge-colorpick-container">
+        <InputField :class="{'input-error': vBadges$.badgeText.$error}" placeholder="Badge Name"
+                    v-model="badgeState.badgeText" label="Add Badges">
+          <template #below-input>
+          </template>
+        </InputField>
+        <HorizontalContainer>
+          <DropDown :class="{'input-error': vBadges$.badgeColor.$error}" label="Badge Color"
+                    v-model="badgeState.badgeColor" type="ColorPicker" :list-elements="hexColors"></DropDown>
+          <Icon image-name="add" file-extension="png"></Icon>
+        </HorizontalContainer>
+      </div>
+      <div>
+        <Badge v-for="badge in badges" :color="badge.color">{{ badge.text }}</Badge>
+      </div>
     </template>
-    <template #second-btn>
+    <template>
       <span @click="createRoom" id="save-btn">Save</span>
     </template>
   </Modal>
@@ -111,5 +165,25 @@ async function createRoom() {
 <style scoped>
 #max-user-input {
   width: 50%;
+}
+
+
+#save-btn {
+  font-weight: bold;
+}
+
+#max-user-input {
+  width: 50%;
+}
+
+#badge-colorpick-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: auto;
+  align-content: center;
+}
+
+.input-error :deep(input) {
+  border-color: var(--error-400);
 }
 </style>
