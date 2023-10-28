@@ -12,7 +12,7 @@ const props = defineProps<{
 <style scoped>
 h3 {
   margin-bottom: 2%;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 500;
   color: var(--color-text)
 }
