@@ -1,27 +1,26 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {computed, onMounted, ref} from "vue"
+import {computed, onMounted, provide, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
-import Modal from "@/components/modals/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
 import type {Room, Topic} from "@/model/types"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
-import ModalSubText from "@/components/text/ModalSubText.vue"
 import {fetchData} from "@/model/util-functions"
-import {useRoomStore} from "@/stores/roomStore"
+import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
 
 const props = defineProps<{
   room: Room,
 }>()
 
-const emits = defineEmits<{
+defineEmits<{
   joined: [getRoomId: string]
 }>()
 
-const roomStore = useRoomStore()
 const badges = ref<Topic[]>()
+provide("containerBadges", badges)
+provide("containerRoom", props.room)
 
 onMounted(() => {
   loadBadges()
@@ -38,11 +37,6 @@ async function loadBadges() {
   }
 }
 
-async function deleteRoom() {
-  if (props.room.room_id != null)
-    await roomStore.deleteRoom(props.room.room_id)
-}
-
 const getRoomId = computed(() => {
   return "room-" + props.room.room_id
 })
@@ -51,30 +45,9 @@ const getRoomId = computed(() => {
 
 <template>
   <div id="chatroom-div">
-    <TitleText :title="room.name"></TitleText>
-    <Modal>
-      <template #modal-btn>
-        <Icon class="details" image-name="more" file-extension="png"></Icon>
-      </template>
-      <template #modal-content>
-        <p id="title">
-          <TitleText title="Chatroom Info"></TitleText>
-        </p>
-        <div class="subtheme-container">
-          <ModalSubText title="Badges"></ModalSubText>
-          <div id="badges">
-            <Badge v-for="badge in badges" :color="badge.color"> {{ badge.text }}</Badge>
-          </div>
-        </div>
-        <div class="subtheme-container">
-          <ModalSubText title="Description"></ModalSubText>
-          <p>{{ room.description }}</p>
-        </div>
-      </template>
-      <template #second-btn>
-        <span @click="deleteRoom" id="delete-btn">Delete</span>
-      </template>
-    </Modal>
+    <TitleText :title="room.name" text-align="none">
+      <RoomInfoModal :modalTitle="room.name"></RoomInfoModal>
+    </TitleText>
     <div id="badges-div">
       <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
@@ -118,48 +91,19 @@ const getRoomId = computed(() => {
   color: var(--warning-800);
 }
 
-.details {
-  padding-left: 0.5%;
-  cursor: pointer;
-}
-
 #chatroom-div {
   width: 100%;
-  height: 10em;
-  padding: 5%;
   border-bottom: 1px solid var(--color-border-soft);
+  height: max-content;
+  padding: 5%;
   background-color: var(--color-background);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
 
-.details {
-  margin-left: 0.5em;
-  cursor: pointer;
-}
-
 #chatroom-div:hover {
-  background-color: var(--color-background-soft);
-}
-
-#title {
-  font-size: 3rem;
-}
-
-#badges {
-  display: flex;
-  flex-wrap: wrap;
-  overflow-x: unset;
-}
-
-#delete-btn {
-  font-weight: bold;
-}
-
-.subtheme-container {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  background-color: var(--color-background);
 }
 
 #lock-div {

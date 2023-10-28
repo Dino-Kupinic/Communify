@@ -28,8 +28,6 @@ onMounted(() => {
   }
 })
 
-const rndColor = ref('')
-
 </script>
 
 <template>

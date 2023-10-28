@@ -19,11 +19,13 @@ VALUES ('user1', 'user1@example.com', '0b14d501a594442a01c6859541bcb3e8164d183d3
 
 -- Insert test data into the 'room' table
 INSERT INTO room (name, maximum_users, description, password, creator_id)
-VALUES ('Room 1', 10, 'Description for Room 1', NULL, 1),
-       ('Room 2', 8, 'Description for Room 2', 'room2pass', 2),
-       ('Room 3', 12, 'Description for Room 3', NULL, 3),
-       ('Room 4', 92, 'Description for Room 4', NULL, 1),
-       ('Room 5', 2, 'Description for Room 5', 'room2pass2', 1);
+VALUES ('Animals and Stuff', NULL, 'Description for Room 1', NULL, 1),
+       ('Just chilling... Only 18 years old and above!!!', 8, 'Description for Room 2', 'room2pass', 2),
+       ('Gaming lounge [ENG/GER] LoL Counter Strike 2 Minecraft', 12, 'Description for Room 3', NULL, 3),
+       ('Hi', 92, 'Description for Room 4', NULL, 1),
+       ('My Room!', 2, 'Description for Room 5', 'room2pass2', 1),
+       ('Join for free hugs', 100, 'Description for Room 6', NULL, 1),
+       ('Wassup bois', NULL, 'Description for Room 7', 'room2pass2', 1);
 
 -- Insert test data into the 'topic' table
 INSERT INTO topic (text, color)
@@ -59,4 +61,14 @@ VALUES (1, 1),
        (1, 4),
        (4, 4),
        (8, 4),
-       (8, 5);
+       (8, 5),
+       (1, 5),
+       (2, 5),
+       (1, 6),
+       (2, 6),
+       (3, 6),
+       (4, 6),
+       (7, 6),
+       (3, 7),
+       (4, 7),
+       (7, 7);
