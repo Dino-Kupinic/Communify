@@ -71,7 +71,7 @@ const getRoomId = computed(() => {
           <p>{{ room.description }}</p>
         </div>
       </template>
-      <template #second-btn>
+      <template #left-btn-slot>
         <span @click="deleteRoom" id="delete-btn">Delete</span>
       </template>
     </Modal>
@@ -155,6 +155,7 @@ const getRoomId = computed(() => {
 
 #delete-btn {
   font-weight: bold;
+  cursor: pointer;
 }
 
 .subtheme-container {
