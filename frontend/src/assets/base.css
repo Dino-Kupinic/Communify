@@ -13,6 +13,7 @@ Import Inter font with multiple weights
     --neutral-600: #636363;
     --neutral-700: #474747;
     --neutral-800: #2a2a2a;
+    --neutral-850: #232323;
     --neutral-900: #0e0e0ee6;
     --neutral-1000: #030303;
 
@@ -99,6 +100,7 @@ Import Inter font with multiple weights
 @media (prefers-color-scheme: dark) {
     :root {
         --color-background: var(--neutral-800);
+        --color-background-hard: var(--neutral-850);
         --color-background-soft: var(--neutral-700);
         --color-background-very-soft: var(--neutral-600);
 

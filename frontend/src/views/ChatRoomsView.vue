@@ -2,7 +2,7 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref, reactive} from "vue"
+import {onMounted, ref} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
@@ -11,19 +11,8 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import {socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
-import Modal from "@/components/Boxes/Modal.vue"
-import InputField from "@/components/controls/InputField.vue"
-import BodyText from "@/components/text/BodyText.vue"
-import Badge from "@/components/util/Badge.vue";
-import DropDown from "@/components/util/DropDown.vue";
-import {email, required} from "@vuelidate/validators";
-import useVuelidate from "@vuelidate/core";
-import {maxLength, minLength} from "@vuelidate/validators/dist/index";
-import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants";
-import InputError from "@/components/controls/InputError.vue";
 import ButtonText from "@/components/controls/ButtonText.vue"
 
-const badges = reactive([{color: "", text: ""}])
 const rooms = ref<Room[]>()
 const roomStore = useRoomStore()
 
@@ -133,15 +122,6 @@ function updateOnRoomCreation() {
 .img {
   margin-right: 0.1rem;
 }
-
-.btn-span {
-  padding-top: 1%;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-}
-
-
 
 .input-error :deep(input) {
   border-color: var(--error-400);
