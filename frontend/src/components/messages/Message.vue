@@ -1,57 +1,27 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue"
+import {onMounted, provide, ref} from "vue"
+import MessageText from "@/components/messages/MessageText.vue"
 
 const props = defineProps<{
-  messageType?: String;
-  messageText?: String;
+  messageType: string
+  user_id?: string
 }>()
+provide("messageType", props.messageType)
 
-const messageStyle = ref("")
+const isFromThem: boolean = props.messageType == 'from-them'
 
 onMounted(() => {
-  if (props.messageType === "received") {
-    messageStyle.value = "receivedMessage"
-  } else {
-    messageStyle.value = "sentMessage"
-  }
-})
 
+})
 </script>
 
 <template>
-  <div class="message" :id=messageStyle>
-    {{ messageText }}
-  </div>
+  <p v-if="isFromThem"></p>
+  <MessageText>
+    <slot></slot>
+  </MessageText>
 </template>
 
 <style scoped>
-
-.message {
-  max-width: 80%;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  padding: 0.6rem;
-  border-radius: 1rem;
-  width: max-content;
-  margin-bottom: 1rem;
-}
-
-#sentMessage {
-  background-color: var(--brand-400);
-  color: white;
-  margin-left: auto;
-}
-
-#receivedMessage {
-  background-color: var(--neutral-50);
-  color: var(--neutral-1000);
-}
-
-.message-container {
-  width: 100%;
-}
-
-
-
 
 </style>
