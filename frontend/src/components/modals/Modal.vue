@@ -28,11 +28,11 @@ function reverseDisplayModal() {
       <WindowTitleText :title="modalTitle"></WindowTitleText>
       <slot name="modal-content"></slot>
       <div id="btn-container">
-        <NormalButton id="save-btn-div">
-          <span @click="reverseDisplayModal" class="button">Save</span>
+        <NormalButton id="save-btn-div" @click="reverseDisplayModal">
+          <slot name="left-btn-slot"  class="button"></slot>
         </NormalButton>
-        <NormalButton id="close-btn-div">
-          <span @click="reverseDisplayModal" class="button">Close</span>
+        <NormalButton id="close-btn-div" @click="reverseDisplayModal">
+          <span  class="button">Close</span>
         </NormalButton>
       </div>
     </div>
