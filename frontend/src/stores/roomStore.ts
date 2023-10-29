@@ -7,7 +7,7 @@ export const useRoomStore = defineStore("room", () => {
   const rooms = ref<Room[]>([])
 
   /**
-   * Fetches rooms from backend on store creation.
+   * Fetches rooms from the backend.
    *
    * @async
    * @function fetchRooms

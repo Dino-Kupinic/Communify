@@ -2,7 +2,7 @@
 
 import Logo from "@/components/util/Logo.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
-import Infobox from "@/components/Boxes/InfoBox.vue"
+import Infobox from "@/components/boxes/InfoBox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"

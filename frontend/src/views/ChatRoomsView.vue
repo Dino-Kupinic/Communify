@@ -14,6 +14,7 @@ import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
 
 const rooms = ref<Room[]>()
+const currentRoom = ref<Room>()
 const roomStore = useRoomStore()
 
 onMounted(async () => {
@@ -34,8 +35,9 @@ const actionButtons = ref([
   {icon: "settings", label: "Settings"},
 ])
 
-function joinRoom(room: string) {
-  console.log(room)
+function joinRoom(room: Room) {
+  currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
+  console.log(currentRoom.value)
 }
 
 function updateOnRoomCreation() {
@@ -48,9 +50,7 @@ function updateOnRoomCreation() {
   <div id="site-container">
     <div id="userbar-chatrooms-container">
       <div id="userbar-container">
-        <!-- Bar for the user profile on top of the list -->
         <UserProfileBar id="container-div-short-user"/>
-        <!-- Bar for the menu above the list and under the user-bar -->
         <div id="container-div-short-menu" class="container-div-short">
           <ActionButton
             v-for="button in actionButtons"
@@ -73,11 +73,19 @@ function updateOnRoomCreation() {
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
-    <ChatRoom></ChatRoom>
+    <ChatRoom v-if="currentRoom != undefined" :room="currentRoom"></ChatRoom>
+    <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
 
 <style scoped>
+#no-room {
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #userbar-container {
   border-right: 1px solid var(--color-border-soft);
   display: flex;
