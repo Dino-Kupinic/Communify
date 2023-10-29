@@ -9,7 +9,7 @@
 <!--import type {Room} from "@/model/types"-->
 <!--import TitleText from "@/components/text/TitleText.vue"-->
 <!--import ActionButton from "@/components/controls/ActionButton.vue"-->
-<!--import Modal from "@/components/Boxes/Modal.vue"-->
+<!--import Modal from "@/components/boxes/Modal.vue"-->
 
 <!--const rooms = ref<Room[]>()-->
 

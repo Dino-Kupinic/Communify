@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {computed, onMounted, provide, ref} from "vue"
+import {onMounted, provide, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Badge from "@/components/util/Badge.vue"
@@ -15,7 +15,7 @@ const props = defineProps<{
 }>()
 
 defineEmits<{
-  joined: [getRoomId: string]
+  joined: [room: Room]
 }>()
 
 const badges = ref<Topic[]>()
@@ -37,10 +37,6 @@ async function loadBadges() {
   }
 }
 
-const getRoomId = computed(() => {
-  return "room-" + props.room.room_id
-})
-
 </script>
 
 <template>
@@ -55,7 +51,7 @@ const getRoomId = computed(() => {
       <div id="lock-div">
         <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
       </div>
-      <ActionButton @click="$emit('joined', getRoomId)" class="join-button" width="5rem">
+      <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
       </ActionButton>
@@ -65,6 +61,7 @@ const getRoomId = computed(() => {
 
 <style scoped>
 .join-button-div {
+  margin-top: 0.5rem;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -79,6 +76,7 @@ const getRoomId = computed(() => {
   color: var(--warning-700);
   border: 1px solid var(--warning-700);
   margin-left: auto;
+  width: 6rem;
 }
 
 :deep(.join-button:hover) {
