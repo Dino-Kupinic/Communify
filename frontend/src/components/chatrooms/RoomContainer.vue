@@ -65,6 +65,7 @@ const getRoomId = computed(() => {
 
 <style scoped>
 .join-button-div {
+  margin-top: 0.5rem;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -79,6 +80,7 @@ const getRoomId = computed(() => {
   color: var(--warning-700);
   border: 1px solid var(--warning-700);
   margin-left: auto;
+  width: 6rem;
 }
 
 :deep(.join-button:hover) {
