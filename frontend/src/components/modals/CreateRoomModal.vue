@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {Client, Room, Topic} from "@/model/types"
+import type {Room, Topic} from "@/model/types"
 import {maxLength, maxValue, minValue, required} from "@vuelidate/validators"
 import {
   BADGE_NAME_MAX_LENGTH,
@@ -31,7 +31,7 @@ const roomStore = useRoomStore()
 const isPrivateRoom = ref<boolean>(false)
 const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
 
-let badgesFromDB : Topic[] = []
+let badgesFromDB : Topic[]
 
 let topicCount = ref(5)
 let isDisabled = ref(false)
@@ -105,7 +105,7 @@ async function createRoom() {
 
     await roomStore.addRoom(room)
     await fetchBadges()
-    for (const elem of badges) await createBadgesAtRoomCreation(elem)
+    for (const elem of badges) await createTopicAtRoomCreation(elem)
     emit("created")
     resetState()
   } catch (err) {
@@ -143,13 +143,17 @@ function addBadge() {
 }
 
 function removeBadgeByID(elemId: number) {
-  console.log(elemId)
-  badges.forEach((elem) => elem.topic_id === elemId ? badges.splice(elem.topic_id, 1) : "")
-  topicCount.value++
-  let i = 0
-  // reset id`s of all list elements
-  badges.forEach((elem) => elem.topic_id = i++)
-  id--
+  const index = badges.findIndex((elem) => elem.topic_id === elemId);
+  if (index !== -1) {
+    badges.splice(index, 1); // Use splice to ensure reactivity
+    topicCount.value++;
+    let i = 0;
+    badges.forEach((elem) => (elem.topic_id = i++));
+    id--;
+    badges.forEach((i) =>
+      i ? console.log(`${i.text} has those chars ${i.color} with the id: ${i.topic_id}`) : "NULL"
+    );
+  }
 }
 
 async function fetchBadges () {
@@ -163,7 +167,7 @@ async function fetchBadges () {
   }
 }
 
-async function createBadgesAtRoomCreation(badge: Topic) {
+async function createTopicAtRoomCreation(badge: Topic) {
   let ok = false
   //Is badge already existing?
   badgesFromDB.forEach((badgeDB) =>  {
@@ -176,7 +180,6 @@ async function createBadgesAtRoomCreation(badge: Topic) {
   if (ok) {
     try {
       const room_id = await getRoomIdByName()
-      console.log(badge.color + " " + badge.text + " " + badge.topic_id + " " + room_id + " state?: " + ok)
       const response = await fetch("http://localhost:4000/topic/createTopic", {
         method: "POST",
         mode: "cors",
@@ -192,7 +195,41 @@ async function createBadgesAtRoomCreation(badge: Topic) {
     } catch (err) {
       console.error(err)
     }
+  } else {
+    await addTopicToRoom(badge)
   }
+}
+
+async function addTopicToRoom (badge : Topic) {
+  try {
+    const room_id = await getRoomIdByName()
+    const response = await fetch("http://localhost:4000/topic/addTopicToRoom", {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({topic_id: getTopicByName(badge.text), room_id: room_id}),
+    })
+    if (response.ok)
+      await roomStore.fetchRooms()
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+function getTopicByName (topic_text : string) {
+  let elemId
+  badgesFromDB.forEach((elem) => {
+    if (elem.text === topic_text) {
+      elemId = elem.topic_id
+      return
+    } else return null
+  })
+
+  return elemId
 }
 
 </script>
@@ -231,7 +268,7 @@ async function createBadgesAtRoomCreation(badge: Topic) {
         <span>Remaining Topics: {{ topicCount }}</span>
       </HorizontalContainer>
 
-      <div>
+      <div id="topics-created-container">
         <Badge v-for="badge in badges" :color="badge.color"  @click="removeBadgeByID(badge.topic_id)">
             {{ badge.text }}
         </Badge>
@@ -281,6 +318,10 @@ async function createBadgesAtRoomCreation(badge: Topic) {
 
 .input-error :deep(input) {
   border-color: var(--error-400);
+}
+
+#topics-created-container {
+  margin-left: 1.5rem;
 }
 
 </style>
