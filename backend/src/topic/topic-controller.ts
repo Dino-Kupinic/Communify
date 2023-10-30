@@ -37,6 +37,12 @@ topicRouter.post("/createTopic", asyncHandler(async (req, res) => {
   res.send(`Topic for room ${room_id} created successfully`)
 }))
 
+topicRouter.post("/addTopicToRoom", asyncHandler(async (req, res) => {
+  const {topic_id, room_id} = req.body
+  await topicService.addTopicToRoom(topic_id, room_id)
+  res.send(`Topic ${topic_id} for room ${room_id} added successfully`)
+}))
+
 topicRouter.put("/editTopicById/:id", asyncHandler(async (req, res) => {
   const {propertyToEdit, newPropertyValue} = req.body
   await topicService.editTopicById(getIdFromParams(req), propertyToEdit, newPropertyValue)

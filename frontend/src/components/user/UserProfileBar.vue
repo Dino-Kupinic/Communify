@@ -96,17 +96,8 @@ async function getProfile() {
   font-size: 1rem;
   padding-right: 1.5%;
   padding-left: 1.5%;
-  height: 2rem;
-}
-
-.logout-text {
-  color: var(--error-500);
-}
-
-:deep(#logout) {
-  border: 1px solid var(--error-500);
-  background-color: var(--error-200);
-  color: var(--error-500)
+  height: 1.8rem;
+  width: 5.5rem;
 }
 
 .img {

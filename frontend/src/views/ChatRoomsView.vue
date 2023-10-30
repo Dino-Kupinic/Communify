@@ -2,7 +2,7 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref, reactive} from "vue"
+import {onMounted, ref} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
@@ -11,20 +11,10 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import {socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
-import Modal from "@/components/Boxes/Modal.vue"
-import InputField from "@/components/controls/InputField.vue"
-import BodyText from "@/components/text/BodyText.vue"
-import Badge from "@/components/util/Badge.vue";
-import DropDown from "@/components/util/DropDown.vue";
-import {email, required} from "@vuelidate/validators";
-import useVuelidate from "@vuelidate/core";
-import {maxLength, minLength} from "@vuelidate/validators/dist/index";
-import {EMAIL_MAX_LENGTH, MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants";
-import InputError from "@/components/controls/InputError.vue";
 import ButtonText from "@/components/controls/ButtonText.vue"
 
-const badges = reactive([{color: "", text: ""}])
 const rooms = ref<Room[]>()
+const currentRoom = ref<Room>()
 const roomStore = useRoomStore()
 
 onMounted(async () => {
@@ -45,8 +35,9 @@ const actionButtons = ref([
   {icon: "settings", label: "Settings"},
 ])
 
-function joinRoom(room: string) {
-  console.log(room)
+function joinRoom(room: Room) {
+  currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
+  console.log(currentRoom.value)
 }
 
 function updateOnRoomCreation() {
@@ -59,9 +50,7 @@ function updateOnRoomCreation() {
   <div id="site-container">
     <div id="userbar-chatrooms-container">
       <div id="userbar-container">
-        <!-- Bar for the user profile on top of the list -->
         <UserProfileBar id="container-div-short-user"/>
-        <!-- Bar for the menu above the list and under the user-bar -->
         <div id="container-div-short-menu" class="container-div-short">
           <ActionButton
             v-for="button in actionButtons"
@@ -84,11 +73,19 @@ function updateOnRoomCreation() {
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
-    <ChatRoom></ChatRoom>
+    <ChatRoom v-if="currentRoom != undefined" :room="currentRoom"></ChatRoom>
+    <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
 
 <style scoped>
+#no-room {
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #userbar-container {
   border-right: 1px solid var(--color-border-soft);
   display: flex;
@@ -133,15 +130,6 @@ function updateOnRoomCreation() {
 .img {
   margin-right: 0.1rem;
 }
-
-.btn-span {
-  padding-top: 1%;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-}
-
-
 
 .input-error :deep(input) {
   border-color: var(--error-400);

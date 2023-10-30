@@ -1,11 +1,38 @@
 <script setup lang="ts">
 import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
-import Message from "@/components/messages/Message.vue"
+import MessageContainer from "@/components/messages/MessageContainer.vue"
+import type {Message, Room} from "@/model/types"
+import {onMounted, provide, ref} from "vue"
+import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
 
 const props = defineProps<{
-  roomID?: String
+  room: Room
 }>()
+provide("room", props.room)
+
+const messages = ref<Message[]>([])
+const userMessage = ref<string>("")
+
+onMounted(async () => {
+  messages.value = await fetchData("http://localhost:4000/message/getAllMessagesFromRoomId/" + props.room.room_id,
+    "GET",
+    [["Content-Type", "application/json"]],
+  )
+})
+
+async function sendMessage() {
+  const currentUserId = await getCurrentUserId()
+  const msg: Message = {
+    message_id: null,
+    content: userMessage.value,
+    timestamp: getFormattedTimestamp(),
+    user_id: currentUserId,
+    room_id: props.room.room_id as number,
+  }
+  messages.value.push(msg)
+  userMessage.value = ""
+}
 </script>
 
 <template>
@@ -13,37 +40,11 @@ const props = defineProps<{
     <header>
       <ChatRoomHeaderBar></ChatRoomHeaderBar>
     </header>
-
-
     <div id="content-container">
-      <div id="placeholder"></div>
-      <Message messageType="sent"
-               messageText="Awdwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqddwdawd aqdwad aq2 dqd "></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="received" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
-      <Message messageType="sent" messageText="awdwdawd aqdwad aq2 dqd qawd"></Message>
+      <MessageContainer message-type="from-me" v-for="message in messages">{{ message.content }}</MessageContainer>
     </div>
     <div id="Input-Container">
-      <UserInput></UserInput>
+      <UserInput @send="sendMessage" v-model="userMessage"></UserInput>
     </div>
   </div>
 </template>
@@ -59,6 +60,9 @@ const props = defineProps<{
   background-color: var(--color-background-soft);
   overflow-y: scroll;
   border-bottom: 1px solid var(--color-border-soft);
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 1.1rem;
 }
 
 header {
@@ -69,13 +73,8 @@ header {
 }
 
 #Input-Container {
-  padding: 1rem;
+  padding: 0.75rem;
   height: 6vh;
   position: sticky;
-}
-
-#placeholder {
-  height: 1%;
-  width: 100%;
 }
 </style>

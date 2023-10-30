@@ -10,7 +10,7 @@ import {
   ROOM_PASSWORD_MAX_LENGTH,
 } from "@/model/type_constants"
 import useVuelidate from "@vuelidate/core"
-import {fetchData} from "@/model/util-functions"
+import {fetchData, getCurrentUserId} from "@/model/util-functions"
 import Modal from "@/components/modals/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import Icon from "@/components/util/Icon.vue"
@@ -85,15 +85,6 @@ const vBadges$ = useVuelidate(badgeRule, badgeState)
 
 function resetState() {
   Object.assign(state, initialState)
-}
-
-async function getCurrentUserId(): Promise<number> {
-  const token: string | null = localStorage.getItem("auth_token")
-  if (token) {
-    const client: Client = await fetchData("http://localhost:4000/auth/profile", "GET", [["access_token", token]])
-    return client.user_id as number
-  }
-  throw new Error("User not authorized")
 }
 
 async function createRoom() {
@@ -237,7 +228,7 @@ async function createBadgesAtRoomCreation(badge: Topic) {
           <Icon image-name="add" file-extension="png"></Icon>
           <ButtonText>Add Bagde</ButtonText>
         </ActionButton>
-        <span>Remaining Topics: {{ topicCount }}/5</span>
+        <span>Remaining Topics: {{ topicCount }}</span>
       </HorizontalContainer>
 
       <div>

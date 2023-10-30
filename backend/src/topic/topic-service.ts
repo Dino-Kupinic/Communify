@@ -115,4 +115,19 @@ export class TopicService {
       client.release()
     })
   }
+
+  /**
+   * Adds a topic to a room.
+   *
+   * @param {number} topic_id - The ID of the topic.
+   * @param {number} room_id - The ID of the room.
+   * @return {Promise<void>} A promise that resolves with no value when the operation is successful.
+   */
+  async addTopicToRoom(topic_id: number, room_id: number): Promise<void> {
+    return runQuery(async (): Promise<void> => {
+      const client: PoolClient = await this.pool.connect()
+      await client.query("INSERT INTO topics_rooms (t_id, r_id) VALUES ($1, $2)", [topic_id, room_id])
+      client.release()
+    })
+  }
 }
