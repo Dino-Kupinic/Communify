@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <span id="badge">
+  <span v-if="props.color" id="badge">
     #
     <slot></slot>
   </span>

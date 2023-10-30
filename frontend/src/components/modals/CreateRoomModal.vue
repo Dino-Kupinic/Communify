@@ -26,7 +26,7 @@ import ButtonText from "@/components/controls/ButtonText.vue"
 let id = 0
 
 const emit = defineEmits(["created"])
-const badges = reactive([{topic_id: ref(id), text: ref(""), color: ref("")}])
+const badges = reactive(<Topic[]>[{}])
 const roomStore = useRoomStore()
 const isPrivateRoom = ref<boolean>(false)
 const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
@@ -146,18 +146,13 @@ watch(topicCount, () => {
 })
 
 function addBadge() {
-  if (badges[id] && badges[id].color === "" && badges[id].text === "") {
-    badges[id].text = badgeState.badgeText
-    badges[id].color = badgeState.badgeColor
-    badges[id].topic_id = id
-  } else {
-    badges.push({topic_id: id++, color: badgeState.badgeColor, text: badgeState.badgeText})
-  }
+  badges.push({topic_id: id++, color: badgeState.badgeColor, text: badgeState.badgeText})
   topicCount.value--
   isDisabled.value = topicCount.value === 0
 }
 
 function removeBadgeByID(elemId: number) {
+  console.log(elemId)
   badges.forEach((elem) => elem.topic_id === elemId ? badges.splice(elem.topic_id, 1) : "")
   topicCount.value++
   let i = 0
@@ -184,13 +179,13 @@ async function createBadgesAtRoomCreation(badge: Topic) {
     if (badgeDB.text === badge.text) {
       ok = false
       return
-    }
-    else ok = true
+    } else ok = true
   })
 
   if (ok) {
     try {
       const room_id = await getRoomIdByName()
+      console.log(badge.color + " " + badge.text + " " + badge.topic_id + " " + room_id + " state?: " + ok)
       const response = await fetch("http://localhost:4000/topic/createTopic", {
         method: "POST",
         mode: "cors",
@@ -246,8 +241,8 @@ async function createBadgesAtRoomCreation(badge: Topic) {
       </HorizontalContainer>
 
       <div>
-        <Badge @click="removeBadgeByID(badge.topic_id)" v-for="badge in badges" :color="badge.color">
-          {{ badge.text }}
+        <Badge v-for="badge in badges" :color="badge.color"  @click="removeBadgeByID(badge.topic_id)">
+            {{ badge.text }}
         </Badge>
       </div>
 
