@@ -10,6 +10,7 @@ import {authRouter} from "./auth/auth-controller"
 import {topicRouter} from "./topic/topic-controller"
 import {messageRouter} from "./message/message-controller"
 import {Server, Socket} from "socket.io"
+import {Message, Room} from "./models/types"
 
 dotenv.config()
 
@@ -62,8 +63,9 @@ io.on("connection", (socket: Socket) => {
     socket.join(room)
   })
 
-  socket.on("chatMessage", (data: { room: string; message: string }) => {
-    io.to(data.room).emit("message", data.message)
+  socket.on("chatMessage", (data: Message) => {
+    console.log(`${data.timestamp} ${data.content}`)
+    io.to(`room-${data.room_id}`).emit("newMessage", data)
   })
 
   socket.on('disconnect', () => {

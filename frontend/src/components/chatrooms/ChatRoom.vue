@@ -5,6 +5,8 @@ import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
 import {onMounted, provide, ref} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
+import {io} from "socket.io-client"
+import {socket} from "@/socket/server"
 
 const props = defineProps<{
   room: Room
@@ -30,6 +32,9 @@ async function sendMessage() {
     user_id: currentUserId,
     room_id: props.room.room_id as number,
   }
+  console.log("Emit chat message")
+  socket.emit("chatMessage", msg)
+
   messages.value.push(msg)
   userMessage.value = ""
 }
