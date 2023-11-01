@@ -16,7 +16,7 @@ import DefaultLayout from "@/layouts/DefaultLayout.vue"
 import UserHomeView from "@/views/UserHomeView.vue"
 import UserProfileView from "@/views/UserProfileView.vue"
 import ChatRoomsView from "@/views/ChatRoomsView.vue"
-import ResetPassword from "@/components/auth/ResetPassword.vue"
+import ResetPassword from "@/components/auth/ResetPasswordWindow.vue"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
