@@ -3,7 +3,7 @@ import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
 import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
-import {onMounted, provide, ref} from "vue"
+import {onMounted, onUpdated, provide, ref} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
 import {socket} from "@/socket/server"
 
@@ -17,13 +17,21 @@ const userMessage = ref<string>("")
 const currentUserId = ref<number>()
 
 onMounted(async () => {
+  await joinRoomAndFetchMessages()
+  currentUserId.value = await getCurrentUserId()
+})
+
+onUpdated(async () => {
+  await joinRoomAndFetchMessages()
+})
+
+async function joinRoomAndFetchMessages() {
   socket.emit("joinRoom", `room-${props.room.room_id}`)
   messages.value = await fetchData("http://localhost:4000/message/getAllMessagesFromRoomId/" + props.room.room_id,
     "GET",
     [["Content-Type", "application/json"]],
   )
-  currentUserId.value = await getCurrentUserId()
-})
+}
 
 async function sendMessage() {
   const currentUserId = await getCurrentUserId()

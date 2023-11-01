@@ -10,7 +10,7 @@ import {authRouter} from "./auth/auth-controller"
 import {topicRouter} from "./topic/topic-controller"
 import {messageRouter} from "./message/message-controller"
 import {Server, Socket} from "socket.io"
-import {Message, Room} from "./models/types"
+import {Message} from "./models/types"
 
 dotenv.config()
 
@@ -47,6 +47,7 @@ const FRONTEND_URL: string = "http://localhost:10000"
  * @param {string} options.cors.origin - The origin URL allowed for CORS requests.
  */
 const io = new Server(server, {
+  connectionStateRecovery: {},
   cors: {
     origin: FRONTEND_URL,
   },
@@ -54,17 +55,19 @@ const io = new Server(server, {
 
 io.on("connection", (socket: Socket) => {
   console.log("a user connected")
-
-  socket.onAny((event, ...args) => {
-    console.log(event, args);
-  });
-
+  
   socket.on("joinRoom", (room: string) => {
     socket.join(room)
   })
 
-  socket.on("chatMessage", (data: Message) => {
-    console.log(`${data.timestamp} User-ID(${data.user_id}): ${data.content}`)
+  socket.on("chatMessage", async (data: Message) => {
+    await fetch("http://localhost:4000/message/createMessage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
     io.to(`room-${data.room_id}`).emit("newMessage", data)
   })
 
