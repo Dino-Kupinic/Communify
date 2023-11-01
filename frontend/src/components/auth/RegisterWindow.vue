@@ -98,14 +98,20 @@ function getJoinDate(): string {
 </script>
 
 <template>
-  <BodySubtitleText class="title" font-size="1.8rem">Create your account</BodySubtitleText>
+  <BodySubtitleText class="title" font-size="1.8rem">Sign up here. Welcome aboard!</BodySubtitleText>
   <div class="container">
-    <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username"
-                placeholder="Dino Kupinic">
-      <template #below-input>
-        <InputError field="username" :v$="v$"></InputError>
-      </template>
-    </InputField>
+    <div class="split-input-container">
+      <InputField :class="{'input-error': v$.username.$error}" id="split-container-inside-left" v-model="state.username" label="Username" placeholder="Dino Kupinic">
+        <template #below-input>
+          <InputError field="username" :v$="v$"></InputError>
+        </template>
+      </InputField>
+      <InputField :class="{'input-error': v$.age.$error}" id="split-container-inside-right" v-model="state.age" label="Age" type="number">
+        <template #below-input>
+          <InputError field="age" :v$="v$"></InputError>
+        </template>
+      </InputField>
+    </div>
     <InputField :class="{'input-error': v$.password.$error}" v-model="state.password" label="Password" type="password">
       <template #below-input>
         <InputError field="password" :v$="v$"></InputError>
@@ -115,11 +121,6 @@ function getJoinDate(): string {
                 placeholder="dkupinic@htl-steyr.ac.at">
       <template #below-input>
         <InputError field="email" :v$="v$"></InputError>
-      </template>
-    </InputField>
-    <InputField :class="{'input-error': v$.age.$error}" v-model="state.age" label="Age" type="number">
-      <template #below-input>
-        <InputError field="age" :v$="v$"></InputError>
       </template>
     </InputField>
     <OptionalInputField :class="{'input-error': v$.biography && v$.biography.$error}" v-model="state.biography"
@@ -132,7 +133,7 @@ function getJoinDate(): string {
       <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Create my account</ActionButton>
     </div>
   </div>
-  <BodyText>
+  <BodyText id="body-text-register">
     Already have an account?
     <Link @click="router.push('/auth/login')">Login</Link>
   </BodyText>
@@ -166,6 +167,7 @@ function getJoinDate(): string {
 }
 
 .title {
+  margin-bottom: 0.5em;
   display: block;
   text-align: center;
 }
@@ -176,4 +178,21 @@ function getJoinDate(): string {
     min-width: 200px;
   }
 }
+
+.split-input-container {
+  display: flex;
+}
+
+#split-container-inside-right {
+  width: 30%;
+}
+
+#split-container-inside-left {
+  width: 70%;
+}
+
+#body-text-register {
+  margin-top: 1em;
+}
+
 </style>

@@ -139,9 +139,4 @@ async function submitForm() {
 .text4Register {
     margin-top: 1em;
 }
-
-body {
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
 </style>
