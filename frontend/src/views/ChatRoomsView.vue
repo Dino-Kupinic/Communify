@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
@@ -9,70 +8,39 @@ import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
-import Modal from "@/components/Boxes/Modal.vue"
-import InputField from "@/components/controls/InputField.vue"
-
-let name = ref("")
-let maxUser = ref(10)
-let description = ref("hallo1")
-let password = ref("")
-let c_ID = ref(1)
+import {socket} from "@/socket/server"
+import {useRoomStore} from "@/stores/roomStore"
+import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
+import ButtonText from "@/components/controls/ButtonText.vue"
 
 const rooms = ref<Room[]>()
-const room = {
-  name: name.value,
-  maximum_users: maxUser.value,
-  description: description.value,
-  password: password.value,
-  creator_id: c_ID.value,
-}
+const currentRoom = ref<Room>()
+const roomStore = useRoomStore()
 
 onMounted(async () => {
-  await loadRooms()
+  socket.connect()
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
 })
 
-async function loadRooms() {
-  try {
-    const response = await fetch("http://localhost:4000/room/getRooms", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    rooms.value = await response.json()
-  } catch (err) {
-    console.error(err)
-  }
+async function refreshRooms() {
+  await roomStore.fetchRooms()
+  rooms.value = roomStore.rooms
 }
-
-async function createRoom() {
-  try {
-    const response = await fetch("http://localhost:4000/auth/login", {
-      method: "POST",
-      mode: "cors",
-      credentials: "same-origin",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(room),
-    })
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-let isPrivateRoom = ref<boolean>(false)
 
 const actionButtons = ref([
-  {icon: "refresh", label: "Refresh", action: loadRooms},
-  {icon: "account", label: "Profile"},
+  {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
+  {icon: "account", label: "Profile"},
   {icon: "settings", label: "Settings"},
 ])
 
-function reverseDisplay(name: string) {
-  isPrivateRoom.value = name === "private"
+function joinRoom(room: Room) {
+  currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
+}
+
+function updateOnRoomCreation() {
+  rooms.value = roomStore.rooms
 }
 
 </script>
@@ -81,9 +49,7 @@ function reverseDisplay(name: string) {
   <div id="site-container">
     <div id="userbar-chatrooms-container">
       <div id="userbar-container">
-        <!-- Bar for the user profile on top of the list -->
         <UserProfileBar id="container-div-short-user"/>
-        <!-- Bar for the menu above the list and under the user-bar -->
         <div id="container-div-short-menu" class="container-div-short">
           <ActionButton
             v-for="button in actionButtons"
@@ -93,49 +59,34 @@ function reverseDisplay(name: string) {
             class="logout"
             @click="button.action"
           >
-            <Modal modalTitle="Create Room">
-              <template #modal-btn>
-                <Icon class="img" :image-name="button.icon" file-extension="png"/>
-                <span class="btn-span">{{ button.label }}</span>
-              </template>
-              <template #modal-content>
-                <InputField :model-value=name  label="Enter a Name for your Room"></InputField>
-                <!-- Private/Public Room Selection -->
-                <div id="selection-container-div">
-                  <div class="selection-div">
-                    <input @click="reverseDisplay('public')" class="selection-input" type="radio"
-                           name="chatroom-status" id="public">
-                    <label class="selection-label" for="private">Public chat room</label>
-                  </div>
-                  <div class="selection-div">
-                    <input @click="reverseDisplay('private')" class="selection-input" type="radio"
-                           name="chatroom-status" id="private">
-                    <label class="selection-label" for="public">Private chat room</label>
-                    <InputField v-if="isPrivateRoom" model-value="" label="Password" type="password"></InputField>
-                  </div>
-                </div>
-              </template>
-              <template #second-btn>
-                <span @click="" id="save-btn">Save</span>
-              </template>
-            </Modal>
+            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'" modalTitle="Create Room"></CreateRoomModal>
+            <template v-else>
+              <Icon class="img" :image-name="button.icon" file-extension="png"/>
+              <ButtonText>{{ button.label }}</ButtonText>
+            </template>
           </ActionButton>
         </div>
       </div>
-
       <RoomList>
-        <RoomContainer v-if="rooms" v-for="room in rooms" :title="room.name"></RoomContainer>
+        <RoomContainer @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
-        <Modal></Modal>
       </RoomList>
     </div>
-    <ChatRoom></ChatRoom>
+    <ChatRoom v-if="currentRoom != undefined" :room="currentRoom"></ChatRoom>
+    <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
 
 <style scoped>
+#no-room {
+  width: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #userbar-container {
-  border-right: 1px solid var(--color-border-very-soft);
+  border-right: 1px solid var(--color-border-soft);
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -154,7 +105,7 @@ function reverseDisplay(name: string) {
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
-  height: auto;
+  height: 4vh;
 }
 
 .logout {
@@ -168,7 +119,7 @@ function reverseDisplay(name: string) {
 
 .container-div-short {
   width: 100%;
-  height: 6em;
+  height: 8vh;
   background-color: var(--color-background);
   display: flex;
   flex-direction: row;
@@ -179,31 +130,8 @@ function reverseDisplay(name: string) {
   margin-right: 0.1rem;
 }
 
-.btn-span {
-  padding-top: 3%;
+.input-error :deep(input) {
+  border-color: var(--error-400);
 }
-
-#selection-container-div {
-  display: block;
-}
-
-.selection-div {
-  margin-top: 5%;
-  padding-bottom: 1%;
-  padding-left: 1%;
-}
-
-.selection-input {
-  margin-right: 1%;
-}
-
-.selection-label {
-  font-size: 1.2rem;
-}
-
-#save-btn {
-  font-weight: bold;
-}
-
 
 </style>

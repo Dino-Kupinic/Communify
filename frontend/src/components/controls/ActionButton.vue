@@ -4,7 +4,7 @@ interface Props {
   width?: string,
   height?: string,
   hollow?: boolean,
-  glow?: boolean
+  glow?: boolean,
 }
 
 withDefaults(defineProps<Props>(), {
@@ -25,6 +25,8 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 button {
+  padding-left: 1.5%;
+  padding-right: 1.5%;
   margin: v-bind(margin);
   width: v-bind(width);
   background-color: var(--brand-500);
@@ -37,7 +39,7 @@ button {
 }
 
 .hollow {
-  background-color: var(--color-background-very-soft);
+  background-color: var(--color-background);
   border-radius: 1.2rem;
   border: 1px solid var(--neutral-500);
   color: var(--color-text);
@@ -61,6 +63,7 @@ button:hover {
 
 button {
   display: flex;
+  flex-wrap: wrap;
   align-content: center;
   flex-wrap: wrap;
   justify-content: center;
@@ -68,5 +71,7 @@ button {
 
 div {
   display: flex;
+  flex-wrap: wrap;
+  align-content: center;
 }
 </style>

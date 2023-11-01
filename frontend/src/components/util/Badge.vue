@@ -1,11 +1,31 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue"
 
-const hexColors = ["#ba0c0c","#6443de", "#c74aee", "#0262c4", "#3b9afd","#037dfc", "#f34545", "#11b54a"]
-const rndColor = ref('')
+const props = defineProps<{
+  color: string
+}>()
+
+const backgroundColor = ref<string>("")
+const fontColor = ref<string>("")
+
+const colorsMap = new Map<string, string[]>()
+colorsMap.set("Red", ["#ba0c0c", "#fde4e4"])
+colorsMap.set("Blue", ["#0262c4", "#e3f1ff"])
+colorsMap.set("Green", ["#11b54a", "#e5fded"])
+colorsMap.set("Yellow", ["#f3dd0c", "#1b1801"])
+colorsMap.set("Purple", ["#8e11b5", "#f7e5fd"])
+colorsMap.set("Teal", ["#02c3d1", "#d6feff"])
+colorsMap.set("Orange", ["#e67300", "#fcf1e1"])
+colorsMap.set("Brown", ["#753b01", "#fcf1e1"])
 
 onMounted(() => {
-  rndColor.value = hexColors[Math.floor(Math.random() * hexColors.length)]
+  if (colorsMap.has(props.color)) {
+    const color = colorsMap.get(props.color)
+    if (color) {
+      backgroundColor.value = color[0]
+      fontColor.value = color[1]
+    }
+  }
 })
 
 </script>
@@ -19,7 +39,8 @@ onMounted(() => {
 
 <style scoped>
 #badge {
-  background-color: v-bind(rndColor);
+  background-color: v-bind(backgroundColor);
+  color: v-bind(fontColor);
   top: auto;
   margin-left: 1%;
   margin-right: 1%;
@@ -29,6 +50,7 @@ onMounted(() => {
   font-size: 85%;
   font-weight: 500;
   line-height: 1;
+  max-height: 1.5em;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;

@@ -1,82 +1,117 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {ref} from "vue"
+import {onMounted, provide, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
-import Modal from "@/components/Boxes/Modal.vue"
 import Badge from "@/components/util/Badge.vue"
+import type {Room, Topic} from "@/model/types"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import BodyText from "@/components/text/BodyText.vue"
+import {fetchData} from "@/model/util-functions"
+import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
 
 const props = defineProps<{
-  title?: string
+  room: Room,
 }>()
 
-const badges = [
-  {name: "Badge1"},
-  {name: "Badge2"},
-  {name: "Badge3"},
-  {name: "Badge4"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-  {name: "Badge5"},
-]
+defineEmits<{
+  joined: [room: Room]
+}>()
 
-const buttonStyle = ref('unclickedBtn')
+const badges = ref<Topic[]>()
+provide("containerBadges", badges)
+provide("containerRoom", props.room)
 
-function changeCol() {
-  if (buttonStyle.value === "clickedBtn") {
-    buttonStyle.value = "unclickedBtn"
-  } else {
-    buttonStyle.value = "clickedBtn"
+onMounted(() => {
+  loadBadges()
+})
+
+async function loadBadges() {
+  try {
+    badges.value = await fetchData("http://localhost:4000/topic/getTopicsByRoomId/" + props.room.room_id,
+      "GET",
+      [["Content-Type", "application/json"]],
+    )
+  } catch (err) {
+    console.log(err)
   }
 }
 
 </script>
 
 <template>
-    <div id="chatroom-div" :class="buttonStyle" @click="changeCol()">
-      <TitleText :title="title"></TitleText>
-      <Modal>
-        <template #modal-btn>
-          <ActionButton height="max-content">
-            <Icon image-name="more" file-extension="png"></Icon>
-          </ActionButton>
-        </template>
-        <template #modal-content>
-          <p id="title">
-            <TitleText title="Chatroom Info"></TitleText>
-          </p>
-          <p>Badges</p>
-          <div id="badges">
-            <Badge v-for="badge in badges"> {{badge.name}} </Badge>
-          </div>
-        </template>
-      </Modal>
+  <div id="chatroom-div">
+    <TitleText :title="room.name" text-align="none">
+      <RoomInfoModal :modalTitle="room.name"></RoomInfoModal>
+    </TitleText>
+    <div id="badges-div">
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
+    <div class="join-button-div">
+      <div id="lock-div">
+        <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
+      </div>
+      <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
+        <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+        <BodyText class="join-text">Join</BodyText>
+      </ActionButton>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.join-button-div {
+  margin-top: 0.5rem;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.join-text {
+  margin-top: 0.2rem;
+}
+
+:deep(.join-button) {
+  background-color: var(--warning-300);
+  color: var(--warning-700);
+  border: 1px solid var(--warning-700);
+  margin-left: auto;
+  width: 6rem;
+}
+
+:deep(.join-button:hover) {
+  background-color: var(--warning-400);
+  color: var(--warning-800);
+  border: 1px solid var(--warning-800);
+}
+
+.join-text {
+  color: var(--warning-800);
+}
+
 #chatroom-div {
   width: 100%;
-  height: 6em;
-  padding: 5%;
   border-bottom: 1px solid var(--color-border-soft);
+  height: max-content;
+  padding: 5%;
   background-color: var(--color-background);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
 }
 
-#title {
-  font-size: 3rem;
+#chatroom-div:hover {
+  background-color: var(--color-background);
 }
 
-#badges {
+#lock-div {
   display: flex;
   flex-wrap: wrap;
-  overflow-x: unset;
+  align-content: center;
+}
+
+#badges-div {
+  width: 100%;
 }
 
 

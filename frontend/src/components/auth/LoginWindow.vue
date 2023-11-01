@@ -7,7 +7,7 @@ import BodyText from "@/components/text/BodyText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import useVuelidate from "@vuelidate/core"
 import InputField from "@/components/controls/InputField.vue"
-import {MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/user_constants"
+import {USERNAME_MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/type_constants"
 import InputError from "@/components/controls/InputError.vue"
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import Link from "@/components/text/Link.vue"
@@ -21,12 +21,12 @@ const state: LoginClient = reactive({
 const rules = {
   username: {
     required,
-    maxLength: maxLength(MAX_LENGTH),
+    maxLength: maxLength(USERNAME_MAX_LENGTH),
   },
   password: {
     required,
     minLength: minLength(PASSWORD_MIN_LENGTH),
-    maxLength: maxLength(MAX_LENGTH),
+    maxLength: maxLength(USERNAME_MAX_LENGTH),
   },
 }
 

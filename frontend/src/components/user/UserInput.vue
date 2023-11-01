@@ -1,40 +1,32 @@
-<script setup lang="ts">
+<script lang="ts" setup>
+import {useVModel} from "@vueuse/core"
 
+const props = defineProps<{
+  modelValue: string
+}>()
+const emit = defineEmits(["update:modelValue", "send"])
+
+const data = useVModel(props, "modelValue", emit)
 </script>
 
 <template>
-<div id="UserInputContainer">
-  <input id="UserInput" placeholder="Send Messages">
-  <button id="sendBtn">➜</button>
-</div>
+  <input v-model="data" @keydown.enter="emit('send')" autocomplete="false" type="text" maxlength="1000" placeholder="Send Message">
 </template>
 
 <style scoped>
-#UserInput {
-  width: 80%;
-  border: 1px solid var(--color-border);
+input {
+  font-size: 1.05em;
+  font-weight: 500;
+  width: 100%;
+  border: 1px solid var(--color-border-soft);
   color: var(--color-text);
   background-color: var(--color-background);
-  padding: 1%;
+  padding: 0.5% 0.5% 0.5% 1%;
   border-radius: 10rem;
 }
 
-#UserInputContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  top: 100%;
-}
-
-#sendBtn {
-  margin-left: 2%;
-  margin-right: 2%;
-  width: 33.4px;
-  height: 33.4px;
-  font-size: 150%;
-  border-radius: 50%;
-  background-color: var(--color-background);
-  color: var(--color-border-very-soft);
-  justify-content: center;
+input:focus {
+  outline: 1px solid var(--brand-400);
+  caret-color: var(--brand-300);
 }
 </style>

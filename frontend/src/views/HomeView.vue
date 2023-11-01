@@ -2,7 +2,7 @@
 
 import Logo from "@/components/util/Logo.vue"
 import HeroTitle from "@/components/text/HeroTitle.vue"
-import Infobox from "@/components/Boxes/InfoBox.vue"
+import Infobox from "@/components/boxes/InfoBox.vue"
 import HeroButton from "@/components/controls/HeroButton.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import HeroSubText from "@/components/text/HeroSubText.vue"
@@ -18,7 +18,7 @@ import Illustration from "@/components/util/Illustration.vue"
  */
 
 </script>
-<template id="template">
+<template>
   <div class="logo">
     <Logo></Logo>
   </div>
@@ -189,7 +189,7 @@ import Illustration from "@/components/util/Illustration.vue"
 .textmodule1 {
   text-align: center;
   width: 100%;
-  font-weight: 300;
+  font-weight: 500;
   font-family: Inter, serif;
   /*
   background: linear-gradient(90deg, #1ec3e0, #2432d3);
