@@ -64,7 +64,7 @@ io.on("connection", (socket: Socket) => {
   })
 
   socket.on("chatMessage", (data: Message) => {
-    console.log(`${data.timestamp} ${data.content}`)
+    console.log(`${data.timestamp} User-ID(${data.user_id}): ${data.content}`)
     io.to(`room-${data.room_id}`).emit("newMessage", data)
   })
 

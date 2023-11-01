@@ -37,7 +37,6 @@ const actionButtons = ref([
 
 function joinRoom(room: Room) {
   currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
-  console.log(currentRoom.value)
 }
 
 function updateOnRoomCreation() {
