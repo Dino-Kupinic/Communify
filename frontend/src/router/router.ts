@@ -43,16 +43,6 @@ const routes: Array<RouteRecordRaw> & {
         meta: {
           requiresAuth: true,
         },
-        // children: [
-        //   {
-        //     path: ":room_name",
-        //     name: "room",
-        //     component: RoomView,
-        //     meta: {
-        //       requiresAuth: true,
-        //     },
-        //   },
-        // ],
       },
     ],
   },
