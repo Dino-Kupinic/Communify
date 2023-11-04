@@ -31,7 +31,7 @@ const roomStore = useRoomStore()
 const isPrivateRoom = ref<boolean>(false)
 const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
 
-let badgesFromDB : Topic[]
+let badgesFromDB: Topic[]
 
 let topicCount = ref(5)
 let isDisabled = ref(false)
@@ -127,8 +127,15 @@ async function getRoomIdByName() {
 }
 
 async function submitForm() {
+  let ok = false
   const isFormCorrect = await vBadges$.value.$validate()
-  if (!isFormCorrect) return
+  badges.forEach((elem) => {
+    if (elem.text === badgeState.badgeText) {
+      ok = false
+      return
+    } else ok = true
+  })
+  if (!isFormCorrect || !ok) return
   addBadge()
 }
 
@@ -142,21 +149,18 @@ function addBadge() {
   isDisabled.value = topicCount.value === 0
 }
 
-function removeBadgeByID(elemId: number) {
-  const index = badges.findIndex((elem) => elem.topic_id === elemId);
-  if (index !== -1) {
-    badges.splice(index, 1); // Use splice to ensure reactivity
-    topicCount.value++;
-    let i = 0;
-    badges.forEach((elem) => (elem.topic_id = i++));
-    id--;
-    badges.forEach((i) =>
-      i ? console.log(`${i.text} has those chars ${i.color} with the id: ${i.topic_id}`) : "NULL"
-    );
-  }
+function removeBadgeByID(topic_id: number) {
+  badges.forEach((badge) => {
+    if (badge.topic_id === topic_id) {
+      badges.splice(badges.indexOf(badge), 1)
+      topicCount.value++;
+    } else {
+     console.log("BADGE NOT FOUND")
+    }
+  })
 }
 
-async function fetchBadges () {
+async function fetchBadges() {
   try {
     badgesFromDB = await fetchData("http://localhost:4000/topic/getTopics",
       "GET",
@@ -170,7 +174,7 @@ async function fetchBadges () {
 async function createTopicAtRoomCreation(badge: Topic) {
   let ok = false
   //Is badge already existing?
-  badgesFromDB.forEach((badgeDB) =>  {
+  badgesFromDB.forEach((badgeDB) => {
     if (badgeDB.text === badge.text) {
       ok = false
       return
@@ -200,7 +204,7 @@ async function createTopicAtRoomCreation(badge: Topic) {
   }
 }
 
-async function addTopicToRoom (badge : Topic) {
+async function addTopicToRoom(badge: Topic) {
   try {
     const room_id = await getRoomIdByName()
     const response = await fetch("http://localhost:4000/topic/addTopicToRoom", {
@@ -220,7 +224,7 @@ async function addTopicToRoom (badge : Topic) {
   }
 }
 
-function getTopicByName (topic_text : string) {
+function getTopicByName(topic_text: string) {
   let elemId
   badgesFromDB.forEach((elem) => {
     if (elem.text === topic_text) {
@@ -269,8 +273,9 @@ function getTopicByName (topic_text : string) {
       </HorizontalContainer>
 
       <div id="topics-created-container">
-        <Badge v-for="badge in badges" :color="badge.color"  @click="removeBadgeByID(badge.topic_id)">
-            {{ badge.text }}
+        <Badge v-for="badge in badges" :key="badge.topic_id" :color="badge.color"
+               @click="removeBadgeByID(badge.topic_id)">
+          {{ badge.text }}
         </Badge>
       </div>
 
