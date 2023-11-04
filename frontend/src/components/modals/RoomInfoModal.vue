@@ -10,6 +10,7 @@ import {fetchData} from "@/model/util-functions"
 
 const roomStore = useRoomStore()
 
+const emit = defineEmits(["deleted"])
 const room: Room | undefined = inject("containerRoom")
 const badges: Topic[] | undefined = inject("containerBadges")
 const creator = ref<Client>()
@@ -17,6 +18,7 @@ const creator = ref<Client>()
 async function deleteRoom() {
   if (room?.room_id != null)
     await roomStore.deleteRoom(room?.room_id)
+    emit("deleted")
 }
 
 onMounted(async () => {
@@ -41,7 +43,7 @@ async function getCreator(): Promise<Client | undefined> {
     <template #modal-content>
       <br>
       <p>Created by {{ creator?.username }}</p>
-      <p>Maximum Users: {{ room?.maximum_users || "unlimited"}}</p>
+      <p>Maximum Users: {{ room?.maximum_users || "unlimited" }}</p>
       <div class="subtheme-container">
         <ModalSubText title="Badges"></ModalSubText>
         <div id="badges">
