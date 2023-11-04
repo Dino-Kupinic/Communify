@@ -10,6 +10,9 @@ import {ref} from "vue"
 import CodeInputBox from "@/components/boxes/CodeInputBox.vue"
 import {fetchData} from "@/model/util-functions"
 import type {Client} from "@/model/types"
+import {required} from "@vuelidate/validators"
+const nodemailer = require("nodemailer");
+import type {Options} from "nodemailer/lib/sendmail-transport"
 
 const step = ref(1)
 let email = ref("")
@@ -31,6 +34,8 @@ async function submitData() {
     await getClientByUsername()
   }
   if (isAvailable && email.value == client.value?.email && !alerted) {
+    await EmailSender() // Wenn es den Benutzer gibt und die Email gesendet werden konnte,
+                        // kann das der generierte Code nun eingegeben werden!
     step.value = 2
   } else {
     if (!alerted) alert("Benutzer nicht vorhanden bzw. Email falsch!")
@@ -50,11 +55,57 @@ async function getClientByUsername() {
   }
 }
 
-function submitCode() {
+async function submitCode() {
+ /* step.value = 3 */
+
   /*
-      Aufrufen der Email-Sender Funktion!
-  */
-  step.value = 3
+      Proof, if the value per mail is correct!
+   */
+  await EmailSender();
+}
+
+async function EmailSender(){
+
+  const minNum = 100000;  // Meine niedrigst-mögliche Zahl
+  const maxNum = 999999;  // Meine höchst-mögliche Zahl
+
+  // Math.floor -> abrunden auf ganze zahl:
+  const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
+
+  const host = "smtp.gmx.net"
+  const port = 587
+  const passwordAcc = "Communifyservice2023!"
+  const transmitter = "service.communify@gmx.at"  // Sender
+  const receiver = email.value                    // Empfänger
+
+  const transport = nodemailer.createTransport({
+    host: host,
+    port: port,
+    secure: false, // es wird kein TLS verwendet = KEINE Verschlüsselung
+    auth: {
+      user: transmitter,
+      pass: passwordAcc,
+    },
+  });
+
+/*
+  const mailOption : Options = {
+
+  };
+
+ */
+
+  try {
+      await transport.sendMail({
+        from: transmitter,
+        to: receiver,
+        subject: "Passwort Reset - Code for Confirmation",
+        text: String(sixDigitValue),
+      })
+      step.value = 3  // Wenn die Email versendet wurde, kann die nächste Seite eingeblendet werden!
+  } catch (error) {
+    console.error("Fehler beim Versenden - Fehlermeldung \n", error)
+  }
 }
 
 async function submitPassword() {
