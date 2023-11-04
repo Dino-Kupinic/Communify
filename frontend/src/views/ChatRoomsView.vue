@@ -20,7 +20,7 @@ const roomStore = useRoomStore()
 onMounted(async () => {
   socket.connect()
   await roomStore.fetchRooms()
-  rooms.value = roomStore.rooms
+  rooms.value  = roomStore.rooms
 })
 
 async function refreshRooms() {
@@ -69,7 +69,7 @@ function updateOnRoomCreation() {
         </div>
       </div>
       <RoomList>
-        <RoomContainer @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
+        <RoomContainer @refreshed="refreshRooms" @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
