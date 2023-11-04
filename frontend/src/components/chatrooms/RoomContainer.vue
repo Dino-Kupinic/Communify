@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, provide, ref} from "vue"
+import {onMounted, provide, reactive, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Badge from "@/components/util/Badge.vue"
@@ -9,14 +9,19 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {fetchData} from "@/model/util-functions"
 import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
+import {useRoomStore} from "@/stores/roomStore"
 
 const props = defineProps<{
   room: Room,
 }>()
 
-defineEmits<{
+const emits = defineEmits<{
   joined: [room: Room]
+  refreshed: ["refreshed"]
 }>()
+
+const rooms = ref<Room[]>()
+const roomStore = useRoomStore()
 
 const badges = ref<Topic[]>()
 provide("containerBadges", badges)
@@ -37,12 +42,16 @@ async function loadBadges() {
   }
 }
 
+async function refreshRoomsOnDeleted () {
+  emits("refreshed", "refreshed")
+}
+
 </script>
 
 <template>
   <div id="chatroom-div">
     <TitleText :title="room.name" text-align="none">
-      <RoomInfoModal :modalTitle="room.name"></RoomInfoModal>
+      <RoomInfoModal @deleted="refreshRoomsOnDeleted" :modalTitle="room.name"></RoomInfoModal>
     </TitleText>
     <div id="badges-div">
       <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
