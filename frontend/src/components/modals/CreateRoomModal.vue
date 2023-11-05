@@ -22,6 +22,7 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Badge from "@/components/util/Badge.vue"
 import HorizontalContainer from "@/components/util/HorizontalContainer.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
+import InputError from "@/components/controls/InputError.vue"
 
 let id = 0
 
@@ -245,15 +246,24 @@ function getTopicByName(topic_text: string) {
       <BodyText class="btn-span">Create Room</BodyText>
     </template>
     <template #modal-content>
-      <InputField v-model="state.name" label="Name" placeholder="My Room "></InputField>
+      <InputField :class="{'input-error': v$.name.$error}" v-model="state.name" label="Name" placeholder="My Room ">
+        <template #below-input>
+          <InputError field="name" :v$="v$"></InputError>
+        </template>
+      </InputField>
       <InputField v-model="state.description" label="Description (Optional)"></InputField>
       <InputField v-model="state.maximum_users" label="Maximum User (Optional)" id="max-user-input" type="number"
                   value="1" min="1"></InputField>
-      <InputField v-model="state.password" label="Password (Optional)" type="password"></InputField>
+      <InputField :class="{'input-error': v$.password.$error}" v-model="state.password" label="Password (Optional)" type="password">
+        <template #below-input>
+          <InputError field="password" :v$="v$"></InputError>
+        </template>
+      </InputField>
       <div id="badge-colorpick-container">
         <InputField :class="{'input-error': vBadges$.badgeText.$error}" placeholder="Topic Name"
                     v-model="badgeState.badgeText" label="Topic Name">
           <template #below-input>
+            <InputError field="badgeText" :v$="vBadges$"></InputError>
           </template>
         </InputField>
         <HorizontalContainer>
