@@ -2,7 +2,7 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref} from "vue"
+import {onMounted, ref, watch} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
@@ -12,15 +12,17 @@ import {socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
+import PasswortModal from "@/components/modals/PasswortModal.vue"
 
 const rooms = ref<Room[]>()
 const currentRoom = ref<Room>()
 const roomStore = useRoomStore()
+let enteredPswd = ref()
 
 onMounted(async () => {
   socket.connect()
   await roomStore.fetchRooms()
-  rooms.value  = roomStore.rooms
+  rooms.value = roomStore.rooms
 })
 
 async function refreshRooms() {
@@ -36,13 +38,22 @@ const actionButtons = ref([
 ])
 
 function joinRoom(room: Room) {
-  currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
-  console.log(currentRoom.value)
+  currentRoom.value = undefined;
+  currentRoom.value = roomStore.rooms.find(roomItem => {
+    if (roomItem === room) {
+      if (room.password === null) return roomItem.name
+      if (enteredPswd.value === room.password) return roomItem.name
+    }
+  })
+
 }
 
 function updateOnRoomCreation() {
   rooms.value = roomStore.rooms
 }
+
+
+
 
 </script>
 
@@ -60,7 +71,8 @@ function updateOnRoomCreation() {
             class="logout"
             @click="button.action"
           >
-            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'" modalTitle="Create Room"></CreateRoomModal>
+            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'"
+                             modalTitle="Create Room"></CreateRoomModal>
             <template v-else>
               <Icon class="img" :image-name="button.icon" file-extension="png"/>
               <ButtonText>{{ button.label }}</ButtonText>
@@ -69,7 +81,8 @@ function updateOnRoomCreation() {
         </div>
       </div>
       <RoomList>
-        <RoomContainer @refreshed="refreshRooms" @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
+        <RoomContainer v-model="enteredPswd" @entered="joinRoom(room)" @refreshed="refreshRooms" @joined="joinRoom" v-if="rooms" v-for="room in rooms"
+                       :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
