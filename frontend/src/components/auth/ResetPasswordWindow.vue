@@ -11,7 +11,7 @@ import CodeInputBox from "@/components/boxes/CodeInputBox.vue"
 import {fetchData} from "@/model/util-functions"
 import type {Client} from "@/model/types"
 import {required} from "@vuelidate/validators"
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
 import type {Options} from "nodemailer/lib/sendmail-transport"
 
 const step = ref(1)
@@ -72,36 +72,16 @@ async function EmailSender(){
   // Math.floor -> abrunden auf ganze zahl:
   const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
 
-  const host = "smtp.gmx.net"
-  const port = 587
-  const passwordAcc = "Communifyservice2023!"
-  const transmitter = "service.communify@gmx.at"  // Sender
   const receiver = email.value                    // Empfänger
 
-  const transport = nodemailer.createTransport({
-    host: host,
-    port: port,
-    secure: false, // es wird kein TLS verwendet = KEINE Verschlüsselung
-    auth: {
-      user: transmitter,
-      pass: passwordAcc,
-    },
-  });
-
-/*
-  const mailOption : Options = {
-
-  };
-
- */
 
   try {
-      await transport.sendMail({
-        from: transmitter,
-        to: receiver,
-        subject: "Passwort Reset - Code for Confirmation",
-        text: String(sixDigitValue),
-      })
+      // TODO: use fetch      !!!
+      // await transport.sendMail({
+      //   to: receiver,
+      //   subject: "Passwort Reset - Code for Confirmation",
+      //   text: String(sixDigitValue),
+      // })
       step.value = 3  // Wenn die Email versendet wurde, kann die nächste Seite eingeblendet werden!
   } catch (error) {
     console.error("Fehler beim Versenden - Fehlermeldung \n", error)
