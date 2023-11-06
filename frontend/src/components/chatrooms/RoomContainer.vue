@@ -10,7 +10,7 @@ import BodyText from "@/components/text/BodyText.vue"
 import {fetchData} from "@/model/util-functions"
 import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
 import {useRoomStore} from "@/stores/roomStore"
-import PasswortModal from "@/components/modals/PasswordModal.vue"
+import PasswordModal from "@/components/modals/PasswordModal.vue"
 import {useVModel} from "@vueuse/core"
 
 const props = defineProps<{
@@ -74,14 +74,14 @@ let input= useVModel(props, "modelValue", emits)
       <div id="lock-div">
         <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
       </div>
-      <PasswortModal v-if="room.password !== null" v-model="input" @joined="okBtnClickedInPswd">
+      <PasswordModal v-if="room.password !== null" v-model="input" @joined="okBtnClickedInPswd">
         <template #password-modal-btn>
           <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
             <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
             <BodyText class="join-text">Join</BodyText>
           </ActionButton>
         </template>
-      </PasswortModal>
+      </PasswordModal>
       <ActionButton v-else @click="$emit('joined', props.room)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>

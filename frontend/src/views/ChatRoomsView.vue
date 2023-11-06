@@ -12,7 +12,6 @@ import {socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
-import PasswortModal from "@/components/modals/PasswortModal.vue"
 
 const rooms = ref<Room[]>()
 const currentRoom = ref<Room>()
@@ -51,9 +50,6 @@ function joinRoom(room: Room) {
 function updateOnRoomCreation() {
   rooms.value = roomStore.rooms
 }
-
-
-
 
 </script>
 
