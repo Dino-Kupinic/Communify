@@ -37,11 +37,10 @@ const actionButtons = ref([
 ])
 
 function joinRoom(room: Room) {
-  currentRoom.value = undefined;
   currentRoom.value = roomStore.rooms.find(roomItem => {
     if (roomItem === room) {
-      if (room.password === null) return roomItem.name
-      if (enteredPswd.value === room.password) return roomItem.name
+      if (room.password === null) return roomItem
+      if (enteredPswd.value === room.password) return roomItem
     }
   })
 

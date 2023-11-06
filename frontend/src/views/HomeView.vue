@@ -199,6 +199,4 @@ import Illustration from "@/components/util/Illustration.vue"
   font-weight: 650;
    */
 }
-
-
 </style>

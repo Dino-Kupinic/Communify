@@ -11,6 +11,8 @@ import {USERNAME_MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/type_constants"
 import InputError from "@/components/controls/InputError.vue"
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import Link from "@/components/text/Link.vue"
+import LogoIcon from "@/components/util/LogoIcon.vue"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
 
 
 const state: LoginClient = reactive({
@@ -66,9 +68,8 @@ async function submitForm() {
   }
 }
 </script>
-
 <template>
-  <BodySubtitleText class="title" font-size="1.8rem">Welcome back.</BodySubtitleText>
+  <BodySubtitleText class="title" font-size="1.8rem">Welcome back. Please login.</BodySubtitleText>
   <div class="container">
     <InputField :class="{'input-error': v$.username.$error}" v-model="state.username" label="Username">
       <template #below-input>
@@ -84,15 +85,26 @@ async function submitForm() {
       <ActionButton @click="submitForm" class="btn" width="90%" height="3rem">Log in</ActionButton>
     </div>
   </div>
-  <BodyText>
+  <BodyText class="register-text">
     New to Communify?
     <Link @click="router.push('/auth/register')">
-      Register
+      <span>
+        Register now<GoogleIcon name="North_East" font-size="1.1rem" line-height="1.3"></GoogleIcon>
+      </span>
+    </Link>
+
+  </BodyText>
+  <BodyText class="reset-text">
+    Forgot your password?
+    <Link @click="router.push('/auth/recovery')">
+      <span>
+        Reset it<GoogleIcon name="North_East" font-size="1.1rem" line-height="1.3"></GoogleIcon>
+      </span>
     </Link>
   </BodyText>
 </template>
 
-<style scoped>
+<style>
 .container {
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
@@ -101,7 +113,9 @@ async function submitForm() {
   padding: 1.2rem;
   width: 25%;
   min-width: 360px;
-  margin: auto;
+  margin-top: 1.2em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .button-container {
@@ -118,6 +132,8 @@ async function submitForm() {
 .title {
   display: block;
   text-align: center;
+  margin-top: 3%;
+  font-size: 1.5em;
 }
 
 
@@ -131,4 +147,13 @@ async function submitForm() {
     min-width: 200px;
   }
 }
+
+.register-text {
+  margin-top: 1em;
+}
+
+.reset-text {
+  margin-top: 0.2em;
+}
+
 </style>

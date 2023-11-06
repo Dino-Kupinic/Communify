@@ -3,8 +3,9 @@ import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
 import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
-import {onMounted, provide, ref} from "vue"
+import {onMounted, onUpdated, provide, ref} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
+import {socket} from "@/socket/server"
 
 const props = defineProps<{
   room: Room
@@ -13,13 +14,24 @@ provide("room", props.room)
 
 const messages = ref<Message[]>([])
 const userMessage = ref<string>("")
+const currentUserId = ref<number>()
 
 onMounted(async () => {
+  await joinRoomAndFetchMessages()
+  currentUserId.value = await getCurrentUserId()
+})
+
+onUpdated(async () => {
+  await joinRoomAndFetchMessages()
+})
+
+async function joinRoomAndFetchMessages() {
+  socket.emit("joinRoom", `room-${props.room.room_id}`)
   messages.value = await fetchData("http://localhost:4000/message/getAllMessagesFromRoomId/" + props.room.room_id,
     "GET",
     [["Content-Type", "application/json"]],
   )
-})
+}
 
 async function sendMessage() {
   const currentUserId = await getCurrentUserId()
@@ -30,9 +42,16 @@ async function sendMessage() {
     user_id: currentUserId,
     room_id: props.room.room_id as number,
   }
+  socket.emit("chatMessage", msg)
+
   messages.value.push(msg)
   userMessage.value = ""
 }
+
+socket.on("newMessage", (msg: Message) => {
+  if (msg.user_id != currentUserId.value)
+    messages.value.push(msg)
+})
 </script>
 
 <template>
@@ -41,7 +60,14 @@ async function sendMessage() {
       <ChatRoomHeaderBar></ChatRoomHeaderBar>
     </header>
     <div id="content-container">
-      <MessageContainer message-type="from-me" v-for="message in messages">{{ message.content }}</MessageContainer>
+      <MessageContainer
+        v-for="message in messages"
+        :key="message.message_id as number"
+        :message="message"
+        :message-type="message.user_id === currentUserId ? 'from-me' : 'from-them'"
+      >
+        {{ message.content }}
+      </MessageContainer>
     </div>
     <div id="Input-Container">
       <UserInput @send="sendMessage" v-model="userMessage"></UserInput>
