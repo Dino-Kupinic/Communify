@@ -9,6 +9,7 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {fetchData} from "@/model/util-functions"
 import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
+import {BACKEND_URL} from "@/socket/server"
 
 const props = defineProps<{
   room: Room,
@@ -28,7 +29,7 @@ onMounted(() => {
 
 async function loadBadges() {
   try {
-    badges.value = await fetchData("http://localhost:4000/topic/getTopicsByRoomId/" + props.room.room_id,
+    badges.value = await fetchData(`${BACKEND_URL}/topic/getTopicsByRoomId/` + props.room.room_id,
       "GET",
       [["Content-Type", "application/json"]],
     )

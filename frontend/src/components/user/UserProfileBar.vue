@@ -8,6 +8,7 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import router from "@/router/router"
+import {BACKEND_URL} from "@/socket/server"
 
 const username = ref<string>("")
 const token = ref<string>(localStorage.getItem("auth_token") || "")
@@ -30,7 +31,7 @@ onMounted(async () => {
 
 async function getProfile() {
   try {
-    const response = await fetch("http://localhost:4000/auth/profile", {
+    const response = await fetch(`${BACKEND_URL}/auth/profile`, {
       method: "GET",
       headers: {
         "access_token": token.value,

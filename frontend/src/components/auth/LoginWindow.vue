@@ -11,9 +11,8 @@ import {USERNAME_MAX_LENGTH, PASSWORD_MIN_LENGTH} from "@/model/type_constants"
 import InputError from "@/components/controls/InputError.vue"
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import Link from "@/components/text/Link.vue"
-import LogoIcon from "@/components/util/LogoIcon.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
-
+import {BACKEND_URL} from "@/socket/server"
 
 const state: LoginClient = reactive({
   username: "",
@@ -48,7 +47,7 @@ async function submitForm() {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/auth/login", {
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",

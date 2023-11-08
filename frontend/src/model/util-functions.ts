@@ -1,4 +1,5 @@
 import type {Client} from "@/model/types"
+import {BACKEND_URL} from "@/socket/server"
 
 /**
  * Fetches data from the specified URL using the given method, headers, and body.
@@ -41,7 +42,7 @@ export async function fetchData<T>(
 export async function getCurrentUserId(): Promise<number> {
   const token: string | null = localStorage.getItem("auth_token")
   if (token) {
-    const client: Client = await fetchData("http://localhost:4000/auth/profile", "GET", [["access_token", token]])
+    const client: Client = await fetchData(`${BACKEND_URL}/auth/profile`, "GET", [["access_token", token]])
     return client.user_id as number
   }
   throw new Error("User not authorized")

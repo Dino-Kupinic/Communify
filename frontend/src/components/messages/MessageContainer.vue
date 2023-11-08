@@ -3,6 +3,7 @@ import {computed, onMounted, provide, ref} from "vue"
 import MessageText from "@/components/messages/MessageText.vue"
 import type {Client, Message} from "@/model/types"
 import {fetchData} from "@/model/util-functions"
+import {BACKEND_URL} from "@/socket/server"
 
 const props = defineProps<{
   messageType: string
@@ -18,7 +19,7 @@ const formattedTimestamp = computed(() => {
 })
 
 onMounted(async () => {
-  const client: Client = await fetchData("http://localhost:4000/client/getClientById/" + props.message.user_id,
+  const client: Client = await fetchData(`${BACKEND_URL}/client/getClientById/` + props.message.user_id,
     "GET", [["Content-Type",
       "application/json"]],
   )

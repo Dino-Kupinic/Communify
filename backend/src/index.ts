@@ -36,7 +36,7 @@ const routes = [
 
 routes.forEach(route => app.use(route.path, route.router))
 
-const FRONTEND_URL: string = "http://localhost:10000"
+const FRONTEND_URL = process.env.FRONTEND_URL as string
 
 /**
  * Represents a Server object for handling input and output operations.
@@ -61,7 +61,7 @@ io.on("connection", (socket: Socket) => {
   })
 
   socket.on("chatMessage", async (data: Message) => {
-    await fetch("http://localhost:4000/message/createMessage", {
+    await fetch(`${FRONTEND_URL}/message/createMessage`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -78,6 +78,6 @@ io.on("connection", (socket: Socket) => {
 
 
 server.listen(port, (): void => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
+  console.log(`[server]: Server is running at ${port}`)
   connectAndQuery()
 })

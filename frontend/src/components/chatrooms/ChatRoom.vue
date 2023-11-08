@@ -5,7 +5,7 @@ import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
 import {onMounted, onUpdated, provide, ref} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
-import {socket} from "@/socket/server"
+import {BACKEND_URL, socket} from "@/socket/server"
 
 const props = defineProps<{
   room: Room
@@ -27,7 +27,7 @@ onUpdated(async () => {
 
 async function joinRoomAndFetchMessages() {
   socket.emit("joinRoom", `room-${props.room.room_id}`)
-  messages.value = await fetchData("http://localhost:4000/message/getAllMessagesFromRoomId/" + props.room.room_id,
+  messages.value = await fetchData(`${BACKEND_URL}/message/getAllMessagesFromRoomId/` + props.room.room_id,
     "GET",
     [["Content-Type", "application/json"]],
   )

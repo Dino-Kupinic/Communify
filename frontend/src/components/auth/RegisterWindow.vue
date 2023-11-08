@@ -18,6 +18,7 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import Link from "@/components/text/Link.vue"
 import OptionalInputField from "@/components/controls/OptionalInputField.vue"
+import {BACKEND_URL} from "@/socket/server"
 
 const state: Client = reactive({
   user_id: null,
@@ -77,7 +78,7 @@ async function submitForm() {
   }
 
   try {
-    await fetch("http://localhost:4000/client/createClient", {
+    await fetch(`${BACKEND_URL}/client/createClient`, {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",

@@ -22,6 +22,7 @@ import ActionButton from "@/components/controls/ActionButton.vue"
 import Badge from "@/components/util/Badge.vue"
 import HorizontalContainer from "@/components/util/HorizontalContainer.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
+import {BACKEND_URL} from "@/socket/server"
 
 let id = 0
 
@@ -115,7 +116,7 @@ async function createRoom() {
 
 async function getRoomIdByName() {
   try {
-    const response: Room = await fetchData("http://localhost:4000/room/getRoomByName/" + state.name,
+    const response: Room = await fetchData(`${BACKEND_URL}/room/getRoomByName/` + state.name,
       "GET", [["Content-Type", "application/json"]],
     )
     if (response) {
@@ -159,7 +160,7 @@ function removeBadgeByID(elemId: number) {
 
 async function fetchBadges () {
   try {
-    badgesFromDB = await fetchData("http://localhost:4000/topic/getTopics",
+    badgesFromDB = await fetchData(`${BACKEND_URL}/topic/getTopics`,
       "GET",
       [["Content-Type", "application/json"]],
     )
@@ -182,7 +183,7 @@ async function createBadgesAtRoomCreation(badge: Topic) {
   if (ok) {
     try {
       const room_id = await getRoomIdByName()
-      const response = await fetch("http://localhost:4000/topic/createTopic", {
+      const response = await fetch(`${BACKEND_URL}/topic/createTopic`, {
         method: "POST",
         mode: "cors",
         credentials: "same-origin",
