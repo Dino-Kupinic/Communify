@@ -12,11 +12,11 @@ import {socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
+import {storeToRefs} from "pinia"
 
 const rooms = ref<Room[]>()
-const currentRoom = ref<Room>()
 const roomStore = useRoomStore()
-let enteredPswd = ref()
+const {currentRoom} = storeToRefs(roomStore)
 
 onMounted(async () => {
   socket.connect()
@@ -37,10 +37,9 @@ const actionButtons = ref([
 ])
 
 function joinRoom(room: Room) {
-  currentRoom.value = roomStore.rooms.find(roomItem => {
+  roomStore.currentRoom = roomStore.rooms.find(roomItem => {
     if (roomItem === room) {
-      if (room.password === null) return roomItem
-      if (enteredPswd.value === room.password) return roomItem
+      if (room.password === null) return room
     }
   })
 
@@ -76,12 +75,13 @@ function updateOnRoomCreation() {
         </div>
       </div>
       <RoomList>
-        <RoomContainer v-model="enteredPswd" @entered="joinRoom(room)" @refreshed="refreshRooms" @joined="joinRoom" v-if="rooms" v-for="room in rooms"
+        <RoomContainer @refreshed="refreshRooms" @joined="joinRoom(room)" v-if="rooms"
+                       v-for="room in rooms"
                        :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
-    <ChatRoom v-if="currentRoom != undefined" :room="currentRoom"></ChatRoom>
+    <ChatRoom v-if="roomStore.currentRoom" :room="roomStore.currentRoom"></ChatRoom>
     <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
