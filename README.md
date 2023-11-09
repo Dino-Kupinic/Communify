@@ -29,6 +29,8 @@ Continue with the configuration below!
    
 `⚠️ Important: this application is only for learning purposes, normally the .env file with the secret key wouldn't be accessible`
 ```env
+FRONTEND_URL=http://localhost:10000
+BACKEND_URL=http://localhost:4000
 PORT=4000
 DB_PORT=5432
 SECRET=eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NzIyMzY4NiwiaWF0IjoxNjk3MjIzNjg2fQ.MRdk7L642ry-VHvkEfBPr_HXXCJ9PjcY9bgwu7zmahQ
