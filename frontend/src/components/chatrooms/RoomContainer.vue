@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, provide, reactive, ref} from "vue"
+import {inject, onMounted, provide, reactive, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Badge from "@/components/util/Badge.vue"
@@ -15,15 +15,11 @@ import {useVModel} from "@vueuse/core"
 
 const props = defineProps<{
   room: Room,
-  modelValue: string
 }>()
-
-const enteredPswd = ref<string>()
 
 const emits = defineEmits<{
   joined: [room: Room]
   refreshed: ["refreshed"]
-  entered: ["entered"]
 }>()
 
 const rooms = ref<Room[]>()
@@ -36,8 +32,6 @@ provide("containerRoom", props.room)
 onMounted(() => {
   loadBadges()
 })
-
-
 
 async function loadBadges() {
   try {
@@ -54,11 +48,6 @@ async function refreshRoomsOnDeleted() {
   emits("refreshed", "refreshed")
 }
 
-function okBtnClickedInPswd () {
-  emits("entered", "entered")
-}
-
-let input= useVModel(props, "modelValue", emits)
 
 </script>
 
@@ -74,9 +63,9 @@ let input= useVModel(props, "modelValue", emits)
       <div id="lock-div">
         <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
       </div>
-      <PasswordModal v-if="room.password !== null" v-model="input" @joined="okBtnClickedInPswd">
+      <PasswordModal v-if="room.password !== null">
         <template #password-modal-btn>
-          <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
+          <ActionButton class="join-button" width="5rem">
             <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
             <BodyText class="join-text">Join</BodyText>
           </ActionButton>
