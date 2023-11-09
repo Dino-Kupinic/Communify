@@ -3,14 +3,18 @@ import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
 import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
-import {onMounted, onUpdated, provide, ref} from "vue"
+import {onMounted, onUpdated, provide, ref, watch} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
 import {socket} from "@/socket/server"
 
 const props = defineProps<{
   room: Room
 }>()
-provide("room", props.room)
+
+
+watch(props.room, () => {
+  provide("room", props.room)
+});
 
 const messages = ref<Message[]>([])
 const userMessage = ref<string>("")
