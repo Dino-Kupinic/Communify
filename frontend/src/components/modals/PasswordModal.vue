@@ -3,28 +3,39 @@
 import Modal from "@/components/modals/Modal.vue"
 import InputField from "@/components/controls/InputField.vue"
 import {useVModel} from "@vueuse/core"
+import type {Room} from "@/model/types"
+import {inject, ref} from "vue"
+import {useRoomStore} from "@/stores/roomStore"
 
-const props = defineProps<{
-  modelValue : string
-}>()
 
 let emit = defineEmits(["joined"])
-
-const input = useVModel(props, "modelValue", emit)
+let room : Room = <Room>inject('containerRoom');
+let enteredPswd = ref<string>()
+const roomStore = useRoomStore()
 
 function checkPswd () {
-  console.log("on emit `joined` value is: " + input.value)
-  emit("joined")
+  if (room.password) {
+    if (room?.password === enteredPswd.value) {
+      joinRoom(room)
+      enteredPswd.value = ""
+    }
+  } else {
+    joinRoom(room)
+  }
+}
+
+function joinRoom(room: Room) {
+  roomStore.currentRoom = roomStore.currentRoom = roomStore.rooms.find(roomItem => room === roomItem)
 }
 </script>
 
 <template>
-<Modal modal-title="Room-Login">
+<Modal v-if="room?.password" modal-title="Room-Login">
   <template #modal-btn>
     <slot name="password-modal-btn"></slot>
   </template>
   <template #modal-content>
-    <InputField v-model="input" label="Enter Password" type="password"></InputField>
+    <InputField v-model="enteredPswd" label="Enter Password" type="password"></InputField>
   </template>
   <template #left-btn-slot>
     <span @click="checkPswd">Submit</span>
