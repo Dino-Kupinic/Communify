@@ -15,14 +15,14 @@ const data = useVModel(props, "modelValue", emit)
 
 <style scoped>
 input {
-  font-size: 1.05em;
+  font-size: 1.1em;
   font-weight: 500;
   width: 100%;
   border: 1px solid var(--color-border-soft);
   color: var(--color-text);
   background-color: var(--color-background);
   padding: 0.5% 0.5% 0.5% 1%;
-  border-radius: 10rem;
+  border-radius: 7rem;
 }
 
 input:focus {

@@ -91,8 +91,10 @@ async function loadBadges() {
 }
 
 #chatroom-div {
-  width: 100%;
-  border-bottom: 1px solid var(--color-border-soft);
+  width: 95%;
+  margin: 0.5rem auto auto;
+  border-radius: 0.5rem;
+  border: 2px solid var(--color-background-soft);
   height: max-content;
   padding: 5%;
   background-color: var(--color-background);

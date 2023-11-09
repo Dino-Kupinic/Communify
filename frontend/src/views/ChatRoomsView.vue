@@ -71,7 +71,7 @@ function updateOnRoomCreation() {
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
-    <ChatRoom v-if="currentRoom != undefined" :room="currentRoom"></ChatRoom>
+    <ChatRoom v-if="currentRoom != undefined" :key="currentRoom.room_id as number" :room="currentRoom"></ChatRoom>
     <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
