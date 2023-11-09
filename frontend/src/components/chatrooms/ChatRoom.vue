@@ -3,25 +3,37 @@ import ChatRoomHeaderBar from "@/components/chatrooms/ChatRoomHeaderBar.vue"
 import UserInput from "@/components/user/UserInput.vue"
 import MessageContainer from "@/components/messages/MessageContainer.vue"
 import type {Message, Room} from "@/model/types"
-import {onMounted, onUpdated, provide, ref} from "vue"
+import {onMounted, onUnmounted, onUpdated, provide, reactive, ref, watch} from "vue"
 import {fetchData, getCurrentUserId, getFormattedTimestamp} from "@/model/util-functions"
 import {BACKEND_URL, socket} from "@/socket/server"
+import Spinner from "@/components/util/Spinner.vue"
 
 const props = defineProps<{
   room: Room
 }>()
-provide("room", props.room)
+const refRoom = ref<Room>(props.room)
+provide("room", refRoom)
+watch(() => props.room, (newRoom) => {
+  refRoom.value = newRoom
+})
 
 const messages = ref<Message[]>([])
 const userMessage = ref<string>("")
 const currentUserId = ref<number>()
+const isLoading = ref<boolean>(true)
 
 onMounted(async () => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 500)
   await joinRoomAndFetchMessages()
   currentUserId.value = await getCurrentUserId()
 })
 
 onUpdated(async () => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 500)
   await joinRoomAndFetchMessages()
 })
 
@@ -60,7 +72,12 @@ socket.on("newMessage", (msg: Message) => {
       <ChatRoomHeaderBar></ChatRoomHeaderBar>
     </header>
     <div id="content-container">
+      <div v-if="isLoading"
+           class="loading">
+        <Spinner></Spinner>
+      </div>
       <MessageContainer
+        v-else
         v-for="message in messages"
         :key="message.message_id as number"
         :message="message"
@@ -89,6 +106,13 @@ socket.on("newMessage", (msg: Message) => {
   display: flex;
   flex-direction: column;
   padding: 0.5rem 1.1rem;
+}
+
+.loading {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header {
