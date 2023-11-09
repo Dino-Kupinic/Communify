@@ -7,6 +7,7 @@ import {useRoomStore} from "@/stores/roomStore"
 import {inject, onMounted, ref} from "vue"
 import type {Client, Room, Topic} from "@/model/types"
 import {fetchData} from "@/model/util-functions"
+import {BACKEND_URL} from "@/socket/server"
 
 const roomStore = useRoomStore()
 
@@ -27,7 +28,7 @@ onMounted(async () => {
 
 async function getCreator(): Promise<Client | undefined> {
   try {
-    return await fetchData("http://localhost:4000/client/getClientById/" + room?.creator_id, "GET", [["Content-Type", "application/json"]])
+    return await fetchData(`${BACKEND_URL}/client/getClientById/` + room?.creator_id, "GET", [["Content-Type", "application/json"]])
   } catch (err) {
     console.error(err)
   }

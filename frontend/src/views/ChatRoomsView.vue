@@ -33,7 +33,6 @@ const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
   {icon: "account", label: "Profile"},
-  {icon: "settings", label: "Settings"},
 ])
 
 function joinRoom(room: Room) {
@@ -62,7 +61,7 @@ function updateOnRoomCreation() {
             :key="button.label"
             :hollow="true"
             height="max-content"
-            class="logout"
+            class="actionbuttons"
             @click="button.action"
           >
             <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'"
@@ -117,7 +116,13 @@ function updateOnRoomCreation() {
   height: 4vh;
 }
 
-.logout {
+@media screen and (max-width: 1290px) {
+  #container-div-short-menu {
+    height: 8vh;
+  }
+}
+
+.actionbuttons {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

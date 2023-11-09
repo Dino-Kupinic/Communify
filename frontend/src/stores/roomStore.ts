@@ -2,6 +2,7 @@ import {ref} from "vue"
 import {defineStore} from "pinia"
 import type {Room} from "@/model/types"
 import {fetchData} from "@/model/util-functions"
+import {BACKEND_URL} from "@/socket/server"
 
 export const useRoomStore = defineStore("room", () => {
   const rooms = ref<Room[]>([])
@@ -18,7 +19,7 @@ export const useRoomStore = defineStore("room", () => {
   async function fetchRooms(): Promise<void> {
     try {
       rooms.value = await fetchData(
-        "http://localhost:4000/room/getRooms", "GET", [["Content-Type", "application/json"]])
+        `${BACKEND_URL}/room/getRooms`, "GET", [["Content-Type", "application/json"]])
     } catch (err) {
       console.error(err)
     }
@@ -33,7 +34,7 @@ export const useRoomStore = defineStore("room", () => {
    */
   async function addRoom(room: Room): Promise<void> {
     try {
-      const response = await fetch("http://localhost:4000/room/createRoom", {
+      const response = await fetch(`${BACKEND_URL}/room/createRoom`, {
         method: "POST",
         mode: "cors",
         credentials: "same-origin",
@@ -61,7 +62,7 @@ export const useRoomStore = defineStore("room", () => {
   async function deleteRoom(room_id: number): Promise<void> {
     try {
       await fetch(
-        "http://localhost:4000/room/deleteRoomById/" + room_id,
+        `${BACKEND_URL}/room/deleteRoomById/` + room_id,
         {
           method: "DELETE",
           mode: "cors",
