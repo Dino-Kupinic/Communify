@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, provide, ref} from "vue"
+import {onMounted, onUnmounted, provide, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Badge from "@/components/util/Badge.vue"
@@ -46,11 +46,12 @@ async function loadBadges() {
       <RoomInfoModal :modalTitle="room.name"></RoomInfoModal>
     </TitleText>
     <div id="badges-div">
-      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }}</Badge>
     </div>
     <div class="join-button-div">
       <div id="lock-div">
-        <Icon v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
+        <Icon id="lock-icon" v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
+        <Icon v-if="room.maximum_users !== null" image-name="team" file-extension="png"><p id="max-user-text">{{ room.maximum_users }}</p></Icon>
       </div>
       <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
@@ -61,6 +62,14 @@ async function loadBadges() {
 </template>
 
 <style scoped>
+#lock-icon {
+  margin-right: 0.75rem;
+}
+
+#max-user-text {
+  margin-left: 0.25rem;
+}
+
 .join-button-div {
   margin-top: 0.5rem;
   width: 100%;
