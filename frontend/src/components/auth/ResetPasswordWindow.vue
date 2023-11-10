@@ -100,7 +100,6 @@ async function EmailSender() {
     const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum
     sixDigitArray.push(sixDigitValue)
   }
-  alert(sixDigitArray)
   const receiver = email.value                    // Empfänger
   const mailParams = {
     to: receiver, subject: "Passwort Reset - Code for Confirmation", text: String(sixDigitArray),
