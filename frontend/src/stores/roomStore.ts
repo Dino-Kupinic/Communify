@@ -59,7 +59,7 @@ export const useRoomStore = defineStore("room", () => {
    */
   async function deleteRoom(room_id: number): Promise<void> {
     try {
-      await fetch(
+      await fetch (
         "http://localhost:4000/room/deleteRoomById/" + room_id,
         {
           method: "DELETE",

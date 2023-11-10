@@ -5,9 +5,9 @@ import {MailOptions} from "nodemailer/lib/sendmail-transport"
  * A transporter object that is used to send emails using the nodemailer library.
  */
 const transport: Transporter = nodemailer.createTransport({
-  host: "smtp.gmx.net",
-  port: 587,
-  secure: false,
+  host: "mail.gmx.net",
+  port: 465,  // PORT
+  secure: true,
   auth: {
     user: "service.communify@gmx.at",
     pass: "Communifyservice2023!",

@@ -11,6 +11,7 @@ import {topicRouter} from "./topic/topic-controller"
 import {messageRouter} from "./message/message-controller"
 import {Server, Socket} from "socket.io"
 import {Message} from "./models/types"
+import {mailRouter} from "./mail/mail-controller"
 
 dotenv.config()
 
@@ -32,6 +33,7 @@ const routes = [
   {path: "/auth", router: authRouter},
   {path: "/topic", router: topicRouter},
   {path: "/message", router: messageRouter},
+  {path: "/mail", router: mailRouter},
 ]
 
 routes.forEach(route => app.use(route.path, route.router))

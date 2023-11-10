@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {ref} from "vue"
+
 interface Props {
   placeholder?: string
 }
@@ -6,12 +8,19 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "NUM?",
 })
 
+const number = ref();
+const emit = defineEmits(['response'])
+
+function sendNumber(){
+  emit('response', number.value)
+}
+
 </script>
 
 <template>
   <div class="form-group">
     <div id="formBorder">
-      <input :placeholder="placeholder">
+      <input :placeholder="placeholder" maxlength="1" @input="sendNumber" v-model="number">
     </div>
   </div>
 

@@ -10,17 +10,32 @@ import {ref} from "vue"
 import CodeInputBox from "@/components/boxes/CodeInputBox.vue"
 import {fetchData} from "@/model/util-functions"
 import type {Client} from "@/model/types"
-import {required} from "@vuelidate/validators"
+import {numeric, required} from "@vuelidate/validators"
 // const nodemailer = require("nodemailer");
 import type {Options} from "nodemailer/lib/sendmail-transport"
+import router from "@/router/router"
 
 const step = ref(1)
 let email = ref("")
 let username = ref("")
 let isAvailable = false
+const sixDigitArray: number[] = []
 const passwordFirstLine = ref<string>("")
 const passwordSecondLine = ref<string>("")
 const client = ref<Client>()
+
+const childNumber = ref(0)
+
+const index1 = ref(0)
+const index2 = ref(0)
+const index3 = ref(0)
+const index4 = ref(0)
+const index5 = ref(0)
+const index6 = ref(0)
+
+//const indexArray = [index1.value, index2.value, index3.value, index4.value, index5.value, index6.value];
+// const inputArray : number[] = [];
+
 
 async function submitData() {
   let alerted = false
@@ -56,54 +71,74 @@ async function getClientByUsername() {
 }
 
 async function submitCode() {
- /* step.value = 3 */
 
-  /*
-      Proof, if the value per mail is correct!
-   */
-  await EmailSender();
+  const inputArray = [
+    Number(index1.value),
+    Number(index2.value),
+    Number(index3.value),
+    Number(index4.value),
+    Number(index5.value),
+    Number(index6.value)
+  ];
+  const value = inputArray.every((wert, index) => wert === sixDigitArray[index]);
+
+  if (value) {
+    step.value = 3;
+  } else {
+    alert("Code stimmt nicht! Versuche es erneut.");
+  }
 }
 
-async function EmailSender(){
+async function EmailSender() {
 
-  const minNum = 100000;  // Meine niedrigst-mögliche Zahl
-  const maxNum = 999999;  // Meine höchst-mögliche Zahl
+  const minNum = 0  // Meine niedrigst-mögliche Zahl
+  const maxNum = 9  // Meine höchst-mögliche Zahl
 
   // Math.floor -> abrunden auf ganze zahl:
-  const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
 
+  for (let i = 0; i < 6; i++) {
+    const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum
+    sixDigitArray.push(sixDigitValue)
+  }
+  alert(sixDigitArray)
   const receiver = email.value                    // Empfänger
-
-
+  const mailParams = {
+    to: receiver, subject: "Passwort Reset - Code for Confirmation", text: String(sixDigitArray),
+  }
   try {
-      // TODO: use fetch      !!!
-      // await transport.sendMail({
-      //   to: receiver,
-      //   subject: "Passwort Reset - Code for Confirmation",
-      //   text: String(sixDigitValue),
-      // })
-      step.value = 3  // Wenn die Email versendet wurde, kann die nächste Seite eingeblendet werden!
-  } catch (error) {
-    console.error("Fehler beim Versenden - Fehlermeldung \n", error)
+    const response = await fetch("http://localhost:4000/mail/sendEmail", {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mailParams),
+    })
+    if (response) {
+      alert("Die Email wurde an " + email.value + " versendet!")
+    } else {
+      alert("Error at sending the email for password reset")
+    }
+  } catch (err) {
+    console.log(err)
   }
 }
 
 async function submitPassword() {
+  alert("Wir sind im submitPassword!")
   // console.log(`${client.value?.password} ${passwordFirstLine.value}`)
   /*const newClient = {propertyToEdit:"password", newPropertyValue:passwordFirstLine.value}*/
   /* passwordFirstLine.value = crypto.createHash("sha256").update(passwordFirstLine.value).digest("hex")*/
-  await fetch("http://localhost:4000/client/editClientByUsername/" + client.value?.username, {
-    method: "PUT",
-    mode: "cors",
-    credentials: "same-origin",
-    headers: {
-      "Accept": "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}),
-  })
-  alert("Password successfully reset!")
-  step.value = 4
+  if (passwordFirstLine.value === passwordSecondLine.value) {
+    await fetchData("http://localhost:4000/client/editClientByUsername/" + client.value?.username,
+      "PUT", [["Content-Type", "application/json"]],
+      JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}))
+      alert("Password successfully reset!")
+    step.value = 4
+  } else {
+    alert("Try it again. Passwords do not match.")
+  }
 }
 </script>
 
@@ -130,16 +165,16 @@ async function submitPassword() {
       </div>
     </div>
   </div>
-  <div v-if="step === 2" id="number-entering-info"> Enter the 6-digit code which you received per email. </div>
+  <div v-if="step === 2" id="number-entering-info"> Enter the 6-digit code which you received per email.</div>
   <div v-if="step === 2" class="outsideContainer-step-2">
     <div class="container-step-2">
       <div id="rectangle-container">
-        <CodeInputBox placeholder="."></CodeInputBox>
-        <CodeInputBox placeholder="."></CodeInputBox>
-        <CodeInputBox placeholder="."></CodeInputBox>
-        <CodeInputBox placeholder="."></CodeInputBox>
-        <CodeInputBox placeholder="."></CodeInputBox>
-        <CodeInputBox placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index1 = msg" placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index2 = msg" placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index3 = msg" placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index4 = msg" placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index5 = msg" placeholder="."></CodeInputBox>
+        <CodeInputBox @response="(msg) => index6 = msg" placeholder="."></CodeInputBox>
       </div>
       <div class="button-container-step-2">
         <ActionButton @click="submitCode" class="btn" width="90%" height="3rem">Submit Code</ActionButton>
@@ -148,8 +183,8 @@ async function submitPassword() {
   </div>
 
   <BodyText v-if="step === 3" id="body-text-style-step-3">
-  Please enter your new Password!<br>
-</BodyText>
+    Please enter your new Password!<br>
+  </BodyText>
   <div v-if="step === 3" class="container-step-3">
     <InputField v-model="passwordFirstLine" label="Enter password" type="password">
       <template #below-input>
@@ -162,7 +197,7 @@ async function submitPassword() {
     </InputField>
 
     <div class="button-container">
-      <ActionButton @click="submitPassword" class="btn" width="90%" height="3rem">Submit Code</ActionButton>
+      <ActionButton @click="submitPassword" class="btn" width="90%" height="3rem">Submit your new Password</ActionButton>
     </div>
 
   </div>
@@ -256,7 +291,7 @@ async function submitPassword() {
   align-content: center;
 }
 
-@media screen and (max-width: 614px){
+@media screen and (max-width: 614px) {
   .container-step-2 {
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
