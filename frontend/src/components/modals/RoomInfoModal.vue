@@ -6,7 +6,7 @@ import Icon from "@/components/util/Icon.vue"
 import {useRoomStore} from "@/stores/roomStore"
 import {inject, onMounted, ref} from "vue"
 import type {Client, Room, Topic} from "@/model/types"
-import {fetchData} from "@/model/util-functions"
+import {fetchData, getCurrentUserId} from "@/model/util-functions"
 import {BACKEND_URL} from "@/socket/server"
 
 const roomStore = useRoomStore()
@@ -14,14 +14,18 @@ const roomStore = useRoomStore()
 const room: Room | undefined = inject("containerRoom")
 const badges: Topic[] | undefined = inject("containerBadges")
 const creator = ref<Client>()
+const currentUserId = ref<number>()
 
 async function deleteRoom() {
-  if (room?.room_id != null)
+  if (room?.room_id != null && room?.creator_id === currentUserId.value)
     await roomStore.deleteRoom(room?.room_id)
+  else
+    alert("Only the creator can delete the room.")
 }
 
 onMounted(async () => {
   creator.value = await getCreator()
+  currentUserId.value = await getCurrentUserId()
 })
 
 async function getCreator(): Promise<Client | undefined> {
@@ -42,7 +46,7 @@ async function getCreator(): Promise<Client | undefined> {
     <template #modal-content>
       <br>
       <p>Created by {{ creator?.username }}</p>
-      <p>Maximum Users: {{ room?.maximum_users || "unlimited"}}</p>
+      <p>Maximum Users: {{ room?.maximum_users || "unlimited" }}</p>
       <div class="subtheme-container">
         <ModalSubText title="Badges"></ModalSubText>
         <div id="badges">
