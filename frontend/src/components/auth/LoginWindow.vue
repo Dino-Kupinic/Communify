@@ -42,8 +42,8 @@ async function submitForm() {
     return
 
   const loginUser: LoginClient = {
-    username: state.username,
-    password: state.password,
+    username: state.username.trim(),
+    password: state.password.trim(),
   }
 
   try {

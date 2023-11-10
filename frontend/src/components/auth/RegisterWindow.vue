@@ -68,9 +68,9 @@ async function submitForm() {
 
   const user: Client = {
     user_id: null,
-    username: state.username,
-    password: state.password,
-    email: state.email,
+    username: state.username.trim(),
+    password: state.password.trim(),
+    email: state.email.trim(),
     biography: state.biography,
     age: state.age,
     member_since: state.member_since,
