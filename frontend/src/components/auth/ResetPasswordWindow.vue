@@ -47,7 +47,7 @@ async function submitData() {
 
 async function getClientByUsername() {
   try {
-    const response: Client = await fetchData("http://localhost:4000/client/getClientByUsername/" +
+    const response: Client = await fetchData(`${BACKEND_URL}/client/getClientByUsername/` +
       username.value, "GET", [["Content-Type", "application/json"]])
     if (response) {
       client.value = response
@@ -86,7 +86,7 @@ async function EmailSender() {
     to: email.value, subject: "Passwort Reset - Code for Confirmation", text: String(sixDigitArray),
   }
   try {
-    const response = await fetch("http://localhost:4000/mail/sendEmail", {
+    const response = await fetch(`${BACKEND_URL}/mail/sendEmail`, {
       method: "POST",
       mode: "cors",
       credentials: "same-origin",
@@ -117,7 +117,7 @@ async function submitPassword() {
       body: JSON.stringify({password: passwordFirstLine.value}),
     })
     const hashedPassword = await response.json()
-    await fetch("http://localhost:4000/client/editClientByUsername/" + client.value?.username, {
+    await fetch(`${BACKEND_URL}/client/editClientByUsername/` + client.value?.username, {
       method: "PUT",
       mode: "cors",
       credentials: "same-origin",
