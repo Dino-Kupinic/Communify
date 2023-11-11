@@ -278,7 +278,7 @@ function getTopicByName(topic_text: string) {
                       height="max-content" width="max-content"
                       class="add-badge-button">
           <Icon image-name="add" file-extension="png"></Icon>
-          <ButtonText>Add Bagde</ButtonText>
+          <ButtonText>Add Topic</ButtonText>
         </ActionButton>
         <span>Remaining Topics: {{ topicCount }}</span>
       </HorizontalContainer>
