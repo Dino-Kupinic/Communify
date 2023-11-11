@@ -8,15 +8,20 @@ import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
-import {socket} from "@/socket/server"
+import {BACKEND_URL, socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
 import {storeToRefs} from "pinia"
+import router from "@/router/router"
+import type {Client} from "@/model/types"
 
 const rooms = ref<Room[]>()
 const roomStore = useRoomStore()
 const {currentRoom} = storeToRefs(roomStore)
+const profileLink = ref("");
+const username = ref("")
+const token = ref<string>(localStorage.getItem("auth_token") || "")
 
 onMounted(async () => {
   socket.connect()
@@ -32,7 +37,7 @@ async function refreshRooms() {
 const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
-  {icon: "account", label: "Profile"},
+  {icon: "account", label: "Profile", action: changeToProfile},
 ])
 
 function joinRoom(room: Room) {
@@ -41,7 +46,29 @@ function joinRoom(room: Room) {
       if (room.password === null) return room
     }
   })
+}
 
+async function getProfile() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/profile`, {
+      method: "GET",
+      headers: {
+        "access_token": token.value,
+      },
+    })
+    const client: Client = await response.json()
+    if (response) {
+      profileLink.value = "/user/" + client.username + "/profile"
+      username.value = client.username
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function changeToProfile () {
+  await getProfile()
+  await router.push(profileLink.value);
 }
 
 function updateOnRoomCreation() {
