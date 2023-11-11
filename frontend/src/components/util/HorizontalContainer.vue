@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+defineProps<{
+  width?: string
+}>()
 </script>
 
 <template>
@@ -14,5 +16,6 @@ div {
   flex-direction: row;
   flex-wrap: wrap;
   align-content: center;
+  width: v-bind(width);
 }
 </style>
