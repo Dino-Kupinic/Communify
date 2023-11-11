@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue"
 
 const props = defineProps<{
   color: string
+  NoBadgeSign?: boolean
 }>()
 
 const backgroundColor = ref<string>("")
@@ -31,19 +32,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <span v-if="props.color" id="badge">
+  <span v-if="props.color && !props.NoBadgeSign" class="badge">
     #
+    <slot></slot>
+  </span>
+  <span v-else class="badge">
     <slot></slot>
   </span>
 </template>
 
 <style scoped>
-#badge {
+.badge {
   background-color: v-bind(backgroundColor);
   color: v-bind(fontColor);
   top: auto;
   margin-left: 1%;
-  margin-right: 1%;
+  margin-right: 1rem;
   margin-top: 1%;
   display: inline-block;
   padding: 0.25em 0.4em;
