@@ -125,16 +125,26 @@ async function EmailSender() {
 }
 
 async function submitPassword() {
-  alert("Wir sind im submitPassword!")
   // console.log(`${client.value?.password} ${passwordFirstLine.value}`)
   /*const newClient = {propertyToEdit:"password", newPropertyValue:passwordFirstLine.value}*/
   /* passwordFirstLine.value = crypto.createHash("sha256").update(passwordFirstLine.value).digest("hex")*/
   if (passwordFirstLine.value === passwordSecondLine.value) {
-    await fetchData("http://localhost:4000/client/editClientByUsername/" + client.value?.username,
+
+    await fetch("http://localhost:4000/client/editClientByUsername/" + client.value?.username, {
+      method: "PUT",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}),
+    });
+
+    /*await fetchData("http://localhost:4000/client/editClientByUsername/" + client.value?.username,
       "PUT", [["Content-Type", "application/json"]],
-      JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}))
+      JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}))*/
       alert("Password successfully reset!")
-    step.value = 4
+      await router.push('/auth/login')
   } else {
     alert("Try it again. Passwords do not match.")
   }
@@ -198,7 +208,6 @@ async function submitPassword() {
     <div class="button-container">
       <ActionButton @click="submitPassword" class="btn" width="90%" height="3rem">Submit your new Password</ActionButton>
     </div>
-
   </div>
 
 
