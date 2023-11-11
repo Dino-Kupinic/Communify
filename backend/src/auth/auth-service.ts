@@ -16,6 +16,10 @@ export class AuthService {
     return jwt.sign({id: client.user_id}, process.env.SECRET, {algorithm: "HS256"})
   }
 
+  async hashPassword(password: string) {
+    return crypto.createHash("sha256").update(password).digest("hex")
+  }
+
   async decodeToken(token: string) {
     try {
       return jwt.decode(token)

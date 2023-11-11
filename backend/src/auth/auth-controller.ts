@@ -13,6 +13,12 @@ authRouter.post("/login", asyncHandler(async (req, res, next) => {
   res.send({"token": token})
 }))
 
+authRouter.post("/hashPassword", asyncHandler(async (req, res, next) => {
+  const {password} = req.body
+  const pass = await authService.hashPassword(password)
+  res.send({"password": pass})
+}))
+
 authRouter.get("/profile", asyncHandler(async (req, res, next) => {
   const token = req.headers.access_token as string
   if (!token) {
