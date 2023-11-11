@@ -4,15 +4,16 @@ import {ref} from "vue"
 interface Props {
   placeholder?: string
 }
+
 const props = withDefaults(defineProps<Props>(), {
   placeholder: "NUM?",
 })
 
-const number = ref();
-const emit = defineEmits(['response'])
+const number = ref()
+const emit = defineEmits(["response"])
 
-function sendNumber(){
-  emit('response', number.value)
+function sendNumber() {
+  emit("response", number.value)
 }
 
 </script>
@@ -33,19 +34,19 @@ function sendNumber(){
   margin-right: 1rem;
 }
 
-  input {
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--neutral-700);
-    border-radius: 5px;
-    text-align: center;
-    justify-content: center;
-    align-content: center;
-    height: 4em;
-    width: 4em;
-    margin: 5px 5%;
-    max-width: 4em;
-    max-height: 4em;
-    font-weight: 550;
-  }
+input {
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border: 1px solid var(--neutral-700);
+  border-radius: 5px;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+  height: 4em;
+  width: 4em;
+  margin: 5px 5%;
+  max-width: 4em;
+  max-height: 4em;
+  font-weight: 550;
+}
 </style>

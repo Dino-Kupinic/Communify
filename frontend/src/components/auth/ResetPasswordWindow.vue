@@ -1,19 +1,14 @@
 <script setup lang="ts">
-
 import BodySubtitleText from "@/components/text/BodySubtitleText.vue"
 import BodyText from "@/components/text/BodyText.vue"
-import InputError from "@/components/controls/InputError.vue"
 import InputField from "@/components/controls/InputField.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
-import {state} from "vue-tsc/out/shared"
 import {ref} from "vue"
 import CodeInputBox from "@/components/boxes/CodeInputBox.vue"
 import {fetchData} from "@/model/util-functions"
 import type {Client} from "@/model/types"
-import {numeric, required} from "@vuelidate/validators"
-// const nodemailer = require("nodemailer");
-import type {Options} from "nodemailer/lib/sendmail-transport"
 import router from "@/router/router"
+import {BACKEND_URL} from "@/socket/server"
 
 const step = ref(1)
 let email = ref("")
@@ -24,18 +19,12 @@ const passwordFirstLine = ref<string>("")
 const passwordSecondLine = ref<string>("")
 const client = ref<Client>()
 
-const childNumber = ref(0)
-
 const index1 = ref(0)
 const index2 = ref(0)
 const index3 = ref(0)
 const index4 = ref(0)
 const index5 = ref(0)
 const index6 = ref(0)
-
-//const indexArray = [index1.value, index2.value, index3.value, index4.value, index5.value, index6.value];
-// const inputArray : number[] = [];
-
 
 async function submitData() {
   let alerted = false
@@ -49,8 +38,7 @@ async function submitData() {
     await getClientByUsername()
   }
   if (isAvailable && email.value == client.value?.email && !alerted) {
-    await EmailSender() // Wenn es den Benutzer gibt und die Email gesendet werden konnte,
-                        // kann das der generierte Code nun eingegeben werden!
+    await EmailSender()
     step.value = 2
   } else {
     if (!alerted) alert("Benutzer nicht vorhanden bzw. Email falsch!")
@@ -71,38 +59,31 @@ async function getClientByUsername() {
 }
 
 async function submitCode() {
-
   const inputArray = [
     Number(index1.value),
     Number(index2.value),
     Number(index3.value),
     Number(index4.value),
     Number(index5.value),
-    Number(index6.value)
-  ];
-  const value = inputArray.every((wert, index) => wert === sixDigitArray[index]);
-
+    Number(index6.value),
+  ]
+  const value = inputArray.every((wert, index) => wert === sixDigitArray[index])
   if (value) {
-    step.value = 3;
+    step.value = 3
   } else {
-    alert("Code stimmt nicht! Versuche es erneut.");
+    alert("Code stimmt nicht! Versuche es erneut.")
   }
 }
 
 async function EmailSender() {
-
-  const minNum = 0  // Meine niedrigst-mögliche Zahl
-  const maxNum = 9  // Meine höchst-mögliche Zahl
-
-  // Math.floor -> abrunden auf ganze zahl:
-
+  const minNum = 0
+  const maxNum = 9
   for (let i = 0; i < 6; i++) {
     const sixDigitValue = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum
     sixDigitArray.push(sixDigitValue)
   }
-  const receiver = email.value                    // Empfänger
   const mailParams = {
-    to: receiver, subject: "Passwort Reset - Code for Confirmation", text: String(sixDigitArray),
+    to: email.value, subject: "Passwort Reset - Code for Confirmation", text: String(sixDigitArray),
   }
   try {
     const response = await fetch("http://localhost:4000/mail/sendEmail", {
@@ -125,11 +106,17 @@ async function EmailSender() {
 }
 
 async function submitPassword() {
-  // console.log(`${client.value?.password} ${passwordFirstLine.value}`)
-  /*const newClient = {propertyToEdit:"password", newPropertyValue:passwordFirstLine.value}*/
-  /* passwordFirstLine.value = crypto.createHash("sha256").update(passwordFirstLine.value).digest("hex")*/
   if (passwordFirstLine.value === passwordSecondLine.value) {
-
+    const response = await fetch(`${BACKEND_URL}/auth/hashPassword/`, {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({password: passwordFirstLine.value}),
+    })
+    const hashedPassword = await response.json()
     await fetch("http://localhost:4000/client/editClientByUsername/" + client.value?.username, {
       method: "PUT",
       mode: "cors",
@@ -137,14 +124,10 @@ async function submitPassword() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}),
-    });
-
-    /*await fetchData("http://localhost:4000/client/editClientByUsername/" + client.value?.username,
-      "PUT", [["Content-Type", "application/json"]],
-      JSON.stringify({propertyToEdit: "password", newPropertyValue: passwordFirstLine.value}))*/
-      alert("Password successfully reset!")
-      await router.push('/auth/login')
+      body: JSON.stringify({propertyToEdit: "password", newPropertyValue: hashedPassword.password}),
+    })
+    alert("Password successfully reset!")
+    await router.push("/auth/login")
   } else {
     alert("Try it again. Passwords do not match.")
   }
@@ -155,7 +138,6 @@ async function submitPassword() {
   <BodySubtitleText id="body-subtitle-text-style">
     Password Reset
   </BodySubtitleText>
-
   <div v-if="step === 1" class="outsideContainer-step-1">
     <BodyText id="body-text-style">
       Please enter your email adress and username below.<br>
@@ -190,7 +172,6 @@ async function submitPassword() {
       </div>
     </div>
   </div>
-
   <BodyText v-if="step === 3" id="body-text-style-step-3">
     Please enter your new Password!<br>
   </BodyText>
@@ -199,19 +180,17 @@ async function submitPassword() {
       <template #below-input>
       </template>
     </InputField>
-
     <InputField v-model="passwordSecondLine" label="Confirm password" type="password">
       <template #below-input>
       </template>
     </InputField>
-
     <div class="button-container">
-      <ActionButton @click="submitPassword" class="btn" width="90%" height="3rem">Submit your new Password</ActionButton>
+      <ActionButton @click="submitPassword" class="btn" width="90%" height="3rem">Submit your new Password
+      </ActionButton>
     </div>
   </div>
-
-
 </template>
+
 <style scoped>
 #body-subtitle-text-style {
   margin-top: 3rem;
