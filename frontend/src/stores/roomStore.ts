@@ -6,6 +6,7 @@ import {BACKEND_URL} from "@/socket/server"
 
 export const useRoomStore = defineStore("room", () => {
   const rooms = ref<Room[]>([])
+  const currentRoom = ref<Room>()
 
   /**
    * Fetches rooms from the backend.
@@ -76,5 +77,5 @@ export const useRoomStore = defineStore("room", () => {
     }
   }
 
-  return {rooms, fetchRooms, addRoom, deleteRoom}
+  return {rooms, currentRoom, fetchRooms, addRoom, deleteRoom}
 })

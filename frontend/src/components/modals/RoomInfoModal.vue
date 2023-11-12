@@ -11,15 +11,17 @@ import {BACKEND_URL} from "@/socket/server"
 
 const roomStore = useRoomStore()
 
+const emit = defineEmits(["deleted"])
 const room: Room | undefined = inject("containerRoom")
 const badges: Topic[] | undefined = inject("containerBadges")
 const creator = ref<Client>()
 const currentUserId = ref<number>()
 
 async function deleteRoom() {
-  if (room?.room_id != null && room?.creator_id === currentUserId.value)
+  if (room?.room_id != null && room?.creator_id === currentUserId.value) {
     await roomStore.deleteRoom(room?.room_id)
-  else
+    emit("deleted")
+  } else
     alert("Only the creator can delete the room.")
 }
 

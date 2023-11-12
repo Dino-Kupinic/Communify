@@ -23,16 +23,17 @@ import Badge from "@/components/util/Badge.vue"
 import HorizontalContainer from "@/components/util/HorizontalContainer.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
 import {BACKEND_URL} from "@/socket/server"
+import InputError from "@/components/controls/InputError.vue"
 
 let id = 0
 
 const emit = defineEmits(["created"])
-const badges = reactive([{topic_id: ref(id), text: ref(""), color: ref("")}])
+const badges = reactive(<Topic[]>[{}])
 const roomStore = useRoomStore()
 const isPrivateRoom = ref<boolean>(false)
 const hexColors = ["Red", "Blue", "Green", "Yellow", "Purple", "Teal", "Orange", "Brown"]
 
-let badgesFromDB : Topic[] = []
+let badgesFromDB: Topic[]
 
 let topicCount = ref(5)
 let isDisabled = ref(false)
@@ -106,7 +107,7 @@ async function createRoom() {
 
     await roomStore.addRoom(room)
     await fetchBadges()
-    for (const elem of badges) await createBadgesAtRoomCreation(elem)
+    for (const elem of badges) await createTopicAtRoomCreation(elem)
     emit("created")
     resetState()
   } catch (err) {
@@ -128,8 +129,15 @@ async function getRoomIdByName() {
 }
 
 async function submitForm() {
+  let ok = false
   const isFormCorrect = await vBadges$.value.$validate()
-  if (!isFormCorrect) return
+  badges.forEach((elem) => {
+    if (elem.text === badgeState.badgeText) {
+      ok = false
+      return
+    } else ok = true
+  })
+  if (!isFormCorrect || !ok) return
   addBadge()
 }
 
@@ -138,27 +146,23 @@ watch(topicCount, () => {
 })
 
 function addBadge() {
-  if (badges[id] && badges[id].color === "" && badges[id].text === "") {
-    badges[id].text = badgeState.badgeText
-    badges[id].color = badgeState.badgeColor
-    badges[id].topic_id = id
-  } else {
-    badges.push({topic_id: id++, color: badgeState.badgeColor, text: badgeState.badgeText})
-  }
+  badges.push({topic_id: id++, color: badgeState.badgeColor, text: badgeState.badgeText})
   topicCount.value--
   isDisabled.value = topicCount.value === 0
 }
 
-function removeBadgeByID(elemId: number) {
-  badges.forEach((elem) => elem.topic_id === elemId ? badges.splice(elem.topic_id, 1) : "")
-  topicCount.value++
-  let i = 0
-  // reset id`s of all list elements
-  badges.forEach((elem) => elem.topic_id = i++)
-  id--
+function removeBadgeByID(topic_id: number) {
+  badges.forEach((badge) => {
+    if (badge.topic_id === topic_id) {
+      badges.splice(badges.indexOf(badge), 1)
+      topicCount.value++;
+    } else {
+     console.log("BADGE NOT FOUND")
+    }
+  })
 }
 
-async function fetchBadges () {
+async function fetchBadges() {
   try {
     badgesFromDB = await fetchData(`${BACKEND_URL}/topic/getTopics`,
       "GET",
@@ -169,15 +173,14 @@ async function fetchBadges () {
   }
 }
 
-async function createBadgesAtRoomCreation(badge: Topic) {
+async function createTopicAtRoomCreation(badge: Topic) {
   let ok = false
   //Is badge already existing?
-  badgesFromDB.forEach((badgeDB) =>  {
+  badgesFromDB.forEach((badgeDB) => {
     if (badgeDB.text === badge.text) {
       ok = false
       return
-    }
-    else ok = true
+    } else ok = true
   })
 
   if (ok) {
@@ -198,7 +201,41 @@ async function createBadgesAtRoomCreation(badge: Topic) {
     } catch (err) {
       console.error(err)
     }
+  } else {
+    await addTopicToRoom(badge)
   }
+}
+
+async function addTopicToRoom(badge: Topic) {
+  try {
+    const room_id = await getRoomIdByName()
+    const response = await fetch("http://localhost:4000/topic/addTopicToRoom", {
+      method: "POST",
+      mode: "cors",
+      credentials: "same-origin",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({topic_id: getTopicByName(badge.text), room_id: room_id}),
+    })
+    if (response.ok)
+      await roomStore.fetchRooms()
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+function getTopicByName(topic_text: string) {
+  let elemId
+  badgesFromDB.forEach((elem) => {
+    if (elem.text === topic_text) {
+      elemId = elem.topic_id
+      return
+    } else return null
+  })
+
+  return elemId
 }
 
 </script>
@@ -210,15 +247,24 @@ async function createBadgesAtRoomCreation(badge: Topic) {
       <BodyText class="btn-span">Create Room</BodyText>
     </template>
     <template #modal-content>
-      <InputField v-model="state.name" label="Name" placeholder="My Room "></InputField>
+      <InputField :class="{'input-error': v$.name.$error}" v-model="state.name" label="Name" placeholder="My Room ">
+        <template #below-input>
+          <InputError field="name" :v$="v$"></InputError>
+        </template>
+      </InputField>
       <InputField v-model="state.description" label="Description (Optional)"></InputField>
       <InputField v-model="state.maximum_users" label="Maximum User (Optional)" id="max-user-input" type="number"
                   value="1" min="1"></InputField>
-      <InputField v-model="state.password" label="Password (Optional)" type="password"></InputField>
+      <InputField :class="{'input-error': v$.password.$error}" v-model="state.password" label="Password (Optional)" type="password">
+        <template #below-input>
+          <InputError field="password" :v$="v$"></InputError>
+        </template>
+      </InputField>
       <div id="badge-colorpick-container">
         <InputField :class="{'input-error': vBadges$.badgeText.$error}" placeholder="Topic Name"
                     v-model="badgeState.badgeText" label="Topic Name">
           <template #below-input>
+            <InputError field="badgeText" :v$="vBadges$"></InputError>
           </template>
         </InputField>
         <HorizontalContainer>
@@ -232,13 +278,14 @@ async function createBadgesAtRoomCreation(badge: Topic) {
                       height="max-content" width="max-content"
                       class="add-badge-button">
           <Icon image-name="add" file-extension="png"></Icon>
-          <ButtonText>Add Bagde</ButtonText>
+          <ButtonText>Add Topic</ButtonText>
         </ActionButton>
         <span>Remaining Topics: {{ topicCount }}</span>
       </HorizontalContainer>
 
-      <div>
-        <Badge @click="removeBadgeByID(badge.topic_id)" v-for="badge in badges" :color="badge.color">
+      <div id="topics-created-container">
+        <Badge v-for="badge in badges" :key="badge.topic_id" :color="badge.color"
+               @click="removeBadgeByID(badge.topic_id)">
           {{ badge.text }}
         </Badge>
       </div>
@@ -287,6 +334,10 @@ async function createBadgesAtRoomCreation(badge: Topic) {
 
 .input-error :deep(input) {
   border-color: var(--error-400);
+}
+
+#topics-created-container {
+  margin-left: 1.5rem;
 }
 
 </style>

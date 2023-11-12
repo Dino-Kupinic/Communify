@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TitleText from "@/components/text/TitleText.vue"
-import {onMounted, onUnmounted, provide, ref} from "vue"
+import {inject, onMounted, onUnmounted, provide, reactive, ref} from "vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
 import Icon from "@/components/util/Icon.vue"
 import Badge from "@/components/util/Badge.vue"
@@ -9,15 +9,22 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import BodyText from "@/components/text/BodyText.vue"
 import {fetchData} from "@/model/util-functions"
 import RoomInfoModal from "@/components/modals/RoomInfoModal.vue"
+import {useRoomStore} from "@/stores/roomStore"
+import PasswordModal from "@/components/modals/PasswordModal.vue"
+import {useVModel} from "@vueuse/core"
 import {BACKEND_URL} from "@/socket/server"
 
 const props = defineProps<{
   room: Room,
 }>()
 
-defineEmits<{
+const emits = defineEmits<{
   joined: [room: Room]
+  refreshed: ["refreshed"]
 }>()
+
+const rooms = ref<Room[]>()
+const roomStore = useRoomStore()
 
 const badges = ref<Topic[]>()
 provide("containerBadges", badges)
@@ -38,22 +45,35 @@ async function loadBadges() {
   }
 }
 
+async function refreshRoomsOnDeleted() {
+  emits("refreshed", "refreshed")
+}
+
+
 </script>
 
 <template>
   <div id="chatroom-div">
     <TitleText :title="room.name" text-align="none">
-      <RoomInfoModal :modalTitle="room.name"></RoomInfoModal>
+      <RoomInfoModal @deleted="refreshRoomsOnDeleted" :modalTitle="room.name"></RoomInfoModal>
     </TitleText>
     <div id="badges-div">
-      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }}</Badge>
+      <Badge v-for="badge in badges" id="badge" :color="badge.color"> {{ badge.text }} </Badge>
     </div>
     <div class="join-button-div">
       <div id="lock-div">
         <Icon id="lock-icon" v-if="room.password !== null" image-name="locked" file-extension="png"></Icon>
         <Icon v-if="room.maximum_users !== null" image-name="team" file-extension="png"><p id="max-user-text">{{ room.maximum_users }}</p></Icon>
       </div>
-      <ActionButton @click="$emit('joined', props.room)" class="join-button" width="5rem">
+      <PasswordModal v-if="room.password !== null">
+        <template #password-modal-btn>
+          <ActionButton class="join-button" width="5rem">
+            <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
+            <BodyText class="join-text">Join</BodyText>
+          </ActionButton>
+        </template>
+      </PasswordModal>
+      <ActionButton v-else @click="$emit('joined', props.room)" class="join-button" width="5rem">
         <GoogleIcon padding="0" name="Arrow_right"></GoogleIcon>
         <BodyText class="join-text">Join</BodyText>
       </ActionButton>

@@ -96,6 +96,7 @@ function reverseDisplayModal() {
 #container {
   display: flex;
   flex-direction: row;
+  margin-left: auto;
 }
 
 .button:hover {

@@ -8,12 +8,14 @@ interface Props {
   autocomplete?: string
   placeholder?: string
   min?: string
+  width?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: "text",
   label: "Label",
   autocomplete: "off",
+  width: "auto",
 })
 
 const emit = defineEmits<{
@@ -48,7 +50,7 @@ input {
   border: 1px solid var(--color-border);
   font-family: "Inter", serif;
   border-radius: 0.5rem;
-  width: auto;
+  width: v-bind(width);
 }
 
 input[type="password"] {

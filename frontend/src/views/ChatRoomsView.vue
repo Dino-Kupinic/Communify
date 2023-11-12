@@ -2,20 +2,26 @@
 import RoomContainer from "@/components/chatrooms/RoomContainer.vue"
 import UserProfileBar from "@/components/user/UserProfileBar.vue"
 import ChatRoom from "@/components/chatrooms/ChatRoom.vue"
-import {onMounted, ref} from "vue"
+import {onMounted, ref, watch} from "vue"
 import RoomList from "@/components/chatrooms/RoomList.vue"
 import Icon from "@/components/util/Icon.vue"
 import type {Room} from "@/model/types"
 import TitleText from "@/components/text/TitleText.vue"
 import ActionButton from "@/components/controls/ActionButton.vue"
-import {socket} from "@/socket/server"
+import {BACKEND_URL, socket} from "@/socket/server"
 import {useRoomStore} from "@/stores/roomStore"
 import CreateRoomModal from "@/components/modals/CreateRoomModal.vue"
 import ButtonText from "@/components/controls/ButtonText.vue"
+import {storeToRefs} from "pinia"
+import router from "@/router/router"
+import type {Client} from "@/model/types"
 
 const rooms = ref<Room[]>()
-const currentRoom = ref<Room>()
 const roomStore = useRoomStore()
+const {currentRoom} = storeToRefs(roomStore)
+const profileLink = ref("");
+const username = ref("")
+const token = ref<string>(localStorage.getItem("auth_token") || "")
 
 onMounted(async () => {
   socket.connect()
@@ -31,11 +37,38 @@ async function refreshRooms() {
 const actionButtons = ref([
   {icon: "refresh", label: "Refresh", action: refreshRooms},
   {icon: "add", label: "Create Room"},
-  {icon: "account", label: "Profile"},
+  {icon: "account", label: "Profile", action: changeToProfile},
 ])
 
 function joinRoom(room: Room) {
-  currentRoom.value = roomStore.rooms.find(roomItem => roomItem === room)
+  roomStore.currentRoom = roomStore.rooms.find(roomItem => {
+    if (roomItem === room) {
+      if (room.password === null) return room
+    }
+  })
+}
+
+async function getProfile() {
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/profile`, {
+      method: "GET",
+      headers: {
+        "access_token": token.value,
+      },
+    })
+    const client: Client = await response.json()
+    if (response) {
+      profileLink.value = "/user/" + client.username + "/profile"
+      username.value = client.username
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function changeToProfile () {
+  await getProfile()
+  await router.push(profileLink.value);
 }
 
 function updateOnRoomCreation() {
@@ -58,7 +91,8 @@ function updateOnRoomCreation() {
             class="actionbuttons"
             @click="button.action"
           >
-            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'" modalTitle="Create Room"></CreateRoomModal>
+            <CreateRoomModal @created="updateOnRoomCreation" v-if="button.icon ==='add'"
+                             modalTitle="Create Room"></CreateRoomModal>
             <template v-else>
               <Icon class="img" :image-name="button.icon" file-extension="png"/>
               <ButtonText>{{ button.label }}</ButtonText>
@@ -67,11 +101,13 @@ function updateOnRoomCreation() {
         </div>
       </div>
       <RoomList>
-        <RoomContainer @joined="joinRoom" v-if="rooms" v-for="room in rooms" :room="room"></RoomContainer>
+        <RoomContainer @refreshed="refreshRooms" @joined="joinRoom(room)" v-if="rooms"
+                       v-for="room in rooms"
+                       :room="room"></RoomContainer>
         <TitleText v-else title="Loading..."></TitleText>
       </RoomList>
     </div>
-    <ChatRoom v-if="currentRoom != undefined" :key="currentRoom.room_id as number" :room="currentRoom"></ChatRoom>
+    <ChatRoom v-if="roomStore.currentRoom" :room="roomStore.currentRoom"></ChatRoom>
     <h2 id="no-room" v-else>✨ Join a room on the left to start chatting! ✨</h2>
   </div>
 </template>
