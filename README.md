@@ -44,6 +44,8 @@ export const socket = io(BACKEND_URL);
 6. rerun `docker compose up --build`
 7. Head to `http://localhost:10000/` or `http://<ip-address>:10000/` to connect to the frontend server
 8. Follow the steps on the website
+
+`⚠️ Important: This tutorial only covers setting up with the vite dev server. If you want to use apache or ngnix, you will have to figure that out yourself.`
    
 ## 👌 Authors
 
