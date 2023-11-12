@@ -29,14 +29,20 @@ Continue with the configuration below!
    
 `⚠️ Important: this application is only for learning purposes, normally the .env file with the secret key wouldn't be accessible`
 ```env
-FRONTEND_URL=http://localhost:10000
-BACKEND_URL=http://localhost:4000
+FRONTEND_URL=http://localhost:10000 # replace localhost with your ip address for hosting in your network.
+BACKEND_URL=http://localhost:4000 # replace localhost with your ip address for hosting in your network.
 PORT=4000
 DB_PORT=5432
 SECRET=eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY5NzIyMzY4NiwiaWF0IjoxNjk3MjIzNjg2fQ.MRdk7L642ry-VHvkEfBPr_HXXCJ9PjcY9bgwu7zmahQ
 ```
+`⚠️ Important: for hosting in the network, you should also change the BACKEND_URL file in frontend/src/socket/server.ts:`
+```ts
+export const BACKEND_URL = "http://<ip-address>:4000"
+
+export const socket = io(BACKEND_URL);
+```
 6. rerun `docker compose up --build`
-7. Head to `http://localhost:10000/`
+7. Head to `http://localhost:10000/` or `http://<ip-address>:10000/` to connect to the frontend server
 8. Follow the steps on the website
    
 ## 👌 Authors
