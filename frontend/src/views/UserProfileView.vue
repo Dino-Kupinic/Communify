@@ -179,8 +179,8 @@ function formatDate(): string {
   overflow-y: scroll;
   border: 1px solid var(--color-border-soft);
   border-radius: 1rem 0.5rem 0.5rem 1rem;
-  margin-top: 4%;
-  margin-bottom: 0.5%;
+  margin-top: auto;
+  margin-bottom: auto;
   height: 310px;
   padding-right: 0;
   margin-left: 4%;
