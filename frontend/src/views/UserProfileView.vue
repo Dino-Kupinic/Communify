@@ -15,6 +15,9 @@ import VerticalContainer from "@/components/util/VerticalContainer.vue"
 import Spinner from "@/components/util/Spinner.vue"
 import Accordion from "@/components/util/Accordion.vue"
 import {useRoomStore} from "@/stores/roomStore"
+import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import Link from "@/components/text/Link.vue"
+import BodyText from "@/components/text/BodyText.vue"
 
 const token = ref<string>(localStorage.getItem("auth_token") || "")
 const currClient = ref<Client>()
@@ -101,8 +104,16 @@ function formatDate(): string {
       <Accordion accord-header-text="Private Information">
         <template #accordion-content>
           <InputField width="50%" :model-value="currClient?.email" label="Your Email-Adress"></InputField>
-          <InputField class="lastInput" width="50%" :model-value="currClient?.password" label="Your Password"
-                      type="password"></InputField>
+          <InputField class="lastInput" width="50%" model-value="Due to security reasons we can't display the password"
+                      label="Your Password"></InputField>
+          <BodyText class="reset-text">
+            Recover your password!
+            <Link @click="router.push('/auth/recovery')">
+              <span>
+                Reset it<GoogleIcon name="North_East" font-size="1.1rem" line-height="1.3"></GoogleIcon>
+              </span>
+            </Link>
+          </BodyText>
         </template>
       </Accordion>
       <Accordion accord-header-text="Public Information">
@@ -149,7 +160,7 @@ function formatDate(): string {
 #vertical-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 6rem;
+  margin-bottom: 2rem;
 }
 
 #userIcon {
@@ -201,5 +212,9 @@ function formatDate(): string {
   align-content: center;
 }
 
+.reset-text {
+  padding-left: 1.5rem;
+  padding-bottom: 1rem;
+}
 
 </style>
