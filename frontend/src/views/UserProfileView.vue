@@ -107,7 +107,7 @@ function formatDate(): string {
           <InputField class="lastInput" width="50%" model-value="Due to security reasons we can't display the password"
                       label="Your Password"></InputField>
           <BodyText class="reset-text">
-            Recover your password!
+            Forgot your Password?
             <Link @click="router.push('/auth/recovery')">
               <span>
                 Reset it<GoogleIcon name="North_East" font-size="1.1rem" line-height="1.3"></GoogleIcon>
