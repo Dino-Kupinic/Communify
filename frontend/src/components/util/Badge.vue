@@ -47,7 +47,6 @@ onMounted(() => {
   color: v-bind(fontColor);
   top: auto;
   margin-left: 1%;
-  margin-right: 1rem;
   margin-top: 1%;
   display: inline-block;
   padding: 0.25em 0.4em;
