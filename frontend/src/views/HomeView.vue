@@ -3,6 +3,9 @@
 </script>
 
 <template>
-  <RouterView />
+<p>Home</p>
 </template>
 
+<style scoped>
+
+</style>
