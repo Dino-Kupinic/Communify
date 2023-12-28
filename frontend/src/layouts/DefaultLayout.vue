@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import Footer from "@/components/footer/Footer.vue"
+import TheFooter from "@/components/footer/TheFooter.vue"
+import TheNavigationBar from "@/components/nav/TheNavigationBar.vue"
 </script>
 
 <template>
-  <RouterView class="pb-16" />
-  <Footer />
+  <TheNavigationBar/>
+  <RouterView class="pb-24"/>
+  <TheFooter/>
 </template>

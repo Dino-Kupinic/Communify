@@ -5,10 +5,10 @@ import FooterThemePreference from "@/components/footer/FooterThemePreference.vue
 </script>
 
 <template>
-  <footer class="no-underline p-0 border-t border-slate-30 dark:border-slate-800 bg-background w-full absolute bottom-0 h-32">
+  <footer class="no-underline p-0 border-t border-slate-30 dark:border-slate-800 bg-background w-full absolute bottom-0 h-24">
     <slot></slot>
     <div class="flex w-full h-full gap-7 sm:gap-3 justify-center">
-      <div class="flex flex-col pt-5 justify-center">
+      <div class="flex flex-col pt-3 justify-center">
         <p class="text-sm sm:text-xs text-center">
           Released under the
           <Link link="https://github.com/Dino-Kupinic/Communify/blob/master/LICENSE" :opens-tab="true">
@@ -23,7 +23,7 @@ import FooterThemePreference from "@/components/footer/FooterThemePreference.vue
           <v-icon name="io-logo-github" scale="1.5"/>
         </Link>
       </div>
-      <div class="p-5">
+      <div class="p-3">
         <FooterThemePreference/>
       </div>
     </div>
