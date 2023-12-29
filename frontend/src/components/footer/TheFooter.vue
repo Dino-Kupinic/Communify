@@ -5,7 +5,7 @@ import FooterThemePreference from "@/components/footer/FooterThemePreference.vue
 </script>
 
 <template>
-  <footer class="no-underline p-0 border-t border-slate-30 dark:border-slate-800 bg-background w-full absolute bottom-0 h-24">
+  <footer class="no-underline p-0 border-t border-slate-300 dark:border-slate-800 bg-background w-full absolute bottom-0 h-24">
     <slot></slot>
     <div class="flex w-full h-full gap-7 sm:gap-3 justify-center">
       <div class="flex flex-col pt-3 justify-center">

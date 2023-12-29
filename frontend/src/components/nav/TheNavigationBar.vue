@@ -5,8 +5,18 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger, navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent, DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu"
 import Communify from "@/components/img/Communify.vue"
 import NavigationMenuListItem from "@/components/nav/NavigationMenuListItem.vue"
+import {Button} from "@/components/ui/button"
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 
 type NavigationListItem = {
   title: string
@@ -16,39 +26,66 @@ type NavigationListItem = {
 
 const gettingStartedList: NavigationListItem[] = [
   {
-    title: "Chatting",
+    title: "Chatting ✨",
     href: "/chats",
-    description: "Meet new friends and chat with them. Create groups and chat with multiple people at once.",
+    description: "Meet new friends and chat with them. Be polite and respectful.",
   },
   {
-    title: "Account",
+    title: "Account 👤",
     href: "/user/:username/profile",
     description: "View your profile and edit your account settings.",
   },
   {
-    title: "Support",
+    title: "Support 🤔",
     href: "/support",
     description: "Need help? Contact us.",
   },
   {
-    title: "Feedback",
+    title: "Feedback 🙂",
     href: "/feedback",
     description: "Missing a feature? Let us know.",
-  }
+  },
+]
+
+const registrationList: NavigationListItem[] = [
+  {
+    title: "Login 👋",
+    href: "/auth/login",
+    description: "Login to your account.",
+  },
+  {
+    title: "Register 🫶",
+    href: "/auth/register",
+    description: "Create a new account.",
+  },
+  {
+    title: "Data Policy & Data Request 👮",
+    href: "/data-policy",
+    description: "View how your data is stored. You can also request a copy of your data.",
+  },
 ]
 </script>
 
 <template>
-  <header>
+  <!-- TODO: responsive design -->
+  <header class="flex justify-center gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
+    <div class="flex items-center">
+      <RouterLink to="/">
+        <Communify/>
+      </RouterLink>
+    </div>
+
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <Communify/>
+          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
+            Home
+          </NavigationMenuLink>
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
-            Home
+          <NavigationMenuLink href="/chats" :class="navigationMenuTriggerStyle()">
+            Chats
           </NavigationMenuLink>
         </NavigationMenuItem>
 
@@ -75,7 +112,16 @@ const gettingStartedList: NavigationListItem[] = [
             Registration
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            samc
+            <ul class="grid w-[200px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              <NavigationMenuListItem
+                v-for="item in registrationList"
+                :key="item.title"
+                :title="item.title"
+                :href="item.href"
+              >
+                {{ item.description }}
+              </NavigationMenuListItem>
+            </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
@@ -84,15 +130,42 @@ const gettingStartedList: NavigationListItem[] = [
             Support
           </NavigationMenuLink>
         </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
-            Feedback
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
       </NavigationMenuList>
     </NavigationMenu>
+
+    <div class="flex items-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost">
+            <span>My Account</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>
+            <Avatar class="mr-1.5">
+              <AvatarFallback>DK</AvatarFallback>
+            </Avatar>
+            <span>Dino Kupinic</span>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator/>
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <v-icon class="mr-1.5" name="io-chatbubble-ellipses"/>
+              <span>Chats</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <v-icon class="mr-1.5" name="io-settings-sharp"/>
+              <span>Settings</span>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator/>
+          <DropdownMenuItem>
+            <v-icon class="mr-1.5" name="io-log-out"/>
+            <span>Logout</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   </header>
 </template>
 
