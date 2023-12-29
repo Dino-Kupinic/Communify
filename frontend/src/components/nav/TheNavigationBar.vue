@@ -142,25 +142,29 @@ const registrationList: NavigationListItem[] = [
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuLabel>
-            <Avatar class="mr-1.5">
+            <Avatar class="mr-3">
               <AvatarFallback>DK</AvatarFallback>
             </Avatar>
             <span>Dino Kupinic</span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator/>
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <v-icon class="mr-1.5" name="io-chatbubble-ellipses"/>
+            <DropdownMenuItem class="cursor-pointer">
+              <v-icon class="mr-1.5" name="io-person-circle-sharp" scale="0.75"/>
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer">
+              <v-icon class="mr-1.5" name="io-chatbubble-ellipses" scale="0.75"/>
               <span>Chats</span>
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <v-icon class="mr-1.5" name="io-settings-sharp"/>
+            <DropdownMenuItem class="cursor-pointer">
+              <v-icon class="mr-1.5" name="io-settings-sharp" scale="0.75"/>
               <span>Settings</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator/>
-          <DropdownMenuItem>
-            <v-icon class="mr-1.5" name="io-log-out"/>
+          <DropdownMenuItem class="cursor-pointer">
+            <v-icon class="mr-1.5" name="io-log-out" scale="0.75"/>
             <span>Logout</span>
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import {useColorMode} from "@vueuse/core"
+import {onMounted, ref, watch} from "vue"
+
 interface Props {
   width?: string
   height?: string
@@ -8,6 +11,23 @@ withDefaults(defineProps<Props>(), {
   width: "8rem",
   height: "2rem",
 })
+
+const mode = useColorMode()
+const fontFill = ref<string>("")
+const accentFill = ref<string>("")
+
+const updateColors = () => {
+  if (mode.value === "light") {
+    fontFill.value = "rgb(29 78 216)"
+    accentFill.value = "rgb(147 197 253)"
+  } else {
+    fontFill.value = "rgb(239 246 255)"
+    accentFill.value = "rgb(29 78 216)"
+  }
+}
+
+onMounted(updateColors)
+watch(mode, updateColors)
 </script>
 
 <template>
@@ -37,14 +57,14 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .cls-1 {
-  fill: #234af7;
+  fill: v-bind(fontFill)
 }
 
 .cls-1, .cls-2 {
-  stroke-width: 0px;
+  stroke-width: 0;
 }
 
 .cls-2 {
-  fill: #cce7eb;
+  fill: v-bind(accentFill)
 }
 </style>

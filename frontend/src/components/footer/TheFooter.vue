@@ -17,7 +17,7 @@ import FooterThemePreference from "@/components/footer/FooterThemePreference.vue
               </span>
           </Link>
           <br>
-          Copyright © 2023 Team DJJ. All rights Reserved.
+          Copyright © 2023 - 2024 Team DJJ. All rights Reserved.
         </p>
         <Link class="m-auto" link="https://github.com/Dino-Kupinic/Communify" :opens-tab="true">
           <v-icon name="io-logo-github" scale="1.5"/>
