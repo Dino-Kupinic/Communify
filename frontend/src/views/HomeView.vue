@@ -5,7 +5,7 @@ import {Separator} from "@/components/ui/separator"
 
 <template>
   <main class="mt-10 w-full pl-10 pr-10">
-    <p class="md:text-7xl p-4 text-center font-extrabold bg-clip-text text-transparent
+    <p class="md:text-8xl p-4 text-center font-extrabold bg-clip-text text-transparent
               bg-[linear-gradient(to_right,theme(colors.indigo.400),theme(colors.indigo.200),theme(colors.sky.400),theme(colors.fuchsia.400),theme(colors.sky.400),theme(colors.indigo.200),theme(colors.indigo.400))]
               bg-[length:200%_auto] animate-gradient"
     >
@@ -23,9 +23,9 @@ import {Separator} from "@/components/ui/separator"
       </Button>
     </div>
     <div>
-      <p class="text-xs text-center tracking-wide mt-2 mb-2 text-neutral-600 dark:text-neutral-500">A HTL STEYR PROJECT</p>
-      <Separator class="m-auto w-6/12"/>
-      <div class="flex justify-center items-center mt-2">
+      <p class="text-xs text-center tracking-wide mt-4 mb-2 text-neutral-600 dark:text-neutral-500">A HTL STEYR PROJECT</p>
+      <Separator class="m-auto w-2/5"/>
+      <div class="flex justify-center items-center mt-4">
         <v-icon name="vi-file-type-vue" scale="3"></v-icon>
         <v-icon name="vi-file-type-nuxt" scale="3"></v-icon>
         <v-icon name="vi-file-type-typescript-official" scale="3"></v-icon>
