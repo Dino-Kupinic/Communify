@@ -77,12 +77,16 @@ module.exports = {
           from: {height: "var(--radix-collapsible-content-height)"},
           to: {height: 0},
         },
+        "gradient": {
+          to: {"background-position": "200% center"},
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "collapsible-down": "collapsible-down 0.2s ease-in-out",
         "collapsible-up": "collapsible-up 0.2s ease-in-out",
+        "gradient": "gradient 5s linear infinite",
       },
     },
   },

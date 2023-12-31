@@ -8,10 +8,14 @@ import router from "./router/router"
 
 import {OhVueIcon, addIcons} from "oh-vue-icons"
 import * as Ionicons from "oh-vue-icons/icons/io"
+import * as Heroicons from "oh-vue-icons/icons/hi"
+import * as Vueicons from "oh-vue-icons/icons"
 import {IconType} from "oh-vue-icons/types/icons"
 
 const Io: IconType[] = Object.values({...Ionicons})
-addIcons(...Io)
+const Hi: IconType[] = Object.values({...Heroicons})
+const Vi: IconType[] = Object.values({...Vueicons})
+addIcons(...Io, ...Hi, ...Vi)
 
 const app = createApp(App)
 
