@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {Toggle} from "@/components/ui/toggle"
 import {useColorMode} from "@vueuse/core"
-import {onMounted, ref, watch, computed} from "vue"
+import {onMounted, ref, watch} from "vue"
 
 const mode = useColorMode()
 
