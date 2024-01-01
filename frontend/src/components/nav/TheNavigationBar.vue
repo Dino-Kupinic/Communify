@@ -16,7 +16,10 @@ import {
 import Communify from "@/components/img/Communify.vue"
 import NavigationMenuListItem from "@/components/nav/NavigationMenuListItem.vue"
 import {Button} from "@/components/ui/button"
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import {Avatar, AvatarFallback} from "@/components/ui/avatar"
+import {breakpointsTailwind, useBreakpoints} from "@vueuse/core"
+import BurgerMenu from "@/components/nav/BurgerMenu.vue"
+import {ref, watch} from "vue"
 
 type NavigationListItem = {
   title: string
@@ -54,7 +57,7 @@ const registrationList: NavigationListItem[] = [
     description: "Login to your account.",
   },
   {
-    title: "Register 🫶",
+    title: "Register 🙌",
     href: "/auth/register",
     description: "Create a new account.",
   },
@@ -64,112 +67,129 @@ const registrationList: NavigationListItem[] = [
     description: "View how your data is stored. You can also request a copy of your data.",
   },
 ]
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const md = breakpoints.between("md", "lg")
+const lg = breakpoints.between("lg", "xl")
+const xl = breakpoints.greater("xl")
+
+const revealMenu = ref<boolean>(false)
 </script>
 
 <template>
   <!-- TODO: responsive design -->
-  <header class="flex justify-center gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
+  <nav class="flex md:justify-center sticky md:gap-2 lg:gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
     <div class="flex items-center">
       <RouterLink to="/">
         <Communify/>
       </RouterLink>
     </div>
 
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
-            Home
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+    <template v-if="md || lg || xl">
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
+              Home
+            </NavigationMenuLink>
+          </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/chats" :class="navigationMenuTriggerStyle()">
-            Chats
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="/chats" :class="navigationMenuTriggerStyle()">
+              Chats
+            </NavigationMenuLink>
+          </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            Get Started
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              <NavigationMenuListItem
-                v-for="item in gettingStartedList"
-                :key="item.title"
-                :title="item.title"
-                :href="item.href"
-              >
-                {{ item.description }}
-              </NavigationMenuListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>
+              Get Started
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul class="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                <NavigationMenuListItem
+                  v-for="item in gettingStartedList"
+                  :key="item.title"
+                  :title="item.title"
+                  :href="item.href"
+                >
+                  {{ item.description }}
+                </NavigationMenuListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            Registration
-          </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul class="grid w-[200px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              <NavigationMenuListItem
-                v-for="item in registrationList"
-                :key="item.title"
-                :title="item.title"
-                :href="item.href"
-              >
-                {{ item.description }}
-              </NavigationMenuListItem>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>
+              Registration
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul class="grid w-[200px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+                <NavigationMenuListItem
+                  v-for="item in registrationList"
+                  :key="item.title"
+                  :title="item.title"
+                  :href="item.href"
+                >
+                  {{ item.description }}
+                </NavigationMenuListItem>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
 
-        <NavigationMenuItem>
-          <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
-            Support
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
+              Support
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
 
-    <div class="flex items-center">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost">
-            <span>My Account</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>
-            <Avatar class="mr-3">
-              <AvatarFallback>DK</AvatarFallback>
-            </Avatar>
-            <span>Dino Kupinic</span>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator/>
-          <DropdownMenuGroup>
+      <div class="flex items-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost">
+              <span>My Account</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>
+              <Avatar class="mr-3">
+                <AvatarFallback>DK</AvatarFallback>
+              </Avatar>
+              <span>Dino Kupinic</span>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator/>
+            <DropdownMenuGroup>
+              <DropdownMenuItem class="cursor-pointer">
+                <v-icon class="mr-1.5" name="io-person-circle-sharp" scale="0.75"/>
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem class="cursor-pointer">
+                <v-icon class="mr-1.5" name="io-chatbubble-ellipses" scale="0.75"/>
+                <span>Chats</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem class="cursor-pointer">
+                <v-icon class="mr-1.5" name="io-settings-sharp" scale="0.75"/>
+                <span>Settings</span>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator/>
             <DropdownMenuItem class="cursor-pointer">
-              <v-icon class="mr-1.5" name="io-person-circle-sharp" scale="0.75"/>
-              <span>Profile</span>
+              <v-icon class="mr-1.5" name="io-log-out" scale="0.75"/>
+              <span>Logout</span>
             </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
-              <v-icon class="mr-1.5" name="io-chatbubble-ellipses" scale="0.75"/>
-              <span>Chats</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem class="cursor-pointer">
-              <v-icon class="mr-1.5" name="io-settings-sharp" scale="0.75"/>
-              <span>Settings</span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator/>
-          <DropdownMenuItem class="cursor-pointer">
-            <v-icon class="mr-1.5" name="io-log-out" scale="0.75"/>
-            <span>Logout</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  </header>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </template>
+    <template v-else>
+      <div class="ml-auto mr-3 sm:mr-10">
+        <BurgerMenu v-model="revealMenu" />
+      </div>
+    </template>
+  </nav>
+  <div v-if="revealMenu">
+    <p class="text-lg bg-red-600">samc</p>
+  </div>
 </template>
 
