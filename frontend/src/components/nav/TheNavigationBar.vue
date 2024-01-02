@@ -19,7 +19,7 @@ import {Button} from "@/components/ui/button"
 import {Avatar, AvatarFallback} from "@/components/ui/avatar"
 import {breakpointsTailwind, useBreakpoints} from "@vueuse/core"
 import BurgerMenu from "@/components/nav/BurgerMenu.vue"
-import {ref, watch} from "vue"
+import {ref} from "vue"
 
 type NavigationListItem = {
   title: string
@@ -78,7 +78,9 @@ const revealMenu = ref<boolean>(false)
 
 <template>
   <!-- TODO: responsive design -->
-  <nav class="flex md:justify-center sticky md:gap-2 lg:gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
+  <nav
+    class="flex md:justify-center sticky top-0 w-full backdrop-filter backdrop-blur-lg bg-opacity-30 firefox:bg-opacity-90
+           md:gap-2 lg:gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
     <div class="flex items-center">
       <RouterLink to="/">
         <Communify/>
@@ -137,7 +139,7 @@ const revealMenu = ref<boolean>(false)
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink href="/" :class="navigationMenuTriggerStyle()">
+            <NavigationMenuLink href="/support" :class="navigationMenuTriggerStyle()">
               Support
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -184,12 +186,34 @@ const revealMenu = ref<boolean>(false)
     </template>
     <template v-else>
       <div class="ml-auto mr-3 sm:mr-10">
-        <BurgerMenu v-model="revealMenu" />
+        <BurgerMenu v-model="revealMenu"/>
       </div>
     </template>
   </nav>
-  <div v-if="revealMenu">
-    <p class="text-lg bg-red-600">samc</p>
+  <div v-if="revealMenu" class="fixed z-50 h-screen w-full bg-background overflow-x-hidden">
+    <div class="w-full p-5">
+      <ul>
+        <li v-for="item in gettingStartedList" class="text-lg border-b border-slate-300 dark:border-slate-80 p-3">
+          <RouterLink :to="item.href">
+            {{ item.title.slice(0, item.title.length - 2) }}
+          </RouterLink>
+        </li>
+      </ul>
+      <div class="h-10"></div>
+      <ul>
+        <li v-for="item in registrationList" class="text-lg border-b border-slate-300 dark:border-slate-80 p-3">
+          <RouterLink :to="item.href">
+            {{ item.title.slice(0, item.title.length - 2) }}
+          </RouterLink>
+        </li>
+      </ul>
+      <div class="h-20"></div>
+      <RouterLink to="/user/:username/profile">
+        <Button class="w-full">
+          My Account
+        </Button>
+      </RouterLink>
+    </div>
   </div>
 </template>
 
