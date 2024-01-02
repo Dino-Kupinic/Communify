@@ -194,7 +194,7 @@ const revealMenu = ref<boolean>(false)
     <div class="w-full p-5">
       <ul>
         <li v-for="item in gettingStartedList" class="text-lg border-b border-slate-300 dark:border-slate-80 p-3">
-          <RouterLink :to="item.href">
+          <RouterLink :to="item.href" @click="revealMenu = false">
             {{ item.title.slice(0, item.title.length - 2) }}
           </RouterLink>
         </li>
@@ -202,14 +202,14 @@ const revealMenu = ref<boolean>(false)
       <div class="h-10"></div>
       <ul>
         <li v-for="item in registrationList" class="text-lg border-b border-slate-300 dark:border-slate-80 p-3">
-          <RouterLink :to="item.href">
+          <RouterLink :to="item.href" @click="revealMenu = false">
             {{ item.title.slice(0, item.title.length - 2) }}
           </RouterLink>
         </li>
       </ul>
       <div class="h-20"></div>
       <RouterLink to="/user/:username/profile">
-        <Button class="w-full">
+        <Button class="w-full" @click="revealMenu = false">
           My Account
         </Button>
       </RouterLink>
