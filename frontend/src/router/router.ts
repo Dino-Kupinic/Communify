@@ -7,6 +7,10 @@ import {
 } from "vue-router"
 import DefaultLayout from "@/layouts/DefaultLayout.vue"
 import HomeView from "@/views/HomeView.vue"
+import NoFooterLayout from "@/layouts/NoFooterLayout.vue"
+import NotFoundView from "@/views/NotFoundView.vue"
+import UserProfileView from "@/views/UserProfileView.vue"
+import ChatRoomsView from "@/views/ChatRoomsView.vue"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
@@ -22,43 +26,34 @@ const routes: Array<RouteRecordRaw> & {
       },
     ],
   },
-  // {
-  //   path: "/",
-  //   component: NoFooterLayout,
-  //   children: [
-  //     {
-  //       path: "/chats",
-  //       name: "chats",
-  //       component: ChatRoomsView,
-  //       meta: {
-  //         requiresAuth: true,
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: "/",
-  //   component: DefaultLayout,
-  //   children: [
-  //     {
-  //       path: "/user/:username",
-  //       name: "User",
-  //       component: UserHomeView,
-  //       meta: {
-  //         requiresAuth: true,
-  //       },
-  //       children: [
-  //         {
-  //           path: "profile",
-  //           component: UserProfileView,
-  //           meta: {
-  //             requiresAuth: true,
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    path: "/",
+    component: NoFooterLayout,
+    children: [
+      {
+        path: "/chats",
+        name: "chats",
+        component: ChatRoomsView,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: DefaultLayout,
+    children: [
+      {
+        path: "/user/:username/profile",
+        name: "User",
+        component: UserProfileView,
+        meta: {
+          requiresAuth: true,
+        }
+      },
+    ],
+  },
   // {
   //   path: "/",
   //   component: NoFooterLayout,
@@ -90,17 +85,17 @@ const routes: Array<RouteRecordRaw> & {
   //     },
   //   ],
   // },
-  // {
-  //   path: "/:pathMatch(.*)",
-  //   component: DefaultLayout,
-  //   children: [
-  //     {
-  //       path: "",
-  //       name: "not found",
-  //       component: NotFoundView,
-  //     },
-  //   ],
-  // },
+  {
+    path: "/:pathMatch(.*)",
+    component: DefaultLayout,
+    children: [
+      {
+        path: "",
+        name: "not found",
+        component: NotFoundView,
+      },
+    ],
+  },
 ]
 
 const router: Router = createRouter({
