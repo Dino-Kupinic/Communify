@@ -4,7 +4,7 @@ import {Separator} from "@/components/ui/separator"
 </script>
 
 <template>
-  <main class="mt-10 w-full pl-10 pr-10">
+  <main class="mt-10 w-full pl-10 pr-10 h-screen">
     <p class="text-6xl md:text-8xl p-4 text-center font-extrabold bg-clip-text text-transparent tracking-tighter
               bg-[linear-gradient(to_right,theme(colors.indigo.400),theme(colors.indigo.200),theme(colors.sky.400),theme(colors.fuchsia.400),theme(colors.sky.400),theme(colors.indigo.200),theme(colors.indigo.400))]
               bg-[length:200%_auto] animate-gradient"
