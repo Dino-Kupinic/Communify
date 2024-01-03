@@ -5,35 +5,29 @@ import {
   type RouteMeta, Router,
   type RouteRecordRaw,
 } from "vue-router"
-import DefaultLayout from "@/layouts/DefaultLayout.vue"
-import HomeView from "@/views/HomeView.vue"
-import NoFooterLayout from "@/layouts/NoFooterLayout.vue"
-import NotFoundView from "@/views/NotFoundView.vue"
-import UserProfileView from "@/views/UserProfileView.vue"
-import ChatRoomsView from "@/views/ChatRoomsView.vue"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
 } = [
   {
     path: "/",
-    component: DefaultLayout,
+    component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
         path: "/",
         name: "home",
-        component: HomeView,
+        component: () => import("@/views/HomeView.vue"),
       },
     ],
   },
   {
     path: "/",
-    component: NoFooterLayout,
+    component: () => import("@/layouts/NoFooterLayout.vue"),
     children: [
       {
         path: "/chats",
         name: "chats",
-        component: ChatRoomsView,
+        component: () => import("@/views/ChatRoomsView.vue"),
         meta: {
           requiresAuth: true,
         },
@@ -42,57 +36,57 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/",
-    component: DefaultLayout,
+    component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
         path: "/user/:username/profile",
         name: "User",
-        component: UserProfileView,
+        component: () => import("@/views/UserProfileView.vue"),
         meta: {
           requiresAuth: true,
-        }
+        },
       },
     ],
   },
-  // {
-  //   path: "/",
-  //   component: NoFooterLayout,
-  //   children: [
-  //     {
-  //       path: "/auth",
-  //       name: "authentication",
-  //       component: AuthenticationView,
-  //       redirect: (to: RouteLocationNormalized) => ({
-  //         path: "/auth/login",
-  //       }),
-  //       children: [
-  //         {
-  //           path: "login",
-  //           name: "login",
-  //           component: LoginWindow,
-  //         },
-  //         {
-  //           path: "register",
-  //           name: "register",
-  //           component: RegisterWindow,
-  //         },
-  //         {
-  //           path: "recovery",
-  //           name: "recovery",
-  //           component: ResetPassword,
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    path: "/",
+    component: () => import("@/layouts/DefaultLayout.vue"),
+    children: [
+      {
+        path: "/auth",
+        name: "authentication",
+        component: () => import("@/views/AuthenticationView.vue"),
+        redirect: (to: RouteLocationNormalized) => ({
+          path: "/auth/login",
+        }),
+        children: [
+          {
+            path: "login",
+            name: "login",
+            component: () => import( "@/components/auth/LoginWindow.vue"),
+          },
+          {
+            path: "register",
+            name: "register",
+            component: () => import("@/components/auth/RegisterWindow.vue"),
+          },
+          {
+            path: "recovery",
+            name: "recovery",
+            component: () => import("@/components/auth/RecoveryWindow.vue"),
+          },
+        ],
+      },
+    ],
+  },
   {
     path: "/:pathMatch(.*)",
-    component: DefaultLayout,
+    component: () => import("@/layouts/DefaultLayout.vue"),
     children: [
       {
         path: "",
         name: "not found",
-        component: NotFoundView,
+        component: () => import("@/views/NotFoundView.vue"),
       },
     ],
   },
