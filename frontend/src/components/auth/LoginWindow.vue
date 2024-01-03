@@ -44,8 +44,11 @@ const onSubmit = form.handleSubmit((values: LoginForm) => {
 </script>
 
 <template>
+  <p class="text-4xl font-bold text-primary mb-5">
+  Login
+  </p>
   <form @submit="onSubmit"
-        class="w-full sm:w-1/2 lg:1/3 xl:w-1/4 space-y-6 sm:border border-slate-300 dark:border-slate-800 p-5 rounded-lg">
+        class="w-full sm:w-96 space-y-6 sm:border border-slate-300 dark:border-slate-800 p-5 rounded-lg">
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
         <FormLabel>Username</FormLabel>
@@ -68,7 +71,7 @@ const onSubmit = form.handleSubmit((values: LoginForm) => {
       Login
     </Button>
   </form>
-  <div class="w-full mt-4 sm:w-1/2 lg:1/3 xl:w-1/4 space-y-3 text-center">
+  <div class="w-full mt-4 sm:w-96 space-y-3 text-center">
     <p class="text-base">
       New to Communify?
       <RouterLink to="/auth/register">
