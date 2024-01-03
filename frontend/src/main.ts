@@ -7,16 +7,39 @@ import App from "./App.vue"
 import router from "./router/router"
 
 import {OhVueIcon, addIcons} from "oh-vue-icons"
-import * as Ionicons from "oh-vue-icons/icons/io"
-import * as Heroicons from "oh-vue-icons/icons/hi"
-import * as Vueicons from "oh-vue-icons/icons"
-import {IconType} from "oh-vue-icons/types/icons"
+import {
+  IoLogoGithub,
+  IoPersonCircleSharp,
+  IoChatbubbleSharp,
+  IoChatbubbleEllipses,
+  IoSunny,
+  IoMoon,
+  IoLogOut,
+} from "oh-vue-icons/icons/io"
+import {
+  ViFileTypeVue,
+  ViFileTypeTypescriptOfficial,
+  ViFileTypeDocker2,
+  ViFileTypeVitest,
+  ViFileTypeVite,
+} from "oh-vue-icons/icons"
+import {HiArrowRight} from "oh-vue-icons/icons/hi"
 
-const Io: IconType[] = Object.values({...Ionicons})
-const Hi: IconType[] = Object.values({...Heroicons})
-const Vi: IconType[] = Object.values({...Vueicons})
-addIcons(...Io, ...Hi, ...Vi)
-
+addIcons(
+  IoLogoGithub,
+  IoPersonCircleSharp,
+  IoChatbubbleSharp,
+  IoChatbubbleEllipses,
+  IoSunny,
+  IoMoon,
+  IoLogOut,
+  ViFileTypeVue,
+  ViFileTypeTypescriptOfficial,
+  ViFileTypeDocker2,
+  ViFileTypeVitest,
+  ViFileTypeVite,
+  HiArrowRight,
+)
 const app = createApp(App)
 
 app.component("v-icon", OhVueIcon)

@@ -17,7 +17,7 @@ const year = useDateFormat(useNow(), "YYYY")
           Released under the
           <Link link="https://github.com/Dino-Kupinic/Communify/blob/master/LICENSE" :opens-tab="true">
               <span>
-                MIT License.<GoogleIcon name="North_East" font-size="base" line-height="1.5"></GoogleIcon>
+                MIT License.<GoogleIcon name="North_East" font-size="base" line-height="1.5" />
               </span>
           </Link>
           <br>
