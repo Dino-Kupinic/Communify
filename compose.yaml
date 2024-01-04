@@ -1,37 +1,36 @@
 version: '3'
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "0.0.0.0:4000:4000"
-    depends_on:
-      - database
-    volumes:
-      - ./backend:/app
-
   database:
+    build:
+      context: ./backend/db
     image: postgres
     ports:
-      - "0.0.0.0:6000:5432"
+      - "${POSTGRES_PORT}:5432"
     restart: always
     environment:
-      - POSTGRES_DB=chatapp
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./backend/postgres-data:/var/lib/postgresql/data
 
-  pgadmin-compose:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "placeholder@example.com"
-      PGADMIN_DEFAULT_PASSWORD: "fakepassword123!"
+  express-backend:
+    build:
+      context: ./backend/api
     ports:
-      - "16543:80"
+      - "${EXPRESS_PORT}:4000"
     depends_on:
       - database
+    volumes:
+      - ./backend/api:/app
 
-volumes:
-  postgres-data:
+  vue-frontend:
+    command: sh -c "npm rebuild esbuild && npm run dev"
+    build:
+      context: ./frontend
+    ports:
+      - "${FRONTEND_PORT}:10000"
+    depends_on:
+      - express-backend
+    volumes:
+      - ./frontend:/app

@@ -24,7 +24,7 @@ cd .. && docker compose up --build
 Continue with the configuration below!
 
 ### Configuration
-4. run `schema.sql` and `insert_test_data.sql` in `/backend/src/database/` for the postgres db
+4. run `schema.sql` and `testData.sql` in `/backend/src/database/` for the postgres db
 5. create a `.env` file in `/backend/` with following content:
    
 `⚠️ Important: this application is only for learning purposes, normally the .env file with the secret key wouldn't be accessible`

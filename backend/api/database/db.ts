@@ -4,7 +4,7 @@ const DATABASE_PORT: number | undefined = process.env.DB_PORT ? Number(process.e
 const DATABASE_HOST: string = "database"
 const DATABASE_NAME: string = "postgres"
 const DATABASE_USERNAME: string = "postgres"
-const DATABASE_PASSWORD: string = "123"
+const DATABASE_PASSWORD: string = "postgres"
 
 /**
  * Represents a client for connecting to a database.
