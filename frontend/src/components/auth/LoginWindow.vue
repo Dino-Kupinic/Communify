@@ -3,12 +3,6 @@ import {useForm} from "vee-validate"
 import {toTypedSchema} from "@vee-validate/zod"
 import * as z from "zod"
 
-import {
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_MIN_LENGTH,
-  USERNAME_MAX_LENGTH,
-  USERNAME_MIN_LENGTH,
-} from "@/components/model/type_constants.ts"
 import {Button} from "@/components/ui/button"
 import {
   FormControl,
@@ -23,14 +17,10 @@ import GoogleIcon from "@/components/util/GoogleIcon.vue"
 const formSchema = toTypedSchema(z.object({
   username: z
     .string()
-    .min(USERNAME_MIN_LENGTH, {message: "Username must contain atleast 4 character(s)"})
-    .max(USERNAME_MAX_LENGTH, {message: "Username can't contain more than 30 characters"})
     .trim(),
   password: z
     .string()
-    .min(PASSWORD_MIN_LENGTH, {message: "Too short"})
-    .max(PASSWORD_MAX_LENGTH, {message: "The maximum length is 255 characters"})
-    .refine((value: string) => !/\s/.test(value), {message: "Password cannot contain whitespaces"}),
+    .trim(),
 }))
 
 const form = useForm({
@@ -82,7 +72,7 @@ const onSubmit = form.handleSubmit((values: LoginForm) => {
     </p>
     <p class="text-base">
       Forgot your password?
-      <RouterLink to="/auth/register">
+      <RouterLink to="/auth/recovery">
         <span class="text-primary">
           Reset it<GoogleIcon name="North_East" font-size="base" line-height="1.5"/>
         </span>
