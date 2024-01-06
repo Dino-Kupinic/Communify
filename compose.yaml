@@ -1,36 +1,9 @@
 version: '3'
 services:
-  database:
-    build:
-      context: ./backend/db
-    image: postgres
+  app:
+    container_name: Communify
+    build: .
     ports:
-      - "${POSTGRES_PORT}:5432"
-    restart: always
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - "${BACKEND_PORT}:8080"
     volumes:
-      - ./backend/postgres-data:/var/lib/postgresql/data
-
-  express-backend:
-    build:
-      context: ./backend/api
-    ports:
-      - "${EXPRESS_PORT}:4000"
-    depends_on:
-      - database
-    volumes:
-      - ./backend/api:/app
-
-  vue-frontend:
-    command: sh -c "npm rebuild esbuild && npm run dev"
-    build:
-      context: ./frontend
-    ports:
-      - "${FRONTEND_PORT}:10000"
-    depends_on:
-      - express-backend
-    volumes:
-      - ./frontend:/app
+      - "./pb_data:/app/pb_data"
