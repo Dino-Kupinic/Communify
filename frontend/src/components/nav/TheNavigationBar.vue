@@ -17,7 +17,7 @@ import Communify from "@/components/img/Communify.vue"
 import NavigationMenuListItem from "@/components/nav/NavigationMenuListItem.vue"
 import {Button} from "@/components/ui/button"
 import {Avatar, AvatarFallback} from "@/components/ui/avatar"
-import {breakpointsTailwind, useBreakpoints} from "@vueuse/core"
+import {breakpointsTailwind, useBreakpoints, watchArray} from "@vueuse/core"
 import BurgerMenu from "@/components/nav/BurgerMenu.vue"
 import {ref} from "vue"
 import {useUserStore} from "@/stores/user.ts"
@@ -78,6 +78,10 @@ const lg = breakpoints.between("lg", "xl")
 const xl = breakpoints.greater("xl")
 
 const revealMenu = ref<boolean>(false)
+
+watchArray([md || lg || xl], () => {
+  revealMenu.value = false
+})
 
 const {currentUser} = storeToRefs(useUserStore())
 
@@ -193,6 +197,18 @@ async function logoutUser() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      <div v-else class="flex gap-2">
+        <RouterLink to="/auth/login">
+          <Button>
+            Login
+          </Button>
+        </RouterLink>
+        <RouterLink to="/auth/register">
+          <Button variant="outline">
+            Register
+          </Button>
+        </RouterLink>
+      </div>
     </template>
     <template v-else>
       <div class="ml-auto mr-3 sm:mr-10">
@@ -218,11 +234,25 @@ async function logoutUser() {
         </li>
       </ul>
       <div class="h-20"></div>
-      <RouterLink to="/user/:username/profile">
-        <Button class="w-full" @click="revealMenu = false">
-          My Account
-        </Button>
-      </RouterLink>
+      <div v-if="currentUser">
+        <RouterLink to="/user/:username/profile">
+          <Button class="w-full" @click="revealMenu = false">
+            My Account
+          </Button>
+        </RouterLink>
+      </div>
+      <div v-else class="flex flex-col gap-3">
+        <RouterLink to="/auth/login">
+          <Button class="w-full" @click="revealMenu = false">
+            Login
+          </Button>
+        </RouterLink>
+        <RouterLink to="/auth/register">
+          <Button variant="outline" class="w-full" @click="revealMenu = false">
+            Register
+          </Button>
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
