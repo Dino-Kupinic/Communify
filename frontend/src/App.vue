@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
+import ErrorAlert from "@/components/util/ErrorAlert.vue"
 </script>
 
 <template>
-  <RouterView />
+  <ErrorAlert/>
+  <RouterView/>
 </template>
 

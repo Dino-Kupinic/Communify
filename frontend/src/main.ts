@@ -16,10 +16,12 @@ import {
   IoSunny,
   IoMoon,
   IoLogOut,
+  IoAlertCircle,
 } from "oh-vue-icons/icons/io"
 import {
   ViFileTypeVue,
   ViFileTypeTypescriptOfficial,
+  ViFileTypeTailwind,
   ViFileTypeDocker2,
   ViFileTypeVitest,
   ViFileTypeVite,
@@ -35,8 +37,10 @@ addIcons(
   IoSunny,
   IoMoon,
   IoLogOut,
+  IoAlertCircle,
   ViFileTypeVue,
   ViFileTypeTypescriptOfficial,
+  ViFileTypeTailwind,
   ViFileTypeDocker2,
   ViFileTypeVitest,
   ViFileTypeVite,
@@ -45,7 +49,8 @@ addIcons(
 const app = createApp(App)
 
 app.component("v-icon", OhVueIcon)
-app.use(createPinia())
+
 app.use(router)
+app.use(createPinia())
 
 app.mount("#app")

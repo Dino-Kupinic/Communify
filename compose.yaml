@@ -2,8 +2,8 @@ version: '3'
 services:
   app:
     container_name: Communify
-    build: .
+    build: ./backend
     ports:
       - "${BACKEND_PORT}:8080"
     volumes:
-      - "./pb_data:/app/pb_data"
+      - "./backend/pb_data:/app/pb_data"

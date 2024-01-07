@@ -5,6 +5,8 @@ import {
   type RouteMeta, Router,
   type RouteRecordRaw,
 } from "vue-router"
+import {storeToRefs} from "pinia"
+import {useUserStore} from "@/stores/user.ts"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
@@ -97,10 +99,9 @@ const router: Router = createRouter({
   routes,
 })
 
-// TODO: refactor to cookie
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-  const isLoggedIn = localStorage.getItem("auth_token") !== ""
-  if (to.meta.requiresAuth && !isLoggedIn) {
+  const {currentUser} = storeToRefs(useUserStore())
+  if (to.meta.requiresAuth && currentUser.value == null) {
     return {
       path: "/auth/login",
       query: {

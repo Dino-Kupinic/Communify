@@ -20,6 +20,7 @@
     "lucide-vue-next": "^0.302.0",
     "oh-vue-icons": "*",
     "pinia": "^2.1.7",
+    "pocketbase": "^0.20.1",
     "radix-vue": "^1.2.5",
     "socket.io-client": "^4.7.2",
     "tailwind-merge": "^2.2.0",

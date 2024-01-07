@@ -20,6 +20,10 @@ import {Avatar, AvatarFallback} from "@/components/ui/avatar"
 import {breakpointsTailwind, useBreakpoints} from "@vueuse/core"
 import BurgerMenu from "@/components/nav/BurgerMenu.vue"
 import {ref} from "vue"
+import {useUserStore} from "@/stores/user.ts"
+import {storeToRefs} from "pinia"
+import {pb} from "@/db/pocketbase.ts"
+import router from "@/router/router.ts"
 
 type NavigationListItem = {
   title: string
@@ -74,10 +78,16 @@ const lg = breakpoints.between("lg", "xl")
 const xl = breakpoints.greater("xl")
 
 const revealMenu = ref<boolean>(false)
+
+const {currentUser} = storeToRefs(useUserStore())
+
+async function logoutUser() {
+  pb.authStore.clear()
+  await router.push("/")
+}
 </script>
 
 <template>
-  <!-- TODO: responsive design -->
   <nav
     class="flex md:justify-center sticky top-0 w-full backdrop-filter backdrop-blur-lg bg-opacity-30 firefox:bg-opacity-90
            md:gap-2 lg:gap-16 p-2 border-b border-slate-300 dark:border-slate-800">
@@ -146,7 +156,7 @@ const revealMenu = ref<boolean>(false)
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div class="flex items-center">
+      <div v-if="currentUser" class="flex items-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost">
@@ -156,9 +166,9 @@ const revealMenu = ref<boolean>(false)
           <DropdownMenuContent>
             <DropdownMenuLabel>
               <Avatar class="mr-3">
-                <AvatarFallback>DK</AvatarFallback>
+                <AvatarFallback>{{ currentUser.username.slice(0, 1).toUpperCase() }}</AvatarFallback>
               </Avatar>
-              <span>Dino Kupinic</span>
+              <span>{{ currentUser.username }}</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
             <DropdownMenuGroup>
@@ -176,7 +186,7 @@ const revealMenu = ref<boolean>(false)
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator/>
-            <DropdownMenuItem class="cursor-pointer">
+            <DropdownMenuItem @click="logoutUser" class="cursor-pointer">
               <v-icon class="mr-1.5" name="io-log-out" scale="0.75"/>
               <span>Logout</span>
             </DropdownMenuItem>

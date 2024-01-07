@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
+import {pb} from "@/db/pocketbase.ts"
+import {useErrorStore} from "@/stores/error.ts"
+import router from "@/router/router.ts"
 
 const formSchema = toTypedSchema(z.object({
   username: z
@@ -27,17 +30,34 @@ const form = useForm({
   validationSchema: formSchema,
 })
 
-type LoginForm = z.infer<typeof formSchema>
-const onSubmit = form.handleSubmit((values: LoginForm) => {
-  console.log("Form submitted!", values)
+const errorStore = useErrorStore()
+const onSubmit = form.handleSubmit(async (values) => {
+  try {
+    await pb.collection("users").authWithPassword(
+      values.username,
+      values.password,
+    )
+    if (pb.authStore.isValid)
+      await router.push("/chats")
+  } catch (error: any) {
+    console.error(error)
+    errorStore.errorMessage = `${error}`
+    if (error.response && error.response.data) {
+      for (const key in error.response.data) {
+        if (error.response.data.hasOwnProperty(key)) {
+          errorStore.hint = `${error.response.data[key].message}`
+        }
+      }
+    }
+  }
 })
 </script>
 
 <template>
   <p class="text-4xl font-bold text-primary mb-5">
-  Login
+    Login
   </p>
-  <form @submit="onSubmit"
+  <form @submit.prevent="onSubmit"
         class="w-full sm:w-96 space-y-6 sm:border border-slate-300 dark:border-slate-800 p-5 rounded-lg">
     <FormField v-slot="{ componentField }" name="username">
       <FormItem>
