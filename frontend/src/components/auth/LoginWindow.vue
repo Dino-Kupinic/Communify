@@ -14,7 +14,7 @@ import {
 import {Input} from "@/components/ui/input"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import {pb} from "@/db/pocketbase.ts"
-import {useErrorStore} from "@/stores/error.ts"
+import {useErrorStore} from "@/stores/errorStore.ts"
 import router from "@/router/router.ts"
 
 const formSchema = toTypedSchema(z.object({

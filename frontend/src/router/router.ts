@@ -5,8 +5,7 @@ import {
   type RouteMeta, Router,
   type RouteRecordRaw,
 } from "vue-router"
-import {storeToRefs} from "pinia"
-import {useUserStore} from "@/stores/user.ts"
+import {useUserStore} from "@/stores/userStore.ts"
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
@@ -100,8 +99,8 @@ const router: Router = createRouter({
 })
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
-  const {currentUser} = storeToRefs(useUserStore())
-  if (to.meta.requiresAuth && currentUser.value == null) {
+  const userStore = useUserStore()
+  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
     return {
       path: "/auth/login",
       query: {

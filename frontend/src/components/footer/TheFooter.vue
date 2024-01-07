@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Link from "@/components/util/Link.vue"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
-import FooterThemePreference from "@/components/footer/FooterThemePreference.vue"
+import ThemePreference from "@/components/util/ThemePreference.vue"
 import {useDateFormat, useNow} from "@vueuse/core"
 
 const year = useDateFormat(useNow(), "YYYY")
@@ -28,7 +28,7 @@ const year = useDateFormat(useNow(), "YYYY")
         </Link>
       </div>
       <div class="p-2">
-        <FooterThemePreference/>
+        <ThemePreference/>
       </div>
     </div>
   </footer>

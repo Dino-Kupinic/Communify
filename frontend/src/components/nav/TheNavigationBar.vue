@@ -20,10 +20,11 @@ import {Avatar, AvatarFallback} from "@/components/ui/avatar"
 import {breakpointsTailwind, useBreakpoints, watchArray} from "@vueuse/core"
 import BurgerMenu from "@/components/nav/BurgerMenu.vue"
 import {ref} from "vue"
-import {useUserStore} from "@/stores/user.ts"
+import {useUserStore} from "@/stores/userStore.ts"
 import {storeToRefs} from "pinia"
 import {pb} from "@/db/pocketbase.ts"
 import router from "@/router/router.ts"
+import ThemePreference from "@/components/util/ThemePreference.vue"
 
 type NavigationListItem = {
   title: string
@@ -233,7 +234,7 @@ async function logoutUser() {
           </RouterLink>
         </li>
       </ul>
-      <div class="h-20"></div>
+      <div class="h-10"></div>
       <div v-if="currentUser">
         <RouterLink to="/user/:username/profile">
           <Button class="w-full" @click="revealMenu = false">
@@ -253,6 +254,8 @@ async function logoutUser() {
           </Button>
         </RouterLink>
       </div>
+      <div class="h-10"></div>
+      <ThemePreference />
     </div>
   </div>
 </template>

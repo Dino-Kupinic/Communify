@@ -7,7 +7,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert"
-import {useErrorStore} from "@/stores/error.ts"
+import {useErrorStore} from "@/stores/errorStore.ts"
 import {storeToRefs} from "pinia"
 import {ref, watch} from "vue"
 

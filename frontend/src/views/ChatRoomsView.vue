@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
+import RoomList from "@/components/chat/TheRoomList.vue"
 </script>
 
 <template>
-<h1>Chats</h1>
+  <RoomList/>
 </template>
 
 <style scoped>

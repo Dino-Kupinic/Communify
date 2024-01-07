@@ -26,7 +26,10 @@ import {
   ViFileTypeVitest,
   ViFileTypeVite,
 } from "oh-vue-icons/icons"
-import {HiArrowRight} from "oh-vue-icons/icons/hi"
+import {
+  HiArrowRight,
+  HiDotsHorizontal
+} from "oh-vue-icons/icons/hi"
 
 addIcons(
   IoLogoGithub,
@@ -45,6 +48,7 @@ addIcons(
   ViFileTypeVitest,
   ViFileTypeVite,
   HiArrowRight,
+  HiDotsHorizontal,
 )
 const app = createApp(App)
 
