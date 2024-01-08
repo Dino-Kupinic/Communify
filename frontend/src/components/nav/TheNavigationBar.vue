@@ -80,7 +80,7 @@ const xl = breakpoints.greater("xl")
 
 const revealMenu = ref<boolean>(false)
 
-watchArray([md || lg || xl], () => {
+watchArray([md, lg, xl], () => {
   revealMenu.value = false
 })
 
