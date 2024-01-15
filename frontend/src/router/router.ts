@@ -102,14 +102,21 @@ const router: Router = createRouter({
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized) => {
   const userStore = useUserStore()
-  if (to.meta.requiresAuth && !userStore.isLoggedIn) {
+  if (to.meta.requiresAuth && !userStore.isLoggedIn)
     return {
       path: "/auth/login",
       query: {
         redirect: to.fullPath,
       },
     }
-  }
+
+  if (userStore.isLoggedIn && to.path.includes("auth"))
+    return {
+      path: "/",
+      query: {
+        redirect: to.fullPath,
+      },
+    }
 })
 
 export default router
