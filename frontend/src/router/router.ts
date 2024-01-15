@@ -7,12 +7,14 @@ import {
 } from "vue-router"
 import {useUserStore} from "@/stores/userStore.ts"
 
+const DefaultLayout = import("@/layouts/DefaultLayout.vue")
+
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
 } = [
   {
     path: "/",
-    component: () => import("@/layouts/DefaultLayout.vue"),
+    component: DefaultLayout,
     children: [
       {
         path: "/",
@@ -37,7 +39,7 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/",
-    component: () => import("@/layouts/DefaultLayout.vue"),
+    component: DefaultLayout,
     children: [
       {
         path: "/user/:username/profile",
@@ -51,7 +53,7 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/",
-    component: () => import("@/layouts/DefaultLayout.vue"),
+    component: DefaultLayout,
     children: [
       {
         path: "/auth",
@@ -82,7 +84,7 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/:pathMatch(.*)",
-    component: () => import("@/layouts/DefaultLayout.vue"),
+    component: DefaultLayout,
     children: [
       {
         path: "",

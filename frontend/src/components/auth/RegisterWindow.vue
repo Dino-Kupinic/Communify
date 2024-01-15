@@ -11,7 +11,7 @@ import {
   PASSWORD_MIN_LENGTH,
   USERNAME_MAX_LENGTH,
   USERNAME_MIN_LENGTH,
-} from "@/components/model/type_constants.ts"
+} from "@/model/type_constants.ts"
 import {Button} from "@/components/ui/button"
 import {
   FormControl,
@@ -23,7 +23,7 @@ import {
 import {Input} from "@/components/ui/input"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import {pb} from "@/db/pocketbase.ts"
-import {User} from "@/components/model/user.dto.ts"
+import {User} from "@/model/user.dto.ts"
 import {useErrorStore} from "@/stores/errorStore.ts"
 import router from "@/router/router.ts"
 
