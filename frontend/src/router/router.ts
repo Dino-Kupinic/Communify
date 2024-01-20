@@ -7,7 +7,7 @@ import {
 } from "vue-router"
 import {useUserStore} from "@/stores/userStore.ts"
 
-const DefaultLayout = import("@/layouts/DefaultLayout.vue")
+const DefaultLayout = () => import("@/layouts/DefaultLayout.vue")
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
