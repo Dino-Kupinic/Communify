@@ -8,7 +8,3 @@ import RoomList from "@/components/chat/TheRoomList.vue"
     <RoomList />
   </div>
 </template>
-
-<style scoped>
-
-</style>

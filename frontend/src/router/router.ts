@@ -30,7 +30,15 @@ const routes: Array<RouteRecordRaw> & {
       {
         path: "/chats",
         name: "chats",
-        component: () => import("@/views/ChatRoomsView.vue"),
+        component: () => import("@/views/RoomsView.vue"),
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "/chats/:room",
+        name: "chatroom",
+        component: () => import("@/views/ChatView.vue"),
         meta: {
           requiresAuth: true,
         },
