@@ -15,6 +15,8 @@ pb.authStore.onChange((auth) => {
 
 <template>
   <ErrorAlert/>
-  <RouterView/>
+  <Suspense>
+    <RouterView/>
+  </Suspense>
 </template>
 
