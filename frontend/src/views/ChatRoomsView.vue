@@ -4,7 +4,9 @@ import RoomList from "@/components/chat/TheRoomList.vue"
 </script>
 
 <template>
-  <RoomList/>
+  <div class="w-full sm:flex sm:items-center sm:justify-center">
+    <RoomList />
+  </div>
 </template>
 
 <style scoped>
