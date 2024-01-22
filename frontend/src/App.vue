@@ -9,6 +9,7 @@ userStore.currentUser = pb.authStore.model
 pb.authStore.onChange((auth) => {
   console.log("authStore changed", auth)
   userStore.currentUser = pb.authStore.model
+  userStore.isLoggedIn = pb.authStore.isValid
 })
 </script>
 
