@@ -82,12 +82,23 @@ export const useRoomStore = defineStore("room", () => {
    *
    * @param {number} room_id The ID of the room to delete.
    * @return {Promise<void>} A Promise that resolves when the room is successfully deleted.
-   *
-   * @throws {Error} If an error occurs while attempting to delete the room.
    */
   async function deleteRoom(room_id: string): Promise<void> {
     try {
       await pb.collection("rooms").delete(room_id)
+    } catch (err) {
+      handleError(err)
+    }
+  }
+
+  /**
+   * Gets a room by its ID.
+   * @param {number} room_id The ID of the room to get.
+   * @return {Promise<Room | undefined>}
+   */
+  async function getRoomById(room_id: string): Promise<Room | undefined> {
+    try {
+      return await pb.collection("rooms").getOne(room_id)
     } catch (err) {
       handleError(err)
     }
@@ -99,5 +110,5 @@ export const useRoomStore = defineStore("room", () => {
     errorMessage.value = `${err}`
   }
 
-  return {rooms, currentRoom, fetchRooms, addRoom, deleteRoom}
+  return {rooms, currentRoom, fetchRooms, addRoom, deleteRoom, getRoomById}
 })
