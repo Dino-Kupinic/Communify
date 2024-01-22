@@ -1,3 +1,5 @@
 backend/pocketbase.exe
 backend/pb_data
 backend/.env
+
+.env
