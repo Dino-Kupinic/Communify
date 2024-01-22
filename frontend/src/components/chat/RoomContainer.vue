@@ -2,35 +2,42 @@
 import {Room} from "@/model/room.dto.ts"
 import {Button} from "@/components/ui/button"
 import {Badge} from "@/components/ui/badge"
-import {computed, ComputedRef, onMounted, ref} from "vue"
+import {computed, ComputedRef} from "vue"
 import {Topic} from "@/model/topic.dto.ts"
 import {useTopicStore} from "@/stores/topicsStore.ts"
 import {storeToRefs} from "pinia"
+import {useRouter} from "vue-router"
+import {useFormatTitle} from "@/composables/useFormatTitle.ts"
 
 const props = defineProps<{
   room: Room
 }>()
 
-onMounted(() => {
-})
-
 const {topics} = storeToRefs(useTopicStore())
-const roomTopics: ComputedRef<Topic | Topic[]> = computed(() => {
+const roomTopics: ComputedRef<Topic[]> = computed(() => {
   return topics.value.filter((topic: Topic) => props.room.topic_id?.includes(topic.id))
 })
 
-const title: ComputedRef<string> = computed(() => {
-  const MAX_DISPLAY_ROOM_NAME: number = 15
-  if (props.room.name.length > MAX_DISPLAY_ROOM_NAME)
-    return `${props.room.name.slice(0, MAX_DISPLAY_ROOM_NAME)}...`
-  return props.room.name
-})
+const title = useFormatTitle(props.room.name)
+const description: ComputedRef<string> = computed(() => {
+  const MAX_DISPLAY_DESCRIPTION: number = 50
+  if (!props.room.description)
+    return ""
 
+  if (props.room.description.length > MAX_DISPLAY_DESCRIPTION)
+    return `${props.room.description.slice(0, MAX_DISPLAY_DESCRIPTION)}...`
+  return props.room.description
+})
 const maximum_users: ComputedRef<string> = computed(() => {
   if (props.room.maximum_users == 0)
     return "♾️"
   return String(props.room.maximum_users)
 })
+
+const router = useRouter()
+const joinRoom = async () => {
+  await router.push(`/chats/${props.room.id}`)
+}
 
 </script>
 
@@ -43,8 +50,12 @@ const maximum_users: ComputedRef<string> = computed(() => {
         <v-icon name="hi-dots-horizontal"/>
       </Button>
     </div>
+    <span class="text-xs">{{ description }}</span>
     <div v-if="roomTopics" class="flex flex-row flex-wrap gap-1 mt-3">
       <Badge v-for="topic in roomTopics" :variant="topic.color">{{ topic.text }}</Badge>
+    </div>
+    <div v-if="roomTopics.length === 0">
+      <span class="text">No topics provided.</span>
     </div>
     <div class="flex flex-row flex-wrap gap-1 mt-auto">
       <div>
@@ -52,7 +63,11 @@ const maximum_users: ComputedRef<string> = computed(() => {
         {{ maximum_users }}
       </div>
     </div>
-    <Button class="mt-auto">
+    <div v-if="props.room.password">
+      <v-icon name="hi-solid-lock-closed"/>
+      <span class="text-sm ml-1">Password protected</span>
+    </div>
+    <Button @click="joinRoom()" class="mt-auto">
       Join
     </Button>
   </div>

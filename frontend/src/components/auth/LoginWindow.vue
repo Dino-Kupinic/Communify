@@ -15,7 +15,7 @@ import {Input} from "@/components/ui/input"
 import GoogleIcon from "@/components/util/GoogleIcon.vue"
 import {pb} from "@/db/pocketbase.ts"
 import {useErrorStore} from "@/stores/errorStore.ts"
-import router from "@/router/router.ts"
+import {useRouter} from "vue-router"
 
 const formSchema = toTypedSchema(z.object({
   username: z
@@ -30,6 +30,7 @@ const form = useForm({
   validationSchema: formSchema,
 })
 
+const router = useRouter()
 const errorStore = useErrorStore()
 const onSubmit = form.handleSubmit(async (values) => {
   try {

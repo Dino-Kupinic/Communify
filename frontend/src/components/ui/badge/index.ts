@@ -14,11 +14,11 @@ export const badgeVariants = cva(
         destructive:
           'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
         outline: 'text-foreground',
-        red: 'border-transparent bg-red-500 text-primary-foreground hover:bg-primary/80',
-        yellow: 'border-transparent bg-yellow-500 text-primary-foreground hover:bg-primary/80',
-        green: 'border-transparent bg-green-500 text-primary-foreground hover:bg-primary/80',
-        blue: 'border-transparent bg-blue-500 text-primary-foreground hover:bg-primary/80',
-        purple: 'border-transparent bg-purple-500 text-primary-foreground hover:bg-primary/80',
+        red: 'border-transparent bg-red-500 text-primary-foreground hover:bg-red-400',
+        yellow: 'border-transparent bg-yellow-500 text-primary-foreground hover:bg-yellow-400',
+        green: 'border-transparent bg-green-500 text-primary-foreground hover:bg-green-400',
+        blue: 'border-transparent bg-blue-500 text-primary-foreground hover:bg-blue-400',
+        purple: 'border-transparent bg-purple-500 text-primary-foreground hover:bg-purple-400',
       },
     },
     defaultVariants: {

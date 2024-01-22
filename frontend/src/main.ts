@@ -29,8 +29,10 @@ import {
 } from "oh-vue-icons/icons"
 import {
   HiArrowRight,
+  HiArrowLeft,
   HiDotsHorizontal,
   HiSolidUserGroup,
+  HiSolidLockClosed
 } from "oh-vue-icons/icons/hi"
 
 addIcons(
@@ -50,8 +52,10 @@ addIcons(
   ViFileTypeVitest,
   ViFileTypeVite,
   HiArrowRight,
+  HiArrowLeft,
   HiDotsHorizontal,
   HiSolidUserGroup,
+  HiSolidLockClosed
 )
 const app = createApp(App)
 
