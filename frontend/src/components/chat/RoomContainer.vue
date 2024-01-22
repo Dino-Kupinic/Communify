@@ -2,15 +2,27 @@
 import {Room} from "@/model/room.dto.ts"
 import {Button} from "@/components/ui/button"
 import {Badge} from "@/components/ui/badge"
-import {computed, ComputedRef} from "vue"
+import {computed, ComputedRef, onMounted, ref} from "vue"
+import {Topic} from "@/model/topic.dto.ts"
+import {useTopicStore} from "@/stores/topicsStore.ts"
+import {storeToRefs} from "pinia"
 
 const props = defineProps<{
   room: Room
 }>()
 
+onMounted(() => {
+})
+
+const {topics} = storeToRefs(useTopicStore())
+const roomTopics: ComputedRef<Topic | Topic[]> = computed(() => {
+  return topics.value.filter((topic: Topic) => props.room.topic_id?.includes(topic.id))
+})
+
 const title: ComputedRef<string> = computed(() => {
-  if (props.room.name.length > 15)
-    return `${props.room.name.slice(0, 15)}...`
+  const MAX_DISPLAY_ROOM_NAME: number = 15
+  if (props.room.name.length > MAX_DISPLAY_ROOM_NAME)
+    return `${props.room.name.slice(0, MAX_DISPLAY_ROOM_NAME)}...`
   return props.room.name
 })
 
@@ -31,15 +43,12 @@ const maximum_users: ComputedRef<string> = computed(() => {
         <v-icon name="hi-dots-horizontal"/>
       </Button>
     </div>
-    <div class="flex flex-row flex-wrap gap-1 mt-3">
-      <Badge class="bg-red-600">Programming</Badge>
-      <Badge class="bg-red-600">Programming</Badge>
-      <Badge class="bg-red-600">Programming</Badge>
-      <Badge class="bg-red-600">Programming</Badge>
+    <div v-if="roomTopics" class="flex flex-row flex-wrap gap-1 mt-3">
+      <Badge v-for="topic in roomTopics" :variant="topic.color">{{ topic.text }}</Badge>
     </div>
     <div class="flex flex-row flex-wrap gap-1 mt-auto">
       <div>
-        <v-icon name="hi-solid-user-group" />
+        <v-icon name="hi-solid-user-group"/>
         {{ maximum_users }}
       </div>
     </div>

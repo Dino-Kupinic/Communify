@@ -26,19 +26,34 @@ export const useRoomStore = defineStore("room", () => {
               const newRoom = await pb.collection("rooms").getOne(record.id)
               record.expand = {newRoom}
               const room: Room = {
+                id: record.id,
                 name: record.name,
-                maximum_users: record.maximum_users || null,
+                maximum_users: record.maximum_users,
                 description: record.description || null,
                 password: record.password || null,
                 creator_id: record.creator_id,
+                topic_id: record.topic_id || null,
               }
               rooms.value.push(room)
               break
             case "update":
-              // TODO
+              const updatedRoom = await pb.collection("rooms").getOne(record.id)
+              record.expand = {updatedRoom}
+              const roomUpdateIndex = rooms.value.findIndex((room) => room.id === record.id)
+              if (roomUpdateIndex !== -1) {
+                rooms.value[roomUpdateIndex].name = record.name
+                rooms.value[roomUpdateIndex].creator_id = record.creator_id
+                rooms.value[roomUpdateIndex].maximum_users = record.maximum_users
+                rooms.value[roomUpdateIndex].description = record.description || null
+                rooms.value[roomUpdateIndex].password = record.password || null
+                rooms.value[roomUpdateIndex].topic_id = record.topic_id || null
+              }
               break
             case "delete":
-              // TODO
+              const indexToDelete = rooms.value.findIndex((room) => room.name === record.name)
+              if (indexToDelete !== -1) {
+                rooms.value.splice(indexToDelete, 1)
+              }
               break
           }
         })
@@ -56,9 +71,7 @@ export const useRoomStore = defineStore("room", () => {
    */
   async function addRoom(room: Room): Promise<void> {
     try {
-      const response = await pb.collection("rooms").create(room)
-      if (response.ok)
-        await fetchRooms()
+      await pb.collection("rooms").create(room)
     } catch (err) {
       handleError(err)
     }
