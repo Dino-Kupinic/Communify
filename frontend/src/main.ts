@@ -2,6 +2,7 @@ import "./assets/index.css"
 
 import {createApp} from "vue"
 import {createPinia} from "pinia"
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate"
 
 import App from "./App.vue"
 import router from "./router/router"
@@ -29,7 +30,7 @@ import {
 import {
   HiArrowRight,
   HiDotsHorizontal,
-  HiSolidUserGroup
+  HiSolidUserGroup,
 } from "oh-vue-icons/icons/hi"
 
 addIcons(
@@ -50,13 +51,16 @@ addIcons(
   ViFileTypeVite,
   HiArrowRight,
   HiDotsHorizontal,
-  HiSolidUserGroup
+  HiSolidUserGroup,
 )
 const app = createApp(App)
 
 app.component("v-icon", OhVueIcon)
 
+
 app.use(router)
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+app.use(pinia)
 
 app.mount("#app")
