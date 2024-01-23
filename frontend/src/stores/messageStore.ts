@@ -8,7 +8,7 @@ export const useMessageStore = defineStore("message", () => {
     try {
       return await pb.collection("messages").getFullList({
         filter: pb.filter('room_id ~ {:id}', {id: id}),
-        sort: "-created",
+        sort: "+created",
       })
     } catch (err) {
       handleError(err)

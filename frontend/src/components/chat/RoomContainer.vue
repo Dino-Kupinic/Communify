@@ -8,10 +8,14 @@ import {useTopicStore} from "@/stores/topicsStore.ts"
 import {storeToRefs} from "pinia"
 import {useRouter} from "vue-router"
 import {useFormatTitle} from "@/composables/useFormatTitle.ts"
+import {useUserStore} from "@/stores/userStore.ts"
 
 const props = defineProps<{
   room: Room
 }>()
+
+const userStore = useUserStore()
+await userStore.fetchUsers()
 
 const {topics} = storeToRefs(useTopicStore())
 const roomTopics: ComputedRef<Topic[]> = computed(() => {

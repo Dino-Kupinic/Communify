@@ -5,7 +5,7 @@ import {pb} from "@/db/pocketbase.ts"
 import {useErrorStore} from "@/stores/errorStore.ts"
 import {User} from "@/model/user.dto.ts"
 
-export const useUserStore = defineStore("message", () => {
+export const useUserStore = defineStore("user", () => {
   const users = ref<User[]>([])
   const currentUser = ref<AuthModel>()
   const isLoggedIn = ref<boolean>(pb.authStore.isValid)

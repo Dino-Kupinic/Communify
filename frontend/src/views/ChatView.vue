@@ -47,6 +47,7 @@ onMounted(async () => {
           break
       }
     })
+
 })
 
 onUnmounted(() => {
@@ -68,7 +69,8 @@ const sendMessage = async () => {
     return
   }
   const msg: Partial<Message> = {
-    user_id: userStore.getUserToken(),
+    // TODO: fix db user to user_id in app
+    user: userStore.currentUser?.id,
     room_id: room.value?.id,
     content: messageInput.value,
   }
