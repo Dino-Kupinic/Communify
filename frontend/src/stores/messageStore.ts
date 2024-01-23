@@ -15,11 +15,19 @@ export const useMessageStore = defineStore("message", () => {
     }
   }
 
+  async function sendMessage(message: Partial<Message>): Promise<void> {
+    try {
+      await pb.collection("messages").create(message)
+    } catch (err) {
+      handleError(err)
+    }
+  }
+
   function handleError(err: any) {
     console.error(err)
     const {errorMessage} = storeToRefs(useErrorStore())
     errorMessage.value = `${err}`
   }
 
-  return {getMessagesByRoomId}
+  return {getMessagesByRoomId, sendMessage}
 })
