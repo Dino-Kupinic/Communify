@@ -11,7 +11,7 @@ migrate((db) => {
       {
         "system": false,
         "id": "gsaxigbv",
-        "name": "user",
+        "name": "message",
         "type": "relation",
         "required": false,
         "presentable": false,
