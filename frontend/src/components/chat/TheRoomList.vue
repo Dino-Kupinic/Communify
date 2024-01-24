@@ -3,13 +3,16 @@ import RoomContainer from "@/components/chat/RoomContainer.vue"
 import {useRoomStore} from "@/stores/roomStore.ts"
 import {onMounted} from "vue"
 import {useTopicStore} from "@/stores/topicsStore.ts"
+import {useUserStore} from "@/stores/userStore.ts"
 
 const roomStore = useRoomStore()
 const topicStore = useTopicStore()
+const userStore = useUserStore()
 
 onMounted(async () => {
   await roomStore.fetchRooms()
   await topicStore.fetchTopics()
+  await userStore.fetchUsers()
 })
 </script>
 

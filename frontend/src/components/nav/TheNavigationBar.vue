@@ -197,6 +197,7 @@ async function logoutUser() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <ThemePreference :display-preference-text="false" />
       </div>
       <div v-else class="flex gap-2">
         <RouterLink to="/auth/login">

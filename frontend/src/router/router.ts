@@ -35,6 +35,13 @@ const routes: Array<RouteRecordRaw> & {
           requiresAuth: true,
         },
       },
+
+    ],
+  },
+  {
+    path: "/",
+    component: () => import("@/layouts/NoFooterNavbarLayout.vue"),
+    children: [
       {
         path: "/chats/:room",
         name: "chatroom",
@@ -43,7 +50,7 @@ const routes: Array<RouteRecordRaw> & {
           requiresAuth: true,
         },
       },
-    ],
+    ]
   },
   {
     path: "/",

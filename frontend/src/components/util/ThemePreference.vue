@@ -3,8 +3,16 @@ import {Toggle} from "@/components/ui/toggle"
 import {useColorMode} from "@vueuse/core"
 import {onMounted, ref, watch} from "vue"
 
-const mode = useColorMode()
+withDefaults(
+  defineProps<{
+    displayPreferenceText?: boolean
+  }>(),
+  {
+    displayPreferenceText: true,
+  },
+)
 
+const mode = useColorMode()
 const toggle = ref<boolean>(false)
 
 onMounted(() => {
@@ -22,7 +30,7 @@ watch(toggle, () => {
 
 <template>
   <div>
-    <p class="text-sm">Preference</p>
+    <p v-if="displayPreferenceText" class="text-sm">Preference</p>
     <Toggle v-model:pressed="toggle" size="sm">
       <div class="mr-2">
         <v-icon v-if="mode === 'light'" name="io-sunny"/>

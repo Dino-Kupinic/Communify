@@ -14,6 +14,7 @@ import {storeToRefs} from "pinia"
 import {Input} from "@/components/ui/input"
 import InputContainer from "@/components/chat/InputContainer.vue"
 import {pb} from "@/db/pocketbase.ts"
+import {Button} from "@/components/ui/button"
 
 const route = useRoute()
 const params = route.params
@@ -57,33 +58,29 @@ onUnmounted(() => {
 const messageInput = ref<string>("")
 const userStore = useUserStore()
 
-const messageContainsProfanity = async (text: string) => {
-  // TODO
-  return false
-}
-
-const {errorMessage} = storeToRefs(useErrorStore())
 const sendMessage = async () => {
-  if (await messageContainsProfanity(messageInput.value)) {
-    errorMessage.value = "You message has not been send since it contains profanity."
+  if (!messageInput.value)
     return
-  }
+
   const msg: Partial<Message> = {
-    // TODO: fix db user to user_id in app
-    user: userStore.currentUser?.id,
+    user_id: userStore.currentUser?.id,
     room_id: room.value?.id,
     content: messageInput.value,
   }
   await messageStore.sendMessage(msg)
   messageInput.value = ""
+  scrollTo({
+    top: document.body.scrollHeight,
+    behavior: "smooth",
+  })
 }
 </script>
 
 <template>
-  <div class="h-full">
+  <div class="h-full w-full sm:w-2/3 md:w-1/2 sm:m-auto sm:border">
     <ChatHeader :title="room?.name"/>
     <ChatContainer>
-      <MessageContainer v-for="message in messages" :key="message.id" :message="message">
+      <MessageContainer v-for="(message) in messages" :key="message.id" :message="message">
         <p>
           {{ message.content }}
         </p>
@@ -91,6 +88,7 @@ const sendMessage = async () => {
     </ChatContainer>
     <InputContainer>
       <Input @keyup.enter.prevent="sendMessage()" type="text" v-model="messageInput" placeholder="Type here..."/>
+      <Button @click="sendMessage()">Send</Button>
     </InputContainer>
   </div>
 </template>

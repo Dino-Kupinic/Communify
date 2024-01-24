@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="h-screen">
+  <div class="h-100">
     <slot />
   </div>
 </template>

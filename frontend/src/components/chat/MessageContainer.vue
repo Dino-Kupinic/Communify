@@ -10,7 +10,7 @@ const props = defineProps<{
 
 const {users} = storeToRefs(useUserStore())
 const username: ComputedRef<string> = computed(() => {
-  const user = users.value.filter((user) => user.id == props.message.user)
+  const user = users.value.filter((user) => user.id == props.message.user_id)
   return user[0].username
 })
 
@@ -35,7 +35,7 @@ const time: ComputedRef<string> = computed(() => {
 <template>
   <div class="flex items-start gap-2.5">
     <div
-      class="flex flex-col w-full leading-1.5 p-4 border-gray-200 rounded-e-xl rounded-es-xl">
+      class="flex flex-col w-full sm:w-2/3 leading-1.5 p-4">
       <div class="flex items-center space-x-2 rtl:space-x-reverse">
         <img
           class="avatar"
@@ -43,10 +43,10 @@ const time: ComputedRef<string> = computed(() => {
           alt="avatar"
           width="32px"
         />
-        <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ username }}</span>
+        <span class="text font-semibold text-gray-900 dark:text-white">{{ username }}</span>
         <span class="text-xs font-normal text-gray-500 dark:text-gray-400 mt-0.5">{{ time }}</span>
       </div>
-      <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
+      <p class="text font-normal py-2.5 text-gray-900 dark:text-white">
         <slot></slot>
       </p>
     </div>
