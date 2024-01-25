@@ -90,7 +90,7 @@ const checkPassword = async (password: string) => {
     </div>
     <div class="mt-auto">
       <RoomPasswordModal @password="checkPassword">
-        <Button @click="joinRoom()" >
+        <Button @click="joinRoom()" class="w-full" >
           Join
         </Button>
       </RoomPasswordModal>

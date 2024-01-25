@@ -21,7 +21,7 @@ const emit = defineEmits<{
 
 <template>
   <Dialog>
-    <DialogTrigger>
+    <DialogTrigger class="w-full">
       <slot />
     </DialogTrigger>
     <DialogContent>
