@@ -9,8 +9,6 @@ import ChatHeader from "@/components/chat/ChatHeader.vue"
 import {Message} from "@/model/message.dto.ts"
 import ChatContainer from "@/components/chat/ChatContainer.vue"
 import MessageContainer from "@/components/chat/MessageContainer.vue"
-import {useErrorStore} from "@/stores/errorStore.ts"
-import {storeToRefs} from "pinia"
 import {Input} from "@/components/ui/input"
 import InputContainer from "@/components/chat/InputContainer.vue"
 import {pb} from "@/db/pocketbase.ts"
@@ -48,7 +46,6 @@ onMounted(async () => {
           break
       }
     })
-
 })
 
 onUnmounted(() => {

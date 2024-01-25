@@ -8,6 +8,8 @@ import {
 import {useUserStore} from "@/stores/userStore.ts"
 
 const DefaultLayout = () => import("@/layouts/DefaultLayout.vue")
+const NoFooterLayout = () => import("@/layouts/NoFooterLayout.vue")
+const NoFooterNavbarLayout = () => import("@/layouts/NoFooterNavbarLayout.vue")
 
 const routes: Array<RouteRecordRaw> & {
   meta?: RouteMeta
@@ -25,7 +27,7 @@ const routes: Array<RouteRecordRaw> & {
   },
   {
     path: "/",
-    component: () => import("@/layouts/NoFooterLayout.vue"),
+    component: NoFooterLayout,
     children: [
       {
         path: "/chats",
@@ -35,12 +37,11 @@ const routes: Array<RouteRecordRaw> & {
           requiresAuth: true,
         },
       },
-
     ],
   },
   {
     path: "/",
-    component: () => import("@/layouts/NoFooterNavbarLayout.vue"),
+    component: NoFooterNavbarLayout,
     children: [
       {
         path: "/chats/:room",
@@ -50,7 +51,7 @@ const routes: Array<RouteRecordRaw> & {
           requiresAuth: true,
         },
       },
-    ]
+    ],
   },
   {
     path: "/",

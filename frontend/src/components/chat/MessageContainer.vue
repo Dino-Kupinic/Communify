@@ -8,7 +8,7 @@ const props = defineProps<{
   message: Message
 }>()
 
-const {users} = storeToRefs(useUserStore())
+const {users, currentUser} = storeToRefs(useUserStore())
 const username: ComputedRef<string> = computed(() => {
   const user = users.value.filter((user) => user.id == props.message.user_id)
   return user[0].username
@@ -16,6 +16,10 @@ const username: ComputedRef<string> = computed(() => {
 
 const imgURL: ComputedRef<string> = computed(() => {
   return `https://api.dicebear.com/7.x/lorelei/svg?seed=${username.value}&scale=130&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear&radius=30&randomizeIds=true`
+})
+
+const imgURLCurrentUser: ComputedRef<string> = computed(() => {
+  return `https://api.dicebear.com/7.x/lorelei/svg?seed=${username.value}&scale=130&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear&radius=30&randomizeIds=true&flip=true`
 })
 
 const time: ComputedRef<string> = computed(() => {
@@ -30,12 +34,13 @@ const time: ComputedRef<string> = computed(() => {
   }
   return props.message.created.substring(0, 19)
 })
+
 </script>
 
 <template>
-  <div class="flex items-start gap-2.5">
+  <div v-if="message.user_id != currentUser?.id" class="flex items-start gap-2.5">
     <div
-      class="flex flex-col w-full sm:w-2/3 leading-1.5 p-4">
+      class="flex flex-col w-full sm:w-2/3 leading-1.5 p-2 pl-4">
       <div class="flex items-center space-x-2 rtl:space-x-reverse">
         <img
           class="avatar"
@@ -47,6 +52,24 @@ const time: ComputedRef<string> = computed(() => {
         <span class="text-xs font-normal text-gray-500 dark:text-gray-400 mt-0.5">{{ time }}</span>
       </div>
       <p class="text font-normal py-2.5 text-gray-900 dark:text-white">
+        <slot></slot>
+      </p>
+    </div>
+  </div>
+  <div v-else class="flex justify-end items-end gap-2.5">
+    <div
+      class="flex flex-col w-full sm:w-2/3 leading-1.5 p-2 pr-4">
+      <div class="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+        <span class="text-xs font-normal text-gray-500 dark:text-gray-400 mt-0.5">{{ time }}</span>
+        <span class="text font-semibold text-primary dark:text-primary">{{ username }}</span>
+        <img
+          class="avatar"
+          :src=imgURLCurrentUser
+          alt="avatar"
+          width="32px"
+        />
+      </div>
+      <p class="text text-right font-normal py-2.5 text-gray-900 dark:text-white">
         <slot></slot>
       </p>
     </div>
