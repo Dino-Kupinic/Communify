@@ -12,12 +12,20 @@ import {Button} from "@/components/ui/button"
 import {Room} from "@/model/room.dto.ts"
 import {storeToRefs} from "pinia"
 import {useUserStore} from "@/stores/userStore.ts"
-import {computed, ComputedRef, inject} from "vue"
+import {computed, ComputedRef, inject, ref} from "vue"
 import {roomKey} from "@/model/room.key.ts"
 import {Label} from "@/components/ui/label"
 import {Input} from "@/components/ui/input"
 import {Badge} from "@/components/ui/badge"
 import {Topic} from "@/model/topic.dto.ts"
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip"
 
 defineProps<{
   roomTopics: Topic[]
@@ -35,6 +43,11 @@ const username: ComputedRef<string> = computed(() => {
 const imgURL: ComputedRef<string> = computed(() => {
   return `https://api.dicebear.com/7.x/lorelei/svg?seed=${username.value}&scale=130&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear&radius=30&randomizeIds=true`
 })
+
+const editName = ref<string>("")
+const editDescription = ref<string>("")
+const editPassword = ref<string>("")
+const editMaximumUsers = ref<number>(0)
 </script>
 
 <template>
@@ -50,12 +63,66 @@ const imgURL: ComputedRef<string> = computed(() => {
           Make changes to your room here. Click save when you're done.
         </DialogDescription>
       </DialogHeader>
-
+      <div class="flex flex-col items-start space-y-2.5">
+        <Label>Creator</Label>
+        <div class="flex items-center space-x-2">
+          <img
+            class="avatar"
+            :src=imgURL
+            alt="avatar"
+            width="32px"
+          />
+          <p class="text">{{ username }}</p>
+        </div>
+        <Label for="name">Name</Label>
+        <Input id="name" type="text" v-model="editName"/>
+        <Label for="description">Description</Label>
+        <Input id="description" type="text" v-model="editDescription" placeholder="Description"/>
+        <Label>Topics</Label>
+        <Button variant="outline" size="default">
+          <v-icon name="io-add-circle"/>
+          <span class="ml-1">
+            Add Topic
+          </span>
+        </Button>
+        <div v-if="roomTopics" class="flex flex-row flex-wrap gap-1 mt-3">
+          <Badge v-for="topic in roomTopics" :variant="topic.color" class="cursor-pointer">
+            {{ topic.text }}
+          </Badge>
+        </div>
+        <Label>Maximum user count</Label>
+        <div class="flex flex-row w-full flex-wrap gap-1 mt-auto">
+          <Input type="number" v-model="editMaximumUsers" placeholder="0"/>
+        </div>
+        <Label>Password</Label>
+        <div v-if="room.password" class="w-full">
+          <Input type="text" v-model="editPassword" placeholder="Password"/>
+        </div>
+      </div>
       <DialogFooter>
-        <Button>
+        <AlertDialog>
+          <AlertDialogTrigger class="w-full">
+            <Button variant="destructive" class="mb-4 w-full">
+              Delete Room
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete the room.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction>Continue</AlertDialogAction>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <Button class="w-full">
           Save changes
         </Button>
-        <Button variant="secondary">
+        <Button variant="secondary" class="w-full">
           Cancel
         </Button>
       </DialogFooter>
@@ -89,7 +156,7 @@ const imgURL: ComputedRef<string> = computed(() => {
           <Badge v-for="topic in roomTopics" :variant="topic.color">{{ topic.text }}</Badge>
         </div>
         <div v-if="roomTopics.length === 0">
-          <span class="text">No topics provided.</span>
+          <span class="text-sm">No topics provided.</span>
         </div>
         <Label>Maximum user count</Label>
         <div class="flex flex-row flex-wrap gap-1 mt-auto">

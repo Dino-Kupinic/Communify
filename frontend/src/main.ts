@@ -18,6 +18,7 @@ import {
   IoMoon,
   IoLogOut,
   IoAlertCircle,
+  IoAddCircle,
 } from "oh-vue-icons/icons/io"
 import {
   ViFileTypeVue,
@@ -32,7 +33,8 @@ import {
   HiArrowLeft,
   HiDotsHorizontal,
   HiSolidUserGroup,
-  HiSolidLockClosed
+  HiSolidLockClosed,
+  HiX,
 } from "oh-vue-icons/icons/hi"
 
 addIcons(
@@ -45,6 +47,7 @@ addIcons(
   IoMoon,
   IoLogOut,
   IoAlertCircle,
+  IoAddCircle,
   ViFileTypeVue,
   ViFileTypeTypescriptOfficial,
   ViFileTypeTailwind,
@@ -55,7 +58,8 @@ addIcons(
   HiArrowLeft,
   HiDotsHorizontal,
   HiSolidUserGroup,
-  HiSolidLockClosed
+  HiSolidLockClosed,
+  HiX,
 )
 const app = createApp(App)
 

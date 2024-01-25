@@ -55,7 +55,6 @@ const checkPassword = async (password: string) => {
     errorMessage.value = "Incorrect Password."
   }
 }
-
 </script>
 
 <template>
@@ -76,7 +75,7 @@ const checkPassword = async (password: string) => {
       <Badge v-for="topic in roomTopics" :variant="topic.color">{{ topic.text }}</Badge>
     </div>
     <div v-if="roomTopics.length === 0">
-      <span class="text">No topics provided.</span>
+      <span class="text-sm">No topics provided.</span>
     </div>
     <div class="flex flex-row flex-wrap gap-1 mt-auto">
       <div>

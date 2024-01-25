@@ -37,12 +37,12 @@ const emit = defineEmits<{
       </div>
       <DialogFooter>
         <DialogTrigger asChild>
-          <Button @click="$emit('password', input)">
+          <Button @click="$emit('password', input)" class="sm:w-full">
             Submit
           </Button>
         </DialogTrigger>
-        <DialogClose >
-          <Button variant="secondary">
+        <DialogClose class="w-full">
+          <Button variant="secondary" class="w-full">
             Close
           </Button>
         </DialogClose>
