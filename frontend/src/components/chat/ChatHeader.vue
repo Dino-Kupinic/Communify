@@ -15,7 +15,7 @@ const formatTitle = useFormatTitle(props.title, 20)
   <div
     class="flex flex-row justify-center items-center sticky top-0 bg-background w-full h-16 p-3 border-b border-slate-300 dark:border-slate-800">
     <div>
-      <Button @click="router.push('/chats')" variant="outline" size="icon" class="mr-auto flex-none flex-grow-0">
+      <Button @click="router.push('/rooms')" variant="outline" size="icon" class="mr-auto flex-none flex-grow-0">
         <v-icon name="hi-arrow-left"/>
       </Button>
     </div>

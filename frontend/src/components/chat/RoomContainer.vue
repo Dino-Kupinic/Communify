@@ -23,7 +23,7 @@ const roomTopics: ComputedRef<Topic[]> = computed(() => {
   return topics.value.filter((topic: Topic) => props.room.topic_id?.includes(topic.id))
 })
 
-const title = useFormatTitle(props.room.name)
+const title = useFormatTitle(props.room.name, 25)
 const description: ComputedRef<string> = computed(() => {
   const MAX_DISPLAY_DESCRIPTION: number = 50
   if (!props.room.description)

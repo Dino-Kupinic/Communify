@@ -39,7 +39,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       values.password,
     )
     if (pb.authStore.isValid)
-      await router.push("/chats")
+      await router.push("/rooms")
   } catch (error: any) {
     console.error(error)
     errorStore.errorMessage = `${error}`

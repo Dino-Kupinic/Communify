@@ -23,17 +23,20 @@ const imgURLCurrentUser: ComputedRef<string> = computed(() => {
 })
 
 const time: ComputedRef<string> = computed(() => {
-  const temp = new Date(props.message.created)
-  const today = new Date()
+  const temp = new Date(props.message.created);
+  const localTime = temp.toLocaleString();
+
+  const today = new Date();
   if (
     temp.getFullYear() === today.getFullYear() &&
     temp.getMonth() === today.getMonth() &&
     temp.getDate() === today.getDate()
   ) {
-    return props.message.created.substring(11, 16)
+    return localTime.substring(11, 17);
   }
-  return props.message.created.substring(0, 19)
-})
+  return localTime.substring(0, 20);
+});
+
 
 </script>
 

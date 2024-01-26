@@ -16,10 +16,10 @@ import {
 import Communify from "@/components/img/Communify.vue"
 import NavigationMenuListItem from "@/components/nav/NavigationMenuListItem.vue"
 import {Button} from "@/components/ui/button"
-import {Avatar, AvatarFallback} from "@/components/ui/avatar"
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {breakpointsTailwind, useBreakpoints, watchArray} from "@vueuse/core"
 import BurgerMenu from "@/components/nav/BurgerMenu.vue"
-import {ref} from "vue"
+import {computed, ComputedRef, ref} from "vue"
 import {useUserStore} from "@/stores/userStore.ts"
 import {storeToRefs} from "pinia"
 import {pb} from "@/db/pocketbase.ts"
@@ -35,7 +35,7 @@ type NavigationListItem = {
 const gettingStartedList: NavigationListItem[] = [
   {
     title: "Chatting ✨",
-    href: "/chats",
+    href: "/rooms",
     description: "Meet new friends and chat with them. Be polite and respectful.",
   },
   {
@@ -90,6 +90,10 @@ async function logoutUser() {
   pb.authStore.clear()
   await router.push("/")
 }
+
+const imgURLCurrentUser: ComputedRef<string> = computed(() => {
+  return `https://api.dicebear.com/7.x/lorelei/svg?seed=${currentUser.name}&scale=130&backgroundColor=b6e3f4,c0aede&backgroundType=gradientLinear&radius=30&randomizeIds=true`
+})
 </script>
 
 <template>
@@ -112,7 +116,7 @@ async function logoutUser() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink href="/chats" :class="navigationMenuTriggerStyle()">
+            <NavigationMenuLink href="/rooms" :class="navigationMenuTriggerStyle()">
               Chats
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -168,12 +172,22 @@ async function logoutUser() {
               <span>My Account</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>
-              <Avatar class="mr-3">
-                <AvatarFallback>{{ currentUser.username.slice(0, 1).toUpperCase() }}</AvatarFallback>
-              </Avatar>
-              <span>{{ currentUser.username }}</span>
+          <DropdownMenuContent class="w-56">
+            <DropdownMenuLabel class="flex flex-row justify-start items-center">
+              <div>
+                <Avatar class="mr-3">
+                  <AvatarImage
+                    class="avatar"
+                    :src=imgURLCurrentUser
+                    alt="avatar"
+                    width="32px"
+                  />
+                  <AvatarFallback>{{ currentUser.username.slice(0, 1).toUpperCase() }}</AvatarFallback>
+                </Avatar>
+              </div>
+              <div class="w-full">
+                <span>{{ currentUser.username }}</span>
+              </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator/>
             <DropdownMenuGroup>
@@ -197,7 +211,7 @@ async function logoutUser() {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <ThemePreference :display-preference-text="false" />
+        <ThemePreference :display-preference-text="false"/>
       </div>
       <div v-else class="flex gap-2">
         <RouterLink to="/auth/login">
@@ -256,7 +270,7 @@ async function logoutUser() {
         </RouterLink>
       </div>
       <div class="h-10"></div>
-      <ThemePreference />
+      <ThemePreference/>
     </div>
   </div>
 </template>

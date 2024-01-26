@@ -30,8 +30,8 @@ const routes: Array<RouteRecordRaw> & {
     component: NoFooterLayout,
     children: [
       {
-        path: "/chats",
-        name: "chats",
+        path: "/rooms",
+        name: "rooms",
         component: () => import("@/views/RoomsView.vue"),
         meta: {
           requiresAuth: true,

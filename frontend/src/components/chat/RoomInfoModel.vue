@@ -170,6 +170,9 @@ const editMaximumUsers = ref<number>(0)
           <v-icon name="hi-solid-lock-closed"/>
           <span class="text-sm ml-1">Password protected</span>
         </div>
+        <div v-else>
+          <span class="text-sm">None</span>
+        </div>
       </div>
       <DialogFooter>
         <DialogClose asChild>

@@ -44,7 +44,7 @@ const icons: Icon[] = [
       <br>and <strong>meaningful socializing</strong>.
     </p>
     <div class="flex justify-center mt-12 mb-20">
-      <RouterLink to="/chats">
+      <RouterLink to="/rooms">
         <Button>
           <v-icon name="hi-arrow-right" class="mr-1.5"></v-icon>
           <span>Join for free</span>
