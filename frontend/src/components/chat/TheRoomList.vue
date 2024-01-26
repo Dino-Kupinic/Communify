@@ -6,6 +6,8 @@ import {useTopicStore} from "@/stores/topicsStore.ts"
 import {useUserStore} from "@/stores/userStore.ts"
 import {Input} from "@/components/ui/input"
 import {Room} from "@/model/room.dto.ts"
+import {Button} from "@/components/ui/button"
+import CreateRoomModal from "@/components/chat/CreateRoomModal.vue"
 
 const roomStore = useRoomStore()
 const topicStore = useTopicStore()
@@ -27,13 +29,19 @@ const filteredRooms: ComputedRef<Room[]> = computed(() => {
 
 <template>
   <div class="flex flex-col gap-3 p-3 sm:w-[400px]">
-    <div>
+    <div class="flex gap-2">
       <Input
         type="search"
         placeholder="Search..."
         class="w-full"
         v-model="searchInput"
       />
+      <CreateRoomModal>
+        <Button size="default">
+          <v-icon name="io-add-circle"/>
+          <span class="ml-1">New</span>
+        </Button>
+      </CreateRoomModal>
     </div>
     <RoomContainer v-for="room in filteredRooms" :room="room" :key="room.id"/>
   </div>

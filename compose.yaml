@@ -1,9 +1,16 @@
 version: '3'
 services:
-  app:
-    container_name: Communify
-    build: ./backend
+#  app:
+#    container_name: Communify
+#    build: ./backend
+#    ports:
+#      - "${BACKEND_PORT}:8090"
+#    volumes:
+#      - "./backend/pb_data:/app/pb_data"
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "${BACKEND_PORT}:8080"
-    volumes:
-      - "./backend/pb_data:/app/pb_data"
+      - "0.0.0.0:10000:10000"
