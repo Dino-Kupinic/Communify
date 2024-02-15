@@ -15,6 +15,7 @@ import {Button} from "@/components/ui/button"
 import {Label} from "@/components/ui/label"
 import {ref} from "vue"
 import {Topic} from "@/model/topic.dto.ts"
+import CreateTopicModal from "@/components/chat/CreateTopicModal.vue"
 
 const roomName = ref<string>("")
 const roomDescription = ref<string>("")
@@ -41,12 +42,14 @@ const roomTopics = ref<Topic[]>([])
         <Label for="description">Description</Label>
         <Input id="description" type="text" v-model="roomDescription" placeholder="Description"/>
         <Label>Topics</Label>
-        <Button variant="outline" size="default">
-          <v-icon name="io-add-circle"/>
-          <span class="ml-1">
+        <CreateTopicModal>
+          <Button variant="outline" size="default">
+            <v-icon name="io-add-circle"/>
+            <span class="ml-1">
             Add Topic
           </span>
-        </Button>
+          </Button>
+        </CreateTopicModal>
         <div v-if="roomTopics" class="flex flex-row flex-wrap gap-1 mt-3">
           <Badge v-for="topic in roomTopics" :variant="topic.color" class="cursor-pointer">
             {{ topic.text }}
@@ -70,7 +73,3 @@ const roomTopics = ref<Topic[]>([])
     </DialogContent>
   </Dialog>
 </template>
-
-<style scoped>
-
-</style>
